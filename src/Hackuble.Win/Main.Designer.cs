@@ -59,6 +59,7 @@ namespace Hackuble.Win
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
+            this.openGLControl1 = new OpenGLControl();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.toolStrip2.SuspendLayout();
@@ -290,11 +291,19 @@ namespace Hackuble.Win
             this.toolStripTextBox1.Name = "toolStripTextBox1";
             this.toolStripTextBox1.Size = new System.Drawing.Size(500, 25);
             // 
+            // openGLControl1
+            // 
+            this.openGLControl1.Location = new System.Drawing.Point(341, 110);
+            this.openGLControl1.Name = "openGLControl1";
+            this.openGLControl1.Size = new System.Drawing.Size(400, 400);
+            this.openGLControl1.TabIndex = 10;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1029, 564);
+            this.Controls.Add(this.openGLControl1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.toolStrip2);
             this.Controls.Add(this.statusStrip);
@@ -345,6 +354,7 @@ namespace Hackuble.Win
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStrip toolStrip2;
         private System.Windows.Forms.ToolStripTextBox toolStripTextBox1;
+        private OpenGLControl openGLControl1;
     }
 }
 

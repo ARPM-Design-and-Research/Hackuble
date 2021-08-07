@@ -85,6 +85,12 @@
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="OpenGLControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OpenGLControl.Designer.cs">
+      <DependentUpon>OpenGLControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScriptEditor.cs">
@@ -170,6 +176,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GUICLR\GUICLR.vcxproj">
+      <Project>{3198326d-d273-4db6-be30-9fd209fe30a2}</Project>
+      <Name>GUICLR</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Hackuble.Core\Hackuble.Core.csproj">
       <Project>{40B9CE8E-1138-4A4B-A339-6E9E3E12CB22}</Project>
       <Name>Hackuble.Core</Name>
