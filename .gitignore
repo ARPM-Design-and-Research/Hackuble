@@ -27,8 +27,8 @@ x86/
 [Aa][Rr][Mm]64/
 bld/
 [Bb]in/
-!src\Hackuble.Win\bin\Debug
-!src\bin
+!src/Hackuble.Win/bin/Debug
+!src/bin
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
