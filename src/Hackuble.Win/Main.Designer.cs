@@ -59,6 +59,7 @@ namespace Hackuble.Win
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
+            this.openGLControl1 = new OpenGLControl();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.toolStrip2.SuspendLayout();
@@ -269,7 +270,7 @@ namespace Hackuble.Win
             this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Left;
             this.toolStrip1.Location = new System.Drawing.Point(0, 49);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(32, 493);
+            this.toolStrip1.Size = new System.Drawing.Size(26, 493);
             this.toolStrip1.TabIndex = 6;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -289,11 +290,19 @@ namespace Hackuble.Win
             this.toolStripTextBox1.Name = "toolStripTextBox1";
             this.toolStripTextBox1.Size = new System.Drawing.Size(500, 25);
             // 
+            // openGLControl1
+            // 
+            this.openGLControl1.Location = new System.Drawing.Point(215, 125);
+            this.openGLControl1.Name = "openGLControl1";
+            this.openGLControl1.Size = new System.Drawing.Size(585, 351);
+            this.openGLControl1.TabIndex = 10;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1029, 564);
+            this.Controls.Add(this.openGLControl1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.toolStrip2);
             this.Controls.Add(this.statusStrip);
@@ -344,6 +353,7 @@ namespace Hackuble.Win
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStrip toolStrip2;
         private System.Windows.Forms.ToolStripTextBox toolStripTextBox1;
+        private OpenGLControl openGLControl1;
     }
 }
 

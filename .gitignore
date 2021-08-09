@@ -16,6 +16,26 @@
 # Mono auto generated files
 mono_crash.*
 
+!src/Hackuble.Win/bin/Debug/fonts/atlas.bmp
+!src/Hackuble.Win/bin/Debug/fonts/atlas.json
+!src/Hackuble.Win/bin/Debug/glew32.dll
+!src/Hackuble.Win/bin/Debug/icons/add-01.png
+!src/Hackuble.Win/bin/Debug/icons/add.png
+!src/Hackuble.Win/bin/Debug/icons/iconAtlas.json
+!src/Hackuble.Win/bin/Debug/icons/iconAtlas.png
+!src/Hackuble.Win/bin/Debug/icons/Perlin-01.png
+!src/Hackuble.Win/bin/Debug/icons/perlin.png
+!src/Hackuble.Win/bin/Debug/icons/Text-01.png
+!src/Hackuble.Win/bin/Debug/icons/text.png
+!src/Hackuble.Win/bin/Debug/icons/triangle.png
+!src/Hackuble.Win/bin/Debug/res/shaders/Basic.shader
+!src/Hackuble.Win/bin/Debug/res/shaders/Bezier-Exp.shader
+!src/Hackuble.Win/bin/Debug/res/shaders/Bezier.shader
+!src/Hackuble.Win/bin/Debug/res/shaders/Icon.shader
+!src/Hackuble.Win/bin/Debug/res/shaders/Rectangle.shader
+!src/Hackuble.Win/bin/Debug/res/shaders/Screen.shader
+!src/Hackuble.Win/bin/Debug/res/shaders/Text.shader
+
 # Build results
 #[Dd]ebug/
 [Dd]ebugPublic/
@@ -27,8 +47,6 @@ x86/
 [Aa][Rr][Mm]64/
 bld/
 #[Bb]in/
-#!src\Hackuble.Win\bin\Debug
-#!src\bin
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
@@ -350,3 +368,5 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+src/Hackuble.Win/bin/Debug/libcef.dll
