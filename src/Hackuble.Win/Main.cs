@@ -21,6 +21,7 @@ namespace Hackuble.Win
 
         DataAccess currentDataAccess;
         AbstractCommand currentCommand;
+        private bool visualscriptingOpen = false;
 
         public Main()
         {
@@ -146,6 +147,17 @@ namespace Hackuble.Win
         private void manageCommandsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ClearExistingCommands();
+        }
+
+        private void openVisualScriptingEnvironmentToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!visualscriptingOpen)
+            {
+                Form childForm = new VisualScriptingEnv();
+                childForm.MdiParent = this;
+                childForm.Show();
+                viewportOpen = true;
+            }
         }
     }
 }

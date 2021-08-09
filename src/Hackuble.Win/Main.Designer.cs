@@ -1,4 +1,6 @@
 ﻿
+using Hackuble.Win.Controls;
+
 namespace Hackuble.Win
 {
     partial class Main
@@ -59,7 +61,7 @@ namespace Hackuble.Win
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
-            this.openGLControl1 = new OpenGLControl();
+            this.openVisualScriptingEnvironmentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.toolStrip2.SuspendLayout();
@@ -71,7 +73,8 @@ namespace Hackuble.Win
             this.fileMenu,
             this.editMenu,
             this.helpMenu,
-            this.toolStripMenuItem1});
+            this.toolStripMenuItem1,
+            this.openVisualScriptingEnvironmentToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(1029, 24);
@@ -287,22 +290,22 @@ namespace Hackuble.Win
             // toolStripTextBox1
             // 
             this.toolStripTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.toolStripTextBox1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStripTextBox1.Name = "toolStripTextBox1";
             this.toolStripTextBox1.Size = new System.Drawing.Size(500, 25);
             // 
-            // openGLControl1
+            // openVisualScriptingEnvironmentToolStripMenuItem
             // 
-            this.openGLControl1.Location = new System.Drawing.Point(215, 125);
-            this.openGLControl1.Name = "openGLControl1";
-            this.openGLControl1.Size = new System.Drawing.Size(585, 351);
-            this.openGLControl1.TabIndex = 10;
+            this.openVisualScriptingEnvironmentToolStripMenuItem.Name = "openVisualScriptingEnvironmentToolStripMenuItem";
+            this.openVisualScriptingEnvironmentToolStripMenuItem.Size = new System.Drawing.Size(203, 20);
+            this.openVisualScriptingEnvironmentToolStripMenuItem.Text = "Open Visual Scripting Environment";
+            this.openVisualScriptingEnvironmentToolStripMenuItem.Click += new System.EventHandler(this.openVisualScriptingEnvironmentToolStripMenuItem_Click);
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1029, 564);
-            this.Controls.Add(this.openGLControl1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.toolStrip2);
             this.Controls.Add(this.statusStrip);
@@ -353,7 +356,7 @@ namespace Hackuble.Win
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStrip toolStrip2;
         private System.Windows.Forms.ToolStripTextBox toolStripTextBox1;
-        private OpenGLControl openGLControl1;
+        private System.Windows.Forms.ToolStripMenuItem openVisualScriptingEnvironmentToolStripMenuItem;
     }
 }
 

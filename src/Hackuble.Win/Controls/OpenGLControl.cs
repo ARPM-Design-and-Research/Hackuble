@@ -12,11 +12,24 @@ using System.Runtime.InteropServices;
 
 using GUICLR;
 
-namespace Hackuble.Win
+namespace Hackuble.Win.Controls
 {
 
     public partial class OpenGLControl : UserControl
     {
+        DateTime _lastTime;
+        private int _fps;
+        int _framesRendered;
+        public ToolStripProgressBar ProgressBar { get; set; }
+
+        public int FrameRate
+        {
+            get
+            {
+                return _fps;
+            }
+        }
+
         //byte[] pixelData;
         ManagedContext context;
 
@@ -127,15 +140,18 @@ namespace Hackuble.Win
 
         protected override void OnPaint(PaintEventArgs e)
         {
-
-            base.OnPaint(e);
-
             if (!InVisualStudio())
             {
-                context.onPaint();
-
+                context.onPaint();                
 
                 var area = new Rectangle(new Point(0, 0), new Size(windowWidth, windowHeight));
+
+                //if (this.ProgressBar != null)
+                //{
+                //    // set maximum
+                //    this.ProgressBar.Maximum = windowWidth * windowHeight;
+                //    this.ProgressBar.Value = 0;
+                //}
 
                 using (Bitmap b = new Bitmap(windowWidth, windowHeight))
                 {
@@ -154,6 +170,11 @@ namespace Hackuble.Win
                                 Color newColor = Color.FromArgb(BitConverter.ToInt32(pixelData, (position * 4)));
                                 b.SetPixel(x, y, newColor);
                                 position++;
+                                //if (this.ProgressBar != null)
+                                //{
+                                //    //set value
+                                //    this.ProgressBar.Value = position;
+                                //}
                             }
                         }
                     }
@@ -165,6 +186,18 @@ namespace Hackuble.Win
                 //UpdateBitmap(pixelData, windowWidth, windowHeight, drawingBitmap);
                 //e.Graphics.DrawImage(drawingBitmap, area);
             }
+
+            //calc fps
+            _framesRendered++;
+            if ((DateTime.Now - _lastTime).TotalSeconds >= 1)
+            {
+                // one second has elapsed 
+                _fps = _framesRendered;
+                _framesRendered = 0;
+                _lastTime = DateTime.Now;
+            }
+
+            base.OnPaint(e);
         }
 
 

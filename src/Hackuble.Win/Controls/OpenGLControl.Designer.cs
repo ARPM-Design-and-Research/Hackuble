@@ -1,5 +1,5 @@
 ﻿
-namespace Hackuble.Win
+namespace Hackuble.Win.Controls
 {
     partial class OpenGLControl
     {
