@@ -147,9 +147,9 @@ namespace Hackuble.Win
                         g.Clear(Color.Red);
                         //draw each pixel
                         int position = 0;
-                        for (int x = 0; x < b.Width; x++)
+                        for (int y = 0; y < b.Height; y++)
                         {
-                            for (int y = 0; y < b.Height; y++)
+                            for (int x = 0; x < b.Width; x++)
                             {
                                 Color newColor = Color.FromArgb(BitConverter.ToInt32(pixelData, (position * 4)));
                                 b.SetPixel(x, y, newColor);
@@ -157,6 +157,7 @@ namespace Hackuble.Win
                             }
                         }
                     }
+                    b.RotateFlip(RotateFlipType.RotateNoneFlipY);
                     e.Graphics.DrawImage(b, area);
                 }
 
