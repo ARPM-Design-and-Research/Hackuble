@@ -17,13 +17,13 @@ namespace Hackuble.Win
 
     public partial class OpenGLControl : UserControl
     {
-        byte[] pixelData;
+        //byte[] pixelData;
         ManagedContext context;
 
         int windowWidth;
         int windowHeight;
         bool initializedContext = false;
-        Bitmap drawingBitmap;
+        //Bitmap drawingBitmap;
 
         public static bool InVisualStudio()
         {
@@ -40,7 +40,7 @@ namespace Hackuble.Win
                 windowWidth = this.Size.Width;
                 windowHeight = this.Size.Height;
 
-                pixelData = new byte[4 * windowWidth * windowHeight];
+                //pixelData = new byte[4 * windowWidth * windowHeight];
 
                 this.DoubleBuffered = true;
             }
@@ -55,7 +55,7 @@ namespace Hackuble.Win
                 windowWidth = this.Size.Width;
                 windowHeight = this.Size.Height;
 
-                pixelData = new byte[4 * windowWidth * windowHeight];
+                //pixelData = new byte[4 * windowWidth * windowHeight];
 
                 if (!initializedContext)
                 {
@@ -68,7 +68,7 @@ namespace Hackuble.Win
                     context.resize(this.Size.Width, this.Size.Height);
                 }
 
-                drawingBitmap = new Bitmap(windowWidth, windowHeight, PixelFormat.Format32bppArgb);
+                //drawingBitmap = new Bitmap(windowWidth, windowHeight, PixelFormat.Format32bppArgb);
             }
         }
 
@@ -137,9 +137,32 @@ namespace Hackuble.Win
 
                 var area = new Rectangle(new Point(0, 0), new Size(windowWidth, windowHeight));
 
-                context.getPixelData(ref pixelData);
-                UpdateBitmap(pixelData, windowWidth, windowHeight, drawingBitmap);
-                e.Graphics.DrawImage(drawingBitmap, area);
+                using (Bitmap b = new Bitmap(windowWidth, windowHeight))
+                {
+                    byte[] pixelData = new byte[4 * windowWidth * windowHeight];
+                    context.getPixelData(ref pixelData);
+                    b.SetResolution(windowWidth, windowHeight);
+                    using (Graphics g = Graphics.FromImage(b))
+                    {
+                        g.Clear(Color.Red);
+                        //draw each pixel
+                        int position = 0;
+                        for (int x = 0; x < b.Width; x++)
+                        {
+                            for (int y = 0; y < b.Height; y++)
+                            {
+                                Color newColor = Color.FromArgb(BitConverter.ToInt32(pixelData, (position * 4)));
+                                b.SetPixel(x, y, newColor);
+                                position++;
+                            }
+                        }
+                    }
+                    e.Graphics.DrawImage(b, area);
+                }
+
+                //context.getPixelData(ref pixelData);
+                //UpdateBitmap(pixelData, windowWidth, windowHeight, drawingBitmap);
+                //e.Graphics.DrawImage(drawingBitmap, area);
             }
         }
 
