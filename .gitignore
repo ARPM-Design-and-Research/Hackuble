@@ -17,7 +17,7 @@
 mono_crash.*
 
 # Build results
-#[Dd]ebug/
+[Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
@@ -26,9 +26,9 @@ x86/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
-#[Bb]in/
-#!src\Hackuble.Win\bin\Debug
-#!src\bin
+[Bb]in/
+!src\Hackuble.Win\bin\Debug
+!src\bin
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
