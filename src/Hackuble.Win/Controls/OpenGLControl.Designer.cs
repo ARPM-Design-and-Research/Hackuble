@@ -31,6 +31,7 @@ namespace Hackuble.Win.Controls
         {
             components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.DoubleBuffered = true;
         }
 
         #endregion

@@ -30,13 +30,13 @@ namespace Hackuble.Win.Controls
             }
         }
 
-        //byte[] pixelData;
+        byte[] pixelData;
         ManagedContext context;
 
         int windowWidth;
         int windowHeight;
         bool initializedContext = false;
-        //Bitmap drawingBitmap;
+        Bitmap drawingBitmap;
 
         public static bool InVisualStudio()
         {
@@ -53,7 +53,7 @@ namespace Hackuble.Win.Controls
                 windowWidth = this.Size.Width;
                 windowHeight = this.Size.Height;
 
-                //pixelData = new byte[4 * windowWidth * windowHeight];
+                pixelData = new byte[4 * windowWidth * windowHeight];
 
                 this.DoubleBuffered = true;
             }
@@ -68,7 +68,7 @@ namespace Hackuble.Win.Controls
                 windowWidth = this.Size.Width;
                 windowHeight = this.Size.Height;
 
-                //pixelData = new byte[4 * windowWidth * windowHeight];
+                pixelData = new byte[4 * windowWidth * windowHeight];
 
                 if (!initializedContext)
                 {
@@ -81,7 +81,7 @@ namespace Hackuble.Win.Controls
                     context.resize(this.Size.Width, this.Size.Height);
                 }
 
-                //drawingBitmap = new Bitmap(windowWidth, windowHeight, PixelFormat.Format32bppArgb);
+                drawingBitmap = new Bitmap(windowWidth, windowHeight, PixelFormat.Format32bppArgb);
             }
         }
 
@@ -142,7 +142,7 @@ namespace Hackuble.Win.Controls
         {
             if (!InVisualStudio())
             {
-                context.onPaint();                
+                context.onPaint();
 
                 var area = new Rectangle(new Point(0, 0), new Size(windowWidth, windowHeight));
 
@@ -153,38 +153,38 @@ namespace Hackuble.Win.Controls
                 //    this.ProgressBar.Value = 0;
                 //}
 
-                using (Bitmap b = new Bitmap(windowWidth, windowHeight))
-                {
-                    byte[] pixelData = new byte[4 * windowWidth * windowHeight];
-                    context.getPixelData(ref pixelData);
-                    b.SetResolution(windowWidth, windowHeight);
-                    using (Graphics g = Graphics.FromImage(b))
-                    {
-                        g.Clear(Color.Red);
-                        //draw each pixel
-                        int position = 0;
-                        for (int y = 0; y < b.Height; y++)
-                        {
-                            for (int x = 0; x < b.Width; x++)
-                            {
-                                Color newColor = Color.FromArgb(BitConverter.ToInt32(pixelData, (position * 4)));
-                                b.SetPixel(x, y, newColor);
-                                position++;
-                                //if (this.ProgressBar != null)
-                                //{
-                                //    //set value
-                                //    this.ProgressBar.Value = position;
-                                //}
-                            }
-                        }
-                    }
-                    b.RotateFlip(RotateFlipType.RotateNoneFlipY);
-                    e.Graphics.DrawImage(b, area);
-                }
+                //using (Bitmap b = new Bitmap(windowWidth, windowHeight))
+                //{
+                //    byte[] pixelData = new byte[4 * windowWidth * windowHeight];
+                //    context.getPixelData(ref pixelData);
+                //    b.SetResolution(windowWidth, windowHeight);
+                //    using (Graphics g = Graphics.FromImage(b))
+                //    {
+                //        g.Clear(Color.Red);
+                //        //draw each pixel
+                //        int position = 0;
+                //        for (int y = 0; y < b.Height; y++)
+                //        {
+                //            for (int x = 0; x < b.Width; x++)
+                //            {
+                //                Color newColor = Color.FromArgb(BitConverter.ToInt32(pixelData, (position * 4)));
+                //                b.SetPixel(x, y, newColor);
+                //                position++;
+                //                //if (this.ProgressBar != null)
+                //                //{
+                //                //    //set value
+                //                //    this.ProgressBar.Value = position;
+                //                //}
+                //            }
+                //        }
+                //    }
+                //    b.RotateFlip(RotateFlipType.RotateNoneFlipY);
+                //    e.Graphics.DrawImage(b, area);
+                //}
 
-                //context.getPixelData(ref pixelData);
-                //UpdateBitmap(pixelData, windowWidth, windowHeight, drawingBitmap);
-                //e.Graphics.DrawImage(drawingBitmap, area);
+                context.getPixelData(ref pixelData);
+                UpdateBitmap(pixelData, windowWidth, windowHeight, drawingBitmap);
+                e.Graphics.DrawImage(drawingBitmap, area);
             }
 
             //calc fps

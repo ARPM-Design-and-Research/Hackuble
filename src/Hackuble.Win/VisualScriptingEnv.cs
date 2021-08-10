@@ -26,14 +26,20 @@ namespace Hackuble.Win
         private void LoadVSEControl()
         {
             this.openGLControl1 = new Win.Controls.OpenGLControl();
-            this.openGLControl1.Location = new System.Drawing.Point(0, 25);
+            this.openGLControl1.SuspendLayout();
+            this.SuspendLayout();
+            this.openGLControl1.BringToFront();
+            this.openGLControl1.Size = new System.Drawing.Size((this.Size.Width), (this.Size.Height - (this.toolStrip1.Height + statusStrip1.Height)));
+            this.openGLControl1.Location = new System.Drawing.Point(0, this.toolStrip1.Height);
             this.openGLControl1.Name = "openGLControl1";
-            this.openGLControl1.Size = new System.Drawing.Size(800, 400);
-            this.openGLControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.openGLControl1.TabIndex = 3;
             this.openGLControl1.ProgressBar = this.toolStripProgressBar1;
             this.openGLControl1.Paint += OpenGLControl1_Paint;
             this.Controls.Add(this.openGLControl1);
+            this.openGLControl1.ResumeLayout(false);
+            this.openGLControl1.PerformLayout();
+            this.ResumeLayout(false);
+            this.PerformLayout(this.openGLControl1, "Size");
         }
 
         private void OpenGLControl1_Paint(object sender, PaintEventArgs e)
@@ -44,6 +50,16 @@ namespace Hackuble.Win
         private void VisualScriptingEnv_Paint(object sender, PaintEventArgs e)
         {
             toolStripProgressBar1.Value = 50;
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            this.openGLControl1.Refresh();
+        }
+
+        private void VisualScriptingEnv_Resize(object sender, EventArgs e)
+        {
+            this.openGLControl1.Size = new System.Drawing.Size((this.Size.Width), (this.Size.Height - (this.toolStrip1.Height + statusStrip1.Height)));
         }
     }
 }
