@@ -45,12 +45,12 @@ void GUIRenderer::init(int width, int height) {
 	framePixelsData = (GLubyte*)malloc(4 * width * height);
 
 	GLCall(glGenRenderbuffers(1, &renderBufferObject));
-	GLCall(glBindRenderbuffer(GL_RENDERBUFFER, GUIRenderer::GetInstance()->renderBufferObject));
+	GLCall(glBindRenderbuffer(GL_RENDERBUFFER, renderBufferObject));
 	GLCall(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width * 2, height * 2));
 
-	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, GUIRenderer::GetInstance()->frameBufferObject));
-	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, GUIRenderer::GetInstance()->screenTexture, 0));
-	GLCall(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, GUIRenderer::GetInstance()->renderBufferObject));
+	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, frameBufferObject));
+	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, screenTexture, 0));
+	GLCall(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderBufferObject));
 	
 	//Creating the vertex array, we basically render onto a quad which is the dimension of the screen
 	GLCall(glGenVertexArrays(1, &screenVAO));
@@ -145,24 +145,29 @@ void GUIRenderer::setScreenSize(int width, int height) {
 
 	Camera::GetInstance()->setWindowSize(glm::vec2(width * 2, height * 2));
 
-	GUIRenderer::GetInstance()->frameWidth = width;
-	GUIRenderer::GetInstance()->frameHeight = height;
+	free(framePixelsData);
+	framePixelsData = (GLubyte*)malloc(4 * width * height);
+
+	frameWidth = width;
+	frameHeight = height;
 
 	//Could cause problem on first call?
-	//glDeleteTextures(1, &GUIRenderer::GetInstance()->screenTexture);
-	//glDeleteRenderbuffers(1, &GUIRenderer::GetInstance()->renderBufferObject);
+	glDeleteTextures(1, &screenTexture);
+	glDeleteRenderbuffers(1, &renderBufferObject);
 
-	GLCall(glBindTexture(GL_TEXTURE_2D, GUIRenderer::GetInstance()->screenTexture));
+	glGenTextures(1, &screenTexture);
+	GLCall(glBindTexture(GL_TEXTURE_2D, screenTexture));
 	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width * 2, height * 2, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 
-	GLCall(glBindRenderbuffer(GL_RENDERBUFFER, GUIRenderer::GetInstance()->renderBufferObject));
+	glGenRenderbuffers(1, &renderBufferObject);
+	GLCall(glBindRenderbuffer(GL_RENDERBUFFER, renderBufferObject));
 	GLCall(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width * 2, height * 2));
 
-	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, GUIRenderer::GetInstance()->frameBufferObject));
-	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, GUIRenderer::GetInstance()->screenTexture, 0));
-	GLCall(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, GUIRenderer::GetInstance()->renderBufferObject));
+	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, frameBufferObject));
+	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, screenTexture, 0));
+	GLCall(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderBufferObject));
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 

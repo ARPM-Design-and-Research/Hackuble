@@ -14,6 +14,14 @@ namespace SynGUI {
 		EventType eventType;
 	};
 
+	class ResizeEvent : public Event {
+	public:
+		ResizeEvent(EventType type, int newWidth, int newHeight);
+
+		int width;
+		int height;
+	};
+
 	class MouseEvent : public Event {
 	public:
 		MouseEvent(EventType type, float mouseX, float mouseY, MouseButton button, float _deltaMouseX = 0, float _deltaMouseY = 0);
@@ -38,6 +46,7 @@ namespace SynGUI {
 		virtual void OnMouseUp(MouseEvent* eventArgs);
 		virtual void OnMouseMove(MouseEvent* eventArgs);
 		virtual void OnMouseWheel(MouseEvent* eventArgs);
+		virtual void OnResize(ResizeEvent* eventArgs);
 	};
 
 

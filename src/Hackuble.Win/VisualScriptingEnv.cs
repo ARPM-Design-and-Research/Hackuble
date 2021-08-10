@@ -61,5 +61,10 @@ namespace Hackuble.Win
         {
             this.openGLControl1.Size = new System.Drawing.Size((this.Size.Width), (this.Size.Height - (this.toolStrip1.Height + statusStrip1.Height)));
         }
+
+        private void VisualScriptingEnv_ResizeEnd(object sender, EventArgs e)
+        {
+            this.openGLControl1.resizeOpenGL(e);
+        }
     }
 }

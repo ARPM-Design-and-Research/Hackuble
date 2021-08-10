@@ -99,6 +99,7 @@ namespace Hackuble.Win
             this.Name = "VisualScriptingEnv";
             this.Text = "VisualScriptingEnv";
             this.Load += new System.EventHandler(this.VisualScriptingEnv_Load);
+            this.ResizeEnd += new System.EventHandler(this.VisualScriptingEnv_ResizeEnd);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.VisualScriptingEnv_Paint);
             this.Resize += new System.EventHandler(this.VisualScriptingEnv_Resize);
             this.statusStrip1.ResumeLayout(false);

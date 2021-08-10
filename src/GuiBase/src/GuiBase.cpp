@@ -196,8 +196,11 @@ unsigned char* GuiBase::getPixelData() {
 	return GUIRenderer::GetInstance()->getPixelData();
 }
 
-void GuiBase::resize(int newWidth, int newHeight) {
-	GUIRenderer::GetInstance()->setScreenSize(newWidth, newHeight);
+void GuiBase::OnResize(ResizeEvent* eventArgs) {
+	GUIRenderer::GetInstance()->setScreenSize(eventArgs->width, eventArgs->height);
+	frameWidth = eventArgs->width;
+	frameHeight = eventArgs->height;
+	resized = true;
 }
 
 void GuiBase::addEventToQueue(Event* _event) {

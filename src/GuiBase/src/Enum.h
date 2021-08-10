@@ -50,5 +50,6 @@ enum class EventType {
 	MOUSEMOVE,
 	MOUSEDOWN,
 	MOUSEUP,
-	MOUSEWHEEL
+	MOUSEWHEEL,
+	RESIZE
 };

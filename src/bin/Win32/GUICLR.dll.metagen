@@ -24,5 +24,6 @@ Class GUICLR.ManagedContext: AutoLayout, AnsiClass, Class, Public, BeforeFieldIn
     onMouseUp(Single, Single, Int32): PrivateScope, Public, HideBySig
     onMouseWheel(Int32): PrivateScope, Public, HideBySig
     onPaint(): PrivateScope, Public, HideBySig
-    isInitialized(): PrivateScope, Public, HideBySig
+    awaitInitialized(): PrivateScope, Public, HideBySig
+    awaitResize(): PrivateScope, Public, HideBySig
     Dispose(): PrivateScope, Public, Final, Virtual, HideBySig

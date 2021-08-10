@@ -11,6 +11,11 @@ Event::Event(EventType type) {
 	eventType = type;
 }
 
+ResizeEvent::ResizeEvent(EventType type, int newWidth, int newHeight) : Event(type) {
+	width = newWidth;
+	height = newHeight;
+}
+
 MouseEvent::MouseEvent(EventType type, float _mouseX, float _mouseY, MouseButton _button, float _deltaMouseX, float _deltaMouseY) : Event(type) {
 	rawPos = glm::vec2(_mouseX, _mouseY);
 	rawDelta = glm::vec2(_deltaMouseX, _deltaMouseY);
@@ -42,6 +47,7 @@ void EventHandler::OnMouseDown(MouseEvent* eventArgs) {}
 void EventHandler::OnMouseUp(MouseEvent* eventArgs) {}
 void EventHandler::OnMouseMove(MouseEvent* eventArgs) {}
 void EventHandler::OnMouseWheel(MouseEvent* eventArgs) {}
+void EventHandler::OnResize(ResizeEvent* eventArgs) {}
 
 
 EventManager::EventManager() {
@@ -119,6 +125,9 @@ void EventManager::pollEvents() {
 					break;
 				case EventType::MOUSEWHEEL:
 					obj->OnMouseWheel((MouseEvent*)eve);
+					break;
+				case EventType::RESIZE:
+					obj->OnResize((ResizeEvent*)eve);
 					break;
 				}
 			}

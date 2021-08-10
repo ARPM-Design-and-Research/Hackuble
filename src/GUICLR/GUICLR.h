@@ -36,6 +36,7 @@ public:
 
 	unsigned char* getPixelData();
 	void resize(int newWidth, int newHeight);
+
 	void onMouseMove(float x, float y, int mouseButton);
 	void onMouseDown(float x, float y, int mouseButton);
 	void onMouseUp(float x, float y, int mouseButton);
@@ -43,7 +44,8 @@ public:
 
 	void onPaint();
 
-	bool isInitialized();
+	void awaitInitialized();
+	void awaitResize();
 
 	int windowWidth;
 	int windowHeight;
@@ -61,6 +63,7 @@ namespace GUICLR {
 
 		void createContext(int windowWidth, int windowHeight);
 		void resize(int newWidth, int newHeight);
+
 		void getPixelData(array<unsigned char>^% pixelData);
 
 		void onMouseMove(float x, float y, Int32 mouseButton);
@@ -70,7 +73,8 @@ namespace GUICLR {
 
 		void onPaint();
 
-		bool isInitialized();
+		void awaitInitialized();
+		void awaitResize();
 		// TODO: Add your methods for this class here.
 	};
 }
@@ -131,8 +135,12 @@ void GUICLR::ManagedContext::onPaint() {
 	mc->onPaint();
 }
 
-bool GUICLR::ManagedContext::isInitialized() {
-	return mc->isInitialized();
+void GUICLR::ManagedContext::awaitResize() {
+	mc->awaitResize();
+}
+
+void GUICLR::ManagedContext::awaitInitialized() {
+	mc->awaitInitialized();
 }
 
 GuiContext::GuiContext() {
@@ -143,8 +151,20 @@ GuiContext::~GuiContext() {
 
 }
 
-bool GuiContext::isInitialized() {
-	return initialized;
+void GuiContext::awaitInitialized() {
+
+	while (!initialized) {
+
+	}
+}
+
+void GuiContext::awaitResize() {
+
+	while (!gui->resized) {
+
+	}
+
+	gui->resized = false;
 }
 
 unsigned char* GuiContext::getPixelData() {
@@ -161,26 +181,25 @@ void GuiContext::createContextThread(int _windowWidth, int _windowHeight) {
 
 void GuiContext::resize(int newWidth, int newHeight) {
 
-	if (isInitialized()) {
-		windowWidth = newWidth;
-		windowHeight = newHeight;
+	windowWidth = newWidth;
+	windowHeight = newHeight;
 
-		wglMakeCurrent(DC, RC);
+	wglMakeCurrent(DC, RC);
 
-		DWORD style = WS_CAPTION | WS_SYSMENU | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
+	DWORD style = WS_CAPTION | WS_SYSMENU | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
 
-		RECT r = RECT();
-		r.top = 0;
-		r.bottom = newWidth;
-		r.left = 0;
-		r.right = newHeight;
+	RECT r = RECT();
+	r.top = 0;
+	r.bottom = newHeight;
+	r.left = 0;
+	r.right = newWidth;
 
-		AdjustWindowRect(&r, style, FALSE);
+	AdjustWindowRect(&r, style, FALSE);
 
-		SetWindowPos(windowHandle, NULL, 0, 0, r.right - r.left, r.bottom - r.top, NULL);
+	SetWindowPos(windowHandle, NULL, 0, 0, r.right - r.left, r.bottom - r.top, NULL);
 
-		gui->resize(newWidth, newHeight);
-	}
+		//gui->resize(newWidth, newHeight);
+	gui->addEventToQueue(new SynGUI::ResizeEvent(EventType::RESIZE, newWidth, newHeight));
 }
 
 
@@ -418,10 +437,11 @@ int GuiContext::createContext() {
 			DispatchMessage(&msg);
 		}
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+		gui->update();
 
 		if (onPaintEvent) {
-			gui->update();
 			gui->render();
 
 			SwapBuffers(DC);

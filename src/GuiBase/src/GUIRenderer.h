@@ -68,6 +68,6 @@ public:
 	GLubyte* getPixelData();
 
 	//static void setScreenSize(GLFWwindow* window, int width, int height);
-	static void setScreenSize(int width, int height);
+	void setScreenSize(int width, int height);
 
 };

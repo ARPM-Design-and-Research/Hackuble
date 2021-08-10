@@ -66,15 +66,16 @@ namespace SynGUI {
 		void update();
 		void render();
 
-		void resize(int newWidth, int newHeight);
-
 		void addEventToQueue(Event* event);
 
 		void OnMouseDown(MouseEvent* eventArgs);
 		void OnMouseUp(MouseEvent* eventArgs);
 		void OnMouseMove(MouseEvent* eventArgs);
 		void OnMouseWheel(MouseEvent* eventArgs);
+		void OnResize(ResizeEvent* eventArgs);
 
 		unsigned char* getPixelData();
+
+		bool resized = false;
 	};
 }

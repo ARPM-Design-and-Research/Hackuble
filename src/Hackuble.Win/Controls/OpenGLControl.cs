@@ -35,7 +35,6 @@ namespace Hackuble.Win.Controls
 
         int windowWidth;
         int windowHeight;
-        bool initializedContext = false;
         Bitmap drawingBitmap;
 
         public static bool InVisualStudio()
@@ -50,36 +49,33 @@ namespace Hackuble.Win.Controls
 
             if (!InVisualStudio())
             {
-                windowWidth = this.Size.Width;
-                windowHeight = this.Size.Height;
+                windowWidth = 800;
+                windowHeight = 400;
 
                 pixelData = new byte[4 * windowWidth * windowHeight];
+
+                context = new ManagedContext();
+                context.createContext(windowWidth, windowHeight);
+                context.awaitInitialized();
+
+                drawingBitmap = new Bitmap(windowWidth, windowHeight, PixelFormat.Format32bppArgb);
 
                 this.DoubleBuffered = true;
             }
         }
 
-        protected override void OnResize(EventArgs e)
+        public void resizeOpenGL(EventArgs e)
         {
-            base.OnResize(e);
-
             if (!InVisualStudio())
             {
+
                 windowWidth = this.Size.Width;
                 windowHeight = this.Size.Height;
 
-                pixelData = new byte[4 * windowWidth * windowHeight];
+                context.resize(windowWidth, windowHeight);
+                context.awaitResize();
 
-                if (!initializedContext)
-                {
-                    context = new ManagedContext();
-                    context.createContext(windowWidth, windowHeight);
-                    initializedContext = true;
-                }
-                else
-                {
-                    context.resize(this.Size.Width, this.Size.Height);
-                }
+                pixelData = new byte[4 * windowWidth * windowHeight];
 
                 drawingBitmap = new Bitmap(windowWidth, windowHeight, PixelFormat.Format32bppArgb);
             }
