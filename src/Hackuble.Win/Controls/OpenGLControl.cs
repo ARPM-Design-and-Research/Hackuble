@@ -43,14 +43,16 @@ namespace Hackuble.Win.Controls
               "devenv", Process.GetCurrentProcess().ProcessName);
             
         }
-        public OpenGLControl()
+        public OpenGLControl(int width, int height)
         {
             InitializeComponent();
 
+            this.Size = new System.Drawing.Size(width, height);
+
             if (!InVisualStudio())
             {
-                windowWidth = 800;
-                windowHeight = 400;
+                windowWidth = this.Size.Width;
+                windowHeight = this.Size.Height;
 
                 pixelData = new byte[4 * windowWidth * windowHeight];
 
@@ -136,9 +138,11 @@ namespace Hackuble.Win.Controls
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            base.OnPaint(e);
+
             if (!InVisualStudio())
             {
-                context.onPaint();
+                //context.onPaint();
 
                 var area = new Rectangle(new Point(0, 0), new Size(windowWidth, windowHeight));
 
@@ -192,8 +196,6 @@ namespace Hackuble.Win.Controls
                 _framesRendered = 0;
                 _lastTime = DateTime.Now;
             }
-
-            base.OnPaint(e);
         }
 
 

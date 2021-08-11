@@ -68,50 +68,6 @@ int add(int a, int b) {
 
 using namespace SynGUI;
 
-GuiBase* createClass(int frameWidth, int frameHeight) {
-	return new GuiBase(frameWidth, frameHeight);
-}
-
-
-void destroyClass(GuiBase* ptr) {
-
-	if (ptr != nullptr) {
-
-		if (!ptr->stopped) {
-			ptr->stopGui();
-		}
-
-		delete ptr;
-	}
-}
-
-
-void startGui(GuiBase* ptr) {
-	ptr->startGui();
-	ptr->stopped = false;
-}
-
-
-void stopGui(GuiBase* ptr) {
-	ptr->stopGui();
-	ptr->stopped = true;
-}
-
-
-void addWindow(GuiBase* ptr) {
-	ptr->addWindow();
-}
-
-
-void update(GuiBase* ptr) {
-	ptr->update();
-}
-
-
-void render(GuiBase* ptr) {
-	ptr->render();
-}
-
 GuiBase::GuiBase(int _frameWidth, int _frameHeight) {
 	frameWidth = _frameWidth;
 	frameHeight = _frameHeight;
@@ -152,11 +108,11 @@ void GuiBase::OnMouseWheel(MouseEvent* eventArgs) {
 	
 }
 
-void GuiBase::addWindow() {
+BaseWindow* GuiBase::addWindow(std::string title) {
 
 	maxWindow++;
 	//TODO: Fix Memory leaks for BaseWindow
-	BaseWindow* windowComp = new BaseWindow("Window " + std::to_string(maxWindow + 1), "add.png", glm::vec2(120.0f, 70.0f), glm::vec2(glm::linearRand(-150.0f,150.0f),glm::linearRand(-150.0f,150.0f)), glm::vec3(glm::linearRand(0.0f, 1.0f), glm::linearRand(0.0f, 1.0f), glm::linearRand(0.0f, 1.0f)), 0.001f * (float)(maxWindow + 1));
+	BaseWindow* windowComp = new BaseWindow(title, "add.png", glm::vec2(120.0f, 70.0f), glm::vec2(glm::linearRand(-150.0f,150.0f),glm::linearRand(-150.0f,150.0f)), glm::vec3(glm::linearRand(0.0f, 1.0f), glm::linearRand(0.0f, 1.0f), glm::linearRand(0.0f, 1.0f)), 0.001f * (float)(maxWindow + 1));
 	windows.push_back(windowComp);
 
 	//eventManager->addListener((EventHandler*)windowComp);
@@ -166,6 +122,8 @@ void GuiBase::addWindow() {
 	for (int j = 0; j < numSlider; j++) {
 		Slider* slider = windowComp->addSlider("Slider " + std::to_string(j), glm::linearRand(0.0f, 115.0f), 0.0f, 115.0f);
 	}
+
+	return windowComp;
 }
 
 void GuiBase::stopGui() {
@@ -185,11 +143,25 @@ void GuiBase::stopGui() {
 
 void GuiBase::update() {
 	eventManager->pollEvents();
+
 	GUIRenderer::GetInstance()->update();
 }
 
+using namespace std::chrono;
+
 void GuiBase::render() {
+
 	GUIRenderer::GetInstance()->render();
+
+	frameCount++;
+	double t = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+
+	double delta = t - lastTime;
+
+	lastTime = t;
+
+	fpsCounter->updateText(std::to_string(1000/delta));
+
 }
 
 unsigned char* GuiBase::getPixelData() {
@@ -217,10 +189,11 @@ int GuiBase::startGui()
 
 	int numWindow = 0;
 
-	IconRenderer::GetInstance()->addIcon("triangle.png");
+	/*IconRenderer::GetInstance()->addIcon("triangle.png");
 	IconRenderer::GetInstance()->addIcon("add.png", glm::vec2(15.0f, 0.0f));
 	IconRenderer::GetInstance()->addIcon("perlin.png", glm::vec2(30.0f, 0.0f));
-	IconRenderer::GetInstance()->addIcon("text.png", glm::vec2(45.0f, 0.0f));
+	IconRenderer::GetInstance()->addIcon("text.png", glm::vec2(45.0f, 0.0f));*/
+	fpsCounter = TextRenderer::GetInstance()->addText("10");
 
 	int frame = 0;
 
@@ -229,9 +202,9 @@ int GuiBase::startGui()
 	eventManager->addListener(this);
 	eventManager->addListener(Camera::GetInstance());
 
-	addWindow();
-	addWindow();
-	addWindow();
+	addWindow("Component 1");
+	addWindow("Component 2");
+	addWindow("Component 3");
 
 	/*while (!glfwWindowShouldClose(window))
 	{

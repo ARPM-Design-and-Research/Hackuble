@@ -314,8 +314,8 @@ void TextRenderer::updateLabel(TextLabel* label) {
 
     //Create more room in buffer
     //First delete the existing space in the buffer
-    if (label->updatedText.size() > label->text.size()) {
-        int extra = label->updatedText.size() - label->text.size();
+    if (label->updatedText.size() != label->text.size()) {
+
         glyphVertices.erase(glyphVertices.begin() + bufferOffset, glyphVertices.begin() + bufferOffset + label->text.size() * 30);
 
         //Remove label from labels vector

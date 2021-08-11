@@ -60,9 +60,13 @@ namespace SynGUI {
 		EventManager* eventManager;
 		Component* activeWindow = nullptr;
 
+		TextLabel* fpsCounter;
+		double lastTime = 0;
+		int frameCount = 0;
+
 		int startGui();
 		void stopGui();
-		void addWindow();
+		BaseWindow* addWindow(std::string title);
 		void update();
 		void render();
 

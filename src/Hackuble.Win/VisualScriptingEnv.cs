@@ -25,11 +25,10 @@ namespace Hackuble.Win
 
         private void LoadVSEControl()
         {
-            this.openGLControl1 = new Win.Controls.OpenGLControl();
+            this.openGLControl1 = new Win.Controls.OpenGLControl((this.Size.Width), (this.Size.Height - (this.toolStrip1.Height + statusStrip1.Height)));
             this.openGLControl1.SuspendLayout();
             this.SuspendLayout();
             this.openGLControl1.BringToFront();
-            this.openGLControl1.Size = new System.Drawing.Size((this.Size.Width), (this.Size.Height - (this.toolStrip1.Height + statusStrip1.Height)));
             this.openGLControl1.Location = new System.Drawing.Point(0, this.toolStrip1.Height);
             this.openGLControl1.Name = "openGLControl1";
             this.openGLControl1.TabIndex = 3;

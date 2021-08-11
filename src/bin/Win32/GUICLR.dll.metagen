@@ -1,5 +1,5 @@
 ImageRuntimeVersion: v4.0.30319
-Assembly GUICLR, Version=1.0.*, Culture=Invariant Language (Invariant Country): 
+Assembly GUICLR, Version=0.0.*, Culture=Invariant Language (Invariant Country): 
 	hash=SHA1, flags=PublicKey
 Assembly mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
 	hash=None, flags=None
@@ -26,4 +26,30 @@ Class GUICLR.ManagedContext: AutoLayout, AnsiClass, Class, Public, BeforeFieldIn
     onPaint(): PrivateScope, Public, HideBySig
     awaitInitialized(): PrivateScope, Public, HideBySig
     awaitResize(): PrivateScope, Public, HideBySig
+    Dispose(): PrivateScope, Public, Final, Virtual, HideBySig
+Class GUICLR.BB: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Interfaces:
+    System.IDisposable
+  Fields:
+    Single x0 : Public
+    Single y0 : Public
+    Single x1 : Public
+    Single y1 : Public
+  Methods:
+    Dispose(): PrivateScope, Public, Final, Virtual, HideBySig
+Class GUICLR.Component: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(std.basic_string<char\,std::char_traits<char>\,std::allocator<char> >*): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Interfaces:
+    System.IDisposable
+  Fields:
+    GUICLR.BB boundingBox IsByValue : Public, InitOnly
+  Methods:
+    addSlider(basic_string<char\,std::char_traits<char>\,std::allocator<char> >*, Single, Single, Single): PrivateScope, Public, HideBySig
+    Dispose(): PrivateScope, Public, Final, Virtual, HideBySig
+Class GUICLR.Slider: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Interfaces:
+    System.IDisposable
+  Methods:
     Dispose(): PrivateScope, Public, Final, Virtual, HideBySig
