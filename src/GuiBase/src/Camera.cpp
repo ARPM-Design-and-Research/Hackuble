@@ -51,22 +51,22 @@ void Camera::init() {
 	//Setup projection matrix with 16:9 aspect ratio
 	proj = glm::ortho(0.0f, windowSize.x, windowSize.y, 0.0f, -1.0f, 1.0f);
 
-	center = glm::vec3(windowSize.x / 2.0f, windowSize.y / 2.0f, 0.0f);
+	//center = glm::vec3(windowSize.x / 2.0f, windowSize.y / 2.0f, 0.0f) + position;
+	zoomMat = glm::mat4(1.0f);
+	//zoomMat = glm::translate(glm::mat4(1.0f), center) * glm::scale(glm::mat4(1.0f), zoom) * glm::translate(glm::mat4(1.0f), -center);
 
-	zoomMat = glm::translate(glm::mat4(1.0f), center) * glm::scale(glm::mat4(1.0f), zoom) * glm::translate(glm::mat4(1.0f), -center);
-
-	view = glm::translate(glm::mat4(1.0f), -position) * zoomMat;
+	view = glm::translate(glm::mat4(1.0f), -position);// * zoomMat;
 	mvp = proj * view;
 }
 
 //Called automatically by GUIRenderer
 void Camera::update() {
 
-	center = glm::vec3(windowSize.x/2.0f, windowSize.y/2.0f, 0.0f) + position;
+	//center = glm::vec3(windowSize.x/2.0f, windowSize.y/2.0f, 0.0f) + position;
 
-	//zoomMat = glm::scale(glm::mat4(1.0f), zoom);
+	view = glm::translate(glm::mat4(1.0f), -position) * zoomMat;
 
-	view = glm::translate(glm::mat4(1.0f), -position) * zoomMat;//glm::translate(glm::mat4(1.0f), center) * zoomMat * glm::translate(glm::mat4(1.0f), -center);
+	//zoomMat = glm::scale(glm::mat4(1.0f), zoom)
 	
 	mvp = proj * view;
 }
@@ -102,7 +102,7 @@ glm::vec3 Camera::getPosition() {
 void Camera::OnMouseMove(MouseEvent* eventArgs) {
 
 	if (panning) {
-		position += glm::vec3(-eventArgs->delta.x, -eventArgs->delta.y,0.0f);
+		position += zoom * glm::vec3(-eventArgs->delta.x, -eventArgs->delta.y,0.0f);
 	}
 }
 
@@ -121,9 +121,20 @@ void Camera::OnMouseUp(MouseEvent* eventArgs) {
 }
 
 void Camera::OnMouseWheel(MouseEvent* eventArgs) {
-	zoom += eventArgs->wheelDelta/480.0f;
 
-	zoomMat = glm::translate(glm::mat4(1.0f), glm::vec3(eventArgs->pos.x,eventArgs->pos.y,0.0f)) * glm::scale(glm::mat4(1.0f), zoom) * glm::translate(glm::mat4(1.0f), glm::vec3(-eventArgs->pos.x, -eventArgs->pos.y, 0.0f));
+	if (!panning) {
+		zoom += eventArgs->wheelDelta / 480.0f;
+
+		zoom = glm::clamp(zoom, 0.5f, 5.0f);
+
+		glm::vec4 tempProj = zoomMat * glm::vec4(eventArgs->pos.x, eventArgs->pos.y, 0.0f, 1.0f);
+		zoomMat = glm::translate(glm::mat4(1.0f), glm::vec3(eventArgs->pos.x, eventArgs->pos.y, 0.0f)) * glm::scale(glm::mat4(1.0f), zoom) * glm::translate(glm::mat4(1.0f), -glm::vec3(eventArgs->pos.x, eventArgs->pos.y, 0.0f));
+		glm::vec4 tempProj1 = zoomMat * glm::vec4(eventArgs->pos.x, eventArgs->pos.y, 0.0f, 1.0f);
+
+		glm::vec4 offset = tempProj1 - tempProj;
+
+		position += glm::vec3(offset.x, offset.y, offset.z);
+	}
 }
 
 //Key callback is used for now to gather key events and move the camera accordingly

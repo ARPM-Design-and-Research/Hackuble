@@ -101,7 +101,7 @@ void EventManager::pollEvents() {
 
 			case EventType::MOUSEMOVE:
 
-				glm::vec4 mousePosGlobal = glm::inverse(Camera::GetInstance()->getZoomMatrix())* glm::vec4(((MouseEvent*)eve)->rawPos.x * 2.0f, ((MouseEvent*)eve)->rawPos.y * 2.0f, 0.0f, 1.0f);
+				glm::vec3 mousePosGlobal = 1.0f/Camera::GetInstance()->zoom.x * glm::vec3(((MouseEvent*)eve)->rawPos.x * 2.0f, ((MouseEvent*)eve)->rawPos.y * 2.0f, 0.0f);
 
 				mouseDelta = glm::vec2(mousePosGlobal.x, mousePosGlobal.y) - mousePos;
 				mousePos = glm::vec2(mousePosGlobal.x, mousePosGlobal.y);

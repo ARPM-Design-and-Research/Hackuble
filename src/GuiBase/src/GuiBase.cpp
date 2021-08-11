@@ -160,7 +160,8 @@ void GuiBase::render() {
 
 	lastTime = t;
 
-	fpsCounter->updateText(std::to_string(1000/delta));
+	//fpsCounter->updateText(std::to_string(1000/delta));
+	fpsCounter->updateText(std::to_string(Camera::GetInstance()->zoom.x));
 
 }
 
