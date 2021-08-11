@@ -57,7 +57,12 @@ void GUICLR::ManagedContext::awaitInitialized() {
 
 
 GUICLR::Component::Component(std::string title) {
+	SynGUI::BaseWindow* component = GuiContext::GetInstance()->addWindow(title);
 
+	boundingBox.x0 = component->componentBoundingBox.x0;
+	boundingBox.y0 = component->componentBoundingBox.y0;
+	boundingBox.x1 = component->componentBoundingBox.x1;
+	boundingBox.y1 = component->componentBoundingBox.y1;
 }
 
 GUICLR::Component::~Component() {

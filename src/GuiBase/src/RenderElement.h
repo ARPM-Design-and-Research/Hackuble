@@ -16,23 +16,26 @@
 * to ovveride the functionality to fit the specific use case
 */
 
-class RenderElement {
-protected:
+namespace SynGUI {
 
-	bool update = false;
-	glm::vec2 pos;
-	Pivot pivot;
-	
-	float zDepth;
+	class RenderElement {
+	protected:
 
-public:
-	RenderElement();
+		bool update = false;
+		glm::vec2 pos;
+		Pivot pivot;
 
-	void setPosition(glm::vec2 pos);
-	void translate(glm::vec2 translate);
-	void setZDepth(float depth);
+		float zDepth;
 
-	void setBox(glm::vec2 c1, glm::vec2 c2);
-	BoundingBox box;
-	//TODO: Add set Size
-};
+	public:
+		RenderElement();
+
+		void setPosition(glm::vec2 pos);
+		void translate(glm::vec2 translate);
+		void setZDepth(float depth);
+
+		void setBox(glm::vec2 c1, glm::vec2 c2);
+		BoundingBox box;
+		//TODO: Add set Size
+	};
+}

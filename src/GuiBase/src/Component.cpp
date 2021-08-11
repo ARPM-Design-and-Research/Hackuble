@@ -3,6 +3,8 @@
 #include "Component.h"
 #include <iostream>
 
+using namespace SynGUI;
+
 Component::Component(){
 
 }

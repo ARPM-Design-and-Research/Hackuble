@@ -81,9 +81,6 @@
     <ClInclude Include="src\Helper.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\dllExport.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\GuiBase.h">
       <Filter>src</Filter>
     </ClInclude>

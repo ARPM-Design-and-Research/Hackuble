@@ -10,13 +10,15 @@
 * a key of string with the icon name. The wrong name will cause errors there.
 */
 
-class Icon : public RenderElement {
-	friend class IconRenderer;
+namespace SynGUI {
+	class Icon : public RenderElement {
+		friend class IconRenderer;
 
-private:
-	int index;
-	bool added = false;
-	std::string iconName;
+	private:
+		int index;
+		bool added = false;
+		std::string iconName;
 
-	Icon(const std::string& iconName, glm::vec2 pos, glm::vec2 size, Pivot pivot, float zDepth);
-};
+		Icon(const std::string& iconName, glm::vec2 pos, glm::vec2 size, Pivot pivot, float zDepth);
+	};
+}

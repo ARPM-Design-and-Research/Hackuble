@@ -14,7 +14,6 @@
 
 #include "Event.h"
 
-#include "dllExport.h"
 
 /*The base window class is used to create a base for rendering a component
 * It automatically calculates the correct dimensions and layering for the sub graphic

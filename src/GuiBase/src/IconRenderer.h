@@ -36,55 +36,58 @@ namespace quicktype {
 	class FrameValue;
 };
 
-class Icon;
+namespace SynGUI {
 
-class IconRenderer {
-private:
-	IconInfo getIconInfo(const std::string& iconName);
+	class Icon;
 
-	std::map<std::string, quicktype::FrameValue> iconMetadata;
+	class IconRenderer {
+	private:
+		IconInfo getIconInfo(const std::string& iconName);
 
-protected:
-	static IconRenderer* iconRenderer_;
-	IconRenderer();
+		std::map<std::string, quicktype::FrameValue> iconMetadata;
 
-	unsigned int atlasTextureBuffer;
-	unsigned char* atlasBuffer;
-	int bpp;
+	protected:
+		static IconRenderer* iconRenderer_;
+		IconRenderer();
 
-	unsigned int vao;
-	unsigned int vbo;
+		unsigned int atlasTextureBuffer;
+		unsigned char* atlasBuffer;
+		int bpp;
 
-	std::vector<float> iconVertices;
-	std::vector<Icon*> icons;
+		unsigned int vao;
+		unsigned int vbo;
 
-	unsigned int iconShader;
+		std::vector<float> iconVertices;
+		std::vector<Icon*> icons;
 
-	void addIconToBuffer(Icon* icon);
+		unsigned int iconShader;
 
-public:
+		void addIconToBuffer(Icon* icon);
 
-	IconRenderer(IconRenderer& other) = delete;
-	/**
-	 * Singletons should not be assignable.
-	 */
-	void operator=(const IconRenderer&) = delete;
-	/**
-	 * This is the static method that controls the access to the singleton
-	 * instance. On the first run, it creates a singleton object and places it
-	 * into the static field. On subsequent runs, it returns the client existing
-	 * object stored in the static field.
-	 */
+	public:
 
-	static IconRenderer* GetInstance();
+		IconRenderer(IconRenderer& other) = delete;
+		/**
+		 * Singletons should not be assignable.
+		 */
+		void operator=(const IconRenderer&) = delete;
+		/**
+		 * This is the static method that controls the access to the singleton
+		 * instance. On the first run, it creates a singleton object and places it
+		 * into the static field. On subsequent runs, it returns the client existing
+		 * object stored in the static field.
+		 */
 
-	void init();
-	void deinit();
-	void render();
+		static IconRenderer* GetInstance();
 
-	Icon* addIcon(const std::string& iconName, glm::vec2 pos = glm::vec2(0.0f), glm::vec2 size = glm::vec2(10.0f), Pivot pivot = Pivot::TOP_LEFT, float zDepth = 0.0f);
-	
-	void updateIcon(Icon* icon);
+		void init();
+		void deinit();
+		void render();
 
-	glm::vec2 atlasSize;
-};
+		Icon* addIcon(const std::string& iconName, glm::vec2 pos = glm::vec2(0.0f), glm::vec2 size = glm::vec2(10.0f), Pivot pivot = Pivot::TOP_LEFT, float zDepth = 0.0f);
+
+		void updateIcon(Icon* icon);
+
+		glm::vec2 atlasSize;
+	};
+}

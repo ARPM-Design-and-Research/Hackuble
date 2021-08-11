@@ -2,6 +2,7 @@
 
 #include "Icon.h"
 
+using namespace SynGUI;
 //Basic constructor for graphic element members
 Icon::Icon(const std::string& name, glm::vec2 _pos, glm::vec2 _size, Pivot _pivot, float _zDepth) {
 	pos = _pos;

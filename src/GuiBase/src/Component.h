@@ -13,24 +13,27 @@
 * To create a new component, you will need to derive it from this class.
 */
 
-class Component {
-private:
+namespace SynGUI {
 
-public:
-	
-	Component();
-	~Component();
+	class Component {
+	private:
 
-	glm::vec2 pos;
-	glm::vec2 size;
-	std::vector<Component*> childComponents;
+	public:
 
-	virtual void setPosition(glm::vec2 pos);
-	virtual void translate(glm::vec2 translate);
+		Component();
+		~Component();
 
-	BoundingBox componentBoundingBox;
+		glm::vec2 pos;
+		glm::vec2 size;
+		std::vector<Component*> childComponents;
 
-	virtual void calculateBoundingBox();
+		virtual void setPosition(glm::vec2 pos);
+		virtual void translate(glm::vec2 translate);
 
-	void addChildComponent(Component* component);
-};
+		BoundingBox componentBoundingBox;
+
+		virtual void calculateBoundingBox();
+
+		void addChildComponent(Component* component);
+	};
+}

@@ -17,51 +17,54 @@
 * draw call is issued to draw all the bezier curves
 */
 
-class Bezier;
+namespace SynGUI {
 
-class BezierRenderer {
-protected:
+	class Bezier;
 
-	static BezierRenderer* bezierRenderer_;
+	class BezierRenderer {
+	protected:
 
-	void updateBezierCurve(Bezier* bezier);
+		static BezierRenderer* bezierRenderer_;
 
-	BezierRenderer();
+		void updateBezierCurve(Bezier* bezier);
 
-public:
-	
-	BezierRenderer(BezierRenderer& other) = delete;
-	/**
-	 * Singletons should not be assignable.
-	 */
-	void operator=(const BezierRenderer&) = delete;
-	/**
-	 * This is the static method that controls the access to the singleton
-	 * instance. On the first run, it creates a singleton object and places it
-	 * into the static field. On subsequent runs, it returns the client existing
-	 * object stored in the static field.
-	 */
+		BezierRenderer();
 
-	unsigned int BezierShader;
-	unsigned int SSBO;
-	unsigned int VAO;
+	public:
 
-	float lineWidth = 1.0f;
+		BezierRenderer(BezierRenderer& other) = delete;
+		/**
+		 * Singletons should not be assignable.
+		 */
+		void operator=(const BezierRenderer&) = delete;
+		/**
+		 * This is the static method that controls the access to the singleton
+		 * instance. On the first run, it creates a singleton object and places it
+		 * into the static field. On subsequent runs, it returns the client existing
+		 * object stored in the static field.
+		 */
 
-	static BezierRenderer* GetInstance();
+		unsigned int BezierShader;
+		unsigned int SSBO;
+		unsigned int VAO;
 
-	std::vector<Bezier*> bezierCurves;
-	std::vector<glm::vec4> bezierVertices;
+		float lineWidth = 1.0f;
 
-	//Create new bezier curve
-	Bezier* addBezierCurve(glm::vec2 v1, glm::vec2 v2, glm::vec2 v3, glm::vec2 v4, glm::vec3 col = glm::vec3(1.0f), int res = 4);
+		static BezierRenderer* GetInstance();
 
-	void addBezierToBuffer(Bezier* bezier);
+		std::vector<Bezier*> bezierCurves;
+		std::vector<glm::vec4> bezierVertices;
 
-	//Change line width of bezier curve
-	void setLineWidth(float width);
+		//Create new bezier curve
+		Bezier* addBezierCurve(glm::vec2 v1, glm::vec2 v2, glm::vec2 v3, glm::vec2 v4, glm::vec3 col = glm::vec3(1.0f), int res = 4);
 
-	void init();
-	void render();
-	void deinit();
-};
+		void addBezierToBuffer(Bezier* bezier);
+
+		//Change line width of bezier curve
+		void setLineWidth(float width);
+
+		void init();
+		void render();
+		void deinit();
+	};
+}

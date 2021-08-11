@@ -3,6 +3,8 @@
 #include "Bezier.h"
 #include "BezierRenderer.h"
 
+using namespace SynGUI;
+
 Bezier::Bezier(glm::vec2 v1, glm::vec2 v2, glm::vec2 v3, glm::vec2 v4, glm::vec3 col, int res) {
 
 	controlPoints[0] = v1;

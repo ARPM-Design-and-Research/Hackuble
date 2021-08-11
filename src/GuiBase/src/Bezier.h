@@ -13,24 +13,27 @@
 
 //TODO: Setup rendering styles for bezier curves
 
-class BezierRenderer;
+namespace SynGUI {
 
-class Bezier : public RenderElement {
+	class BezierRenderer;
 
-friend class BezierRenderer;
+	class Bezier : public RenderElement {
 
-private:
-	int index;
+		friend class BezierRenderer;
 
-	glm::vec2 controlPoints[4];
-	glm::vec3 color;
+	private:
+		int index;
 
-	bool added = false;
-public:
-	Bezier(glm::vec2 v1, glm::vec2 v2, glm::vec2 v3, glm::vec2 v4, glm::vec3 col = glm::vec3(1.0f), int res = 4);
+		glm::vec2 controlPoints[4];
+		glm::vec3 color;
 
-	int resolution;
+		bool added = false;
+	public:
+		Bezier(glm::vec2 v1, glm::vec2 v2, glm::vec2 v3, glm::vec2 v4, glm::vec3 col = glm::vec3(1.0f), int res = 4);
 
-	void setColor(glm::vec3 col);
-	void setControlPoints(glm::vec2 v1, glm::vec2 v2, glm::vec2 v3, glm::vec2 v4);
-};
+		int resolution;
+
+		void setColor(glm::vec3 col);
+		void setControlPoints(glm::vec2 v1, glm::vec2 v2, glm::vec2 v3, glm::vec2 v4);
+	};
+}

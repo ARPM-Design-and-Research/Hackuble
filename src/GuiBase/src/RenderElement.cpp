@@ -3,6 +3,8 @@
 #include "RenderElement.h"
 #include <iostream>
 
+using namespace SynGUI;
+
 RenderElement::RenderElement() {
 
 }

@@ -160,7 +160,6 @@
     <ClInclude Include="src\BezierRenderer.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Component.h" />
-    <ClInclude Include="src\dllExport.h" />
     <ClInclude Include="src\Enum.h" />
     <ClInclude Include="src\Error.h" />
     <ClInclude Include="src\Event.h" />

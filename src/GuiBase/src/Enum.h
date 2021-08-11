@@ -5,51 +5,54 @@
 
 #include "glm.hpp"
 
-enum class Pivot {
-	CENTER,
-	TOP_LEFT,
-	BOTTOM_LEFT,
-	TOP_RIGHT,
-	BOTTOM_RIGHT
-};
+namespace SynGUI {
 
-struct BoundingBox {
-	float x0;
-	float y0;
-	float x1;
-	float y1;
-};
+	enum class Pivot {
+		CENTER,
+		TOP_LEFT,
+		BOTTOM_LEFT,
+		TOP_RIGHT,
+		BOTTOM_RIGHT
+	};
 
-struct GlyphInfo {
-	glm::vec2 pos;
-	glm::vec2 size;
-	glm::vec4 uv;
-	float advance;
-	unsigned short unicode;
-};
+	struct BoundingBox {
+		float x0;
+		float y0;
+		float x1;
+		float y1;
+	};
 
-struct AtlasInfo {
-	glm::vec2 size;
-	float fontSize;
-};
+	struct GlyphInfo {
+		glm::vec2 pos;
+		glm::vec2 size;
+		glm::vec4 uv;
+		float advance;
+		unsigned short unicode;
+	};
 
-struct IconInfo {
-	glm::vec2 pos;
-	glm::vec2 size;
-};
+	struct AtlasInfo {
+		glm::vec2 size;
+		float fontSize;
+	};
+
+	struct IconInfo {
+		glm::vec2 pos;
+		glm::vec2 size;
+	};
 
 
-enum class MouseButton {
-	NONE,
-	LEFT,
-	MIDDLE,
-	RIGHT
-};
+	enum class MouseButton {
+		NONE,
+		LEFT,
+		MIDDLE,
+		RIGHT
+	};
 
-enum class EventType {
-	MOUSEMOVE,
-	MOUSEDOWN,
-	MOUSEUP,
-	MOUSEWHEEL,
-	RESIZE
-};
+	enum class EventType {
+		MOUSEMOVE,
+		MOUSEDOWN,
+		MOUSEUP,
+		MOUSEWHEEL,
+		RESIZE
+	};
+}

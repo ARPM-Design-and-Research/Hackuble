@@ -39,8 +39,6 @@
 
 #include "gtc/random.hpp"
 
-#include "dllExport.h"
-
 
 
 namespace SynGUI {

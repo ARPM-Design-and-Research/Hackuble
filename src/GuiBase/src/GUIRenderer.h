@@ -23,51 +23,54 @@
 *
 */
 
-class GUIRenderer {
-protected:
+namespace SynGUI {
 
-	static GUIRenderer* guiRenderer_;
+	class GUIRenderer {
+	protected:
 
-	GUIRenderer();
+		static GUIRenderer* guiRenderer_;
 
-	unsigned int screenTexture;
-	unsigned int renderBufferObject;
-	unsigned int frameBufferObject;
+		GUIRenderer();
 
-	unsigned int screenVAO;
-	unsigned int screenVBO;
+		unsigned int screenTexture;
+		unsigned int renderBufferObject;
+		unsigned int frameBufferObject;
 
-	unsigned int screenShader;
+		unsigned int screenVAO;
+		unsigned int screenVBO;
 
-	GLubyte *framePixelsData;
+		unsigned int screenShader;
 
-public:
+		GLubyte* framePixelsData;
 
-	GUIRenderer(GUIRenderer& other) = delete;
-	/**
-	 * Singletons should not be assignable.
-	 */
-	void operator=(const GUIRenderer&) = delete;
-	/**
-	 * This is the static method that controls the access to the singleton
-	 * instance. On the first run, it creates a singleton object and places it
-	 * into the static field. On subsequent runs, it returns the client existing
-	 * object stored in the static field.
-	 */
+	public:
 
-	static GUIRenderer* GetInstance();
+		GUIRenderer(GUIRenderer& other) = delete;
+		/**
+		 * Singletons should not be assignable.
+		 */
+		void operator=(const GUIRenderer&) = delete;
+		/**
+		 * This is the static method that controls the access to the singleton
+		 * instance. On the first run, it creates a singleton object and places it
+		 * into the static field. On subsequent runs, it returns the client existing
+		 * object stored in the static field.
+		 */
 
-	int frameWidth;
-	int frameHeight;
+		static GUIRenderer* GetInstance();
 
-	void init(int width, int height);
-	void deinit();
-	void render();
-	void update();
+		int frameWidth;
+		int frameHeight;
 
-	GLubyte* getPixelData();
+		void init(int width, int height);
+		void deinit();
+		void render();
+		void update();
 
-	//static void setScreenSize(GLFWwindow* window, int width, int height);
-	void setScreenSize(int width, int height);
+		GLubyte* getPixelData();
 
-};
+		//static void setScreenSize(GLFWwindow* window, int width, int height);
+		void setScreenSize(int width, int height);
+
+	};
+}
