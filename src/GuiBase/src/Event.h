@@ -25,7 +25,7 @@ namespace SynGUI {
 	class MouseEvent : public Event {
 	public:
 		MouseEvent(EventType type, float mouseX, float mouseY, MouseButton button, float _deltaMouseX = 0, float _deltaMouseY = 0);
-		MouseEvent(EventType type, int wheelDelta);
+		MouseEvent(EventType type, float mouseX, float mouseY, int wheelDelta);
 
 		glm::vec2 rawPos;
 		glm::vec2 rawDelta;

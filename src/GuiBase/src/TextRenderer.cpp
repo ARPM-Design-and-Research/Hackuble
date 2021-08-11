@@ -443,6 +443,7 @@ TextLabel* TextRenderer::addText(const std::string& text, float fontSize, glm::v
     }
 
     label->added = false;
+    label->update = true;
 
     return label;
 }

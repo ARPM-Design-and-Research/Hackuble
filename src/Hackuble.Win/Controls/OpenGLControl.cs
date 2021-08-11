@@ -69,7 +69,8 @@ namespace Hackuble.Win.Controls
 
             VisualScripting.Component comp = new VisualScripting.Component();
             comp.setColor(255, 0, 0);
-            comp.addSlider("Slider 45", 0.5f, 0.0f, 1.0f);
+            comp.setName("From C#");
+            comp.addSlider("Slider 1", 0.5f, 0.0f, 1.0f);
         }
 
         public void resizeOpenGL(EventArgs e)
@@ -137,7 +138,7 @@ namespace Hackuble.Win.Controls
             base.OnMouseWheel(e);
 
             if (!InVisualStudio())
-                context.onMouseWheel(e.Delta);
+                context.onMouseWheel(e.X, e.Y, e.Delta);
 
             this.Invalidate();
         }

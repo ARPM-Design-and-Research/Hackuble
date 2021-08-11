@@ -26,7 +26,7 @@ namespace GUICLR {
 		void onMouseMove(float x, float y, Int32 mouseButton);
 		void onMouseDown(float x, float y, Int32 mouseButton);
 		void onMouseUp(float x, float y, Int32 mouseButton);
-		void onMouseWheel(int delta);
+		void onMouseWheel(float x, float y, int delta);
 
 		void onPaint();
 

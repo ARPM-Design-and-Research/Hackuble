@@ -53,7 +53,9 @@ void Camera::init() {
 
 	center = glm::vec3(windowSize.x / 2.0f, windowSize.y / 2.0f, 0.0f);
 
-	view = glm::translate(glm::mat4(1.0f), -position) * glm::translate(glm::mat4(1.0f), center) * glm::scale(glm::mat4(1.0f), zoom) * glm::translate(glm::mat4(1.0f), -center);
+	zoomMat = glm::translate(glm::mat4(1.0f), center) * glm::scale(glm::mat4(1.0f), zoom) * glm::translate(glm::mat4(1.0f), -center);
+
+	view = glm::translate(glm::mat4(1.0f), -position) * zoomMat;
 	mvp = proj * view;
 }
 
@@ -62,9 +64,9 @@ void Camera::update() {
 
 	center = glm::vec3(windowSize.x/2.0f, windowSize.y/2.0f, 0.0f) + position;
 
-	zoomMat = glm::scale(glm::mat4(1.0f), zoom);
+	//zoomMat = glm::scale(glm::mat4(1.0f), zoom);
 
-	view = glm::translate(glm::mat4(1.0f), -position) * glm::translate(glm::mat4(1.0f), center) * zoomMat * glm::translate(glm::mat4(1.0f), -center);
+	view = glm::translate(glm::mat4(1.0f), -position) * zoomMat;//glm::translate(glm::mat4(1.0f), center) * zoomMat * glm::translate(glm::mat4(1.0f), -center);
 	
 	mvp = proj * view;
 }
@@ -120,6 +122,8 @@ void Camera::OnMouseUp(MouseEvent* eventArgs) {
 
 void Camera::OnMouseWheel(MouseEvent* eventArgs) {
 	zoom += eventArgs->wheelDelta/480.0f;
+
+	zoomMat = glm::translate(glm::mat4(1.0f), glm::vec3(eventArgs->pos.x,eventArgs->pos.y,0.0f)) * glm::scale(glm::mat4(1.0f), zoom) * glm::translate(glm::mat4(1.0f), glm::vec3(-eventArgs->pos.x, -eventArgs->pos.y, 0.0f));
 }
 
 //Key callback is used for now to gather key events and move the camera accordingly

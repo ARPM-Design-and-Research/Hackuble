@@ -56,7 +56,7 @@ public:
 	void onMouseMove(float x, float y, int mouseButton);
 	void onMouseDown(float x, float y, int mouseButton);
 	void onMouseUp(float x, float y, int mouseButton);
-	void onMouseWheel(int delta);
+	void onMouseWheel(float x, float y, int delta);
 
 	void onPaint();
 

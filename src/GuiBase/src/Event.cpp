@@ -27,10 +27,10 @@ MouseEvent::MouseEvent(EventType type, float _mouseX, float _mouseY, MouseButton
 	wheelDelta = 0;
 }
 
-MouseEvent::MouseEvent(EventType type, int _wheelDelta) : Event(type) {
+MouseEvent::MouseEvent(EventType type, float _mouseX, float _mouseY, int _wheelDelta) : Event(type) {
 	wheelDelta = _wheelDelta;
 
-	rawPos = glm::vec2(0);
+	rawPos = glm::vec2(_mouseX, _mouseY);
 	rawDelta = glm::vec2(0);
 	pos = glm::vec2(0);
 	delta = glm::vec2(0);
@@ -88,6 +88,12 @@ void EventManager::pollEvents() {
 
 				if (((MouseEvent*)eve)->button == MouseButton::RIGHT)
 					rightMouseDown = false;
+
+				convertMouseEvent((MouseEvent*)eve);
+
+				break;
+
+			case EventType::MOUSEWHEEL:
 
 				convertMouseEvent((MouseEvent*)eve);
 

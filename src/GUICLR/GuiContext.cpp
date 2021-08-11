@@ -123,10 +123,10 @@ void GuiContext::onMouseUp(float x, float y, int mouseButton) {
 		gui->addEventToQueue(new SynGUI::MouseEvent(EventType::MOUSEUP, x, y, convertMouseButton(mouseButton)));
 }
 
-void GuiContext::onMouseWheel(int delta) {
+void GuiContext::onMouseWheel(float x, float y, int delta) {
 
 	if (initialized)
-		gui->addEventToQueue(new SynGUI::MouseEvent(EventType::MOUSEWHEEL, delta));
+		gui->addEventToQueue(new SynGUI::MouseEvent(EventType::MOUSEWHEEL, x, y, delta));
 }
 
 void GuiContext::onPaint() {

@@ -44,8 +44,8 @@ void GUICLR::ManagedContext::onMouseUp(float x, float y, Int32 mouseButton) {
 	GuiContext::GetInstance()->onMouseUp(x, y, mouseButton);
 }
 
-void GUICLR::ManagedContext::onMouseWheel(int delta) {
-	GuiContext::GetInstance()->onMouseWheel(delta);
+void GUICLR::ManagedContext::onMouseWheel(float x, float y, int delta) {
+	GuiContext::GetInstance()->onMouseWheel(x,y,delta);
 }
 
 void GUICLR::ManagedContext::onPaint() {
