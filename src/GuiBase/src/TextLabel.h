@@ -51,4 +51,6 @@ public:
 
 	void setPosition(glm::vec2 _pos);
 	void translate(glm::vec2 translate);
+
+	std::string getCurrentText();
 };

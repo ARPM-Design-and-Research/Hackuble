@@ -112,16 +112,16 @@ BaseWindow* GuiBase::addWindow(std::string title) {
 
 	maxWindow++;
 	//TODO: Fix Memory leaks for BaseWindow
-	BaseWindow* windowComp = new BaseWindow(title, "add.png", glm::vec2(120.0f, 70.0f), glm::vec2(glm::linearRand(-150.0f,150.0f),glm::linearRand(-150.0f,150.0f)), glm::vec3(glm::linearRand(0.0f, 1.0f), glm::linearRand(0.0f, 1.0f), glm::linearRand(0.0f, 1.0f)), 0.001f * (float)(maxWindow + 1));
+	BaseWindow* windowComp = new BaseWindow(title, "add.png", glm::vec2(120.0f, 70.0f), glm::vec2(0,0), glm::vec3(1.0f), 0.001f * (float)(maxWindow + 1));
 	windows.push_back(windowComp);
 
 	//eventManager->addListener((EventHandler*)windowComp);
 
-	int numSlider = glm::linearRand(1, 7);
+	/*int numSlider = glm::linearRand(1, 7);
 
 	for (int j = 0; j < numSlider; j++) {
 		Slider* slider = windowComp->addSlider("Slider " + std::to_string(j), glm::linearRand(0.0f, 115.0f), 0.0f, 115.0f);
-	}
+	}*/
 
 	return windowComp;
 }
@@ -202,9 +202,9 @@ int GuiBase::startGui()
 	eventManager->addListener(this);
 	eventManager->addListener(Camera::GetInstance());
 
-	addWindow("Component 1");
-	addWindow("Component 2");
-	addWindow("Component 3");
+	//addWindow("Component 1");
+	//addWindow("Component 2");
+	//addWindow("Component 3");
 
 	/*while (!glfwWindowShouldClose(window))
 	{

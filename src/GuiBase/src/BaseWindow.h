@@ -47,10 +47,14 @@ namespace SynGUI {
 
 		void setPosition(glm::vec2 _pos);
 		void translate(glm::vec2 _trans);
+		void setColor(glm::vec3 _color);
 
 		Slider* addSlider(const std::string& title, float currentValue = 0.0f, float startValue = 0.0f, float endValue = 1.0f);
 
 		void OnMouseMove(MouseEvent* eventArgs);
+
+		void setTitle(std::string title);
+		std::string getTitle();
 	};
 }
 

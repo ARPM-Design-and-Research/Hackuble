@@ -193,6 +193,10 @@
       <Project>{40B9CE8E-1138-4A4B-A339-6E9E3E12CB22}</Project>
       <Name>Hackuble.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\VisualScriptingEnv\VisualScriptingEnv.csproj">
+      <Project>{c8b98e57-20c5-4876-8cc9-6ec15883d318}</Project>
+      <Name>VisualScriptingEnv</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

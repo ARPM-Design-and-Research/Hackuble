@@ -35,10 +35,10 @@ namespace GUICLR {
 		// TODO: Add your methods for this class here.
 	};
 
-	public ref class BB {
+	public ref class BoundingBox {
 	public:
-		BB();
-		~BB();
+		BoundingBox();
+		~BoundingBox();
 
 		float x0;
 		float y0;
@@ -47,13 +47,18 @@ namespace GUICLR {
 	};
 
 	public ref class Component {
+	private:
+		SynGUI::BaseWindow* baseComponent;
+		GUICLR::BoundingBox boundingBox;
 	public:
-		Component(std::string title);
+		Component(System::String^ title);
 		~Component();
 
-		GUICLR::BB boundingBox;
-
-		void addSlider(std::string title, float currentValue, float startValue, float endValue);
+		void addSlider(System::String^ title, float currentValue, float startValue, float endValue);
+		void setColor(float r, float g, float b);
+		void setTitle(System::String^ title);
+		System::String^ getTitle();
+		//GUICLR::BoundingBox getBoundingBox();
 	};
 
 	public ref class Slider {

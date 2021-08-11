@@ -67,6 +67,19 @@ void BaseWindow::setPosition(glm::vec2 _pos) {
 	calculateBoundingBox();
 }
 
+void BaseWindow::setTitle(std::string title) {
+	titleLabel->updateText(title);
+}
+
+std::string BaseWindow::getTitle() {
+	return titleLabel->getCurrentText();
+}
+
+void BaseWindow::setColor(glm::vec3 _color) {
+	color = _color;
+	topRect->setColor(color);
+}
+
 //Adds a slider to the component
 Slider* BaseWindow::addSlider(const std::string& title, float currentValue, float startValue, float endValue) {
 	Slider* slider = new Slider(title, pos + glm::vec2(0.0f, currentHeight), glm::vec2(size.x - 5.0f, 12.0f), currentValue, startValue, endValue, layer);

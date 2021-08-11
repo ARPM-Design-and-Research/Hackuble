@@ -97,3 +97,7 @@ void TextLabel::translate(glm::vec2 translate) {
 
     update = true;
 }
+
+std::string TextLabel::getCurrentText() {
+    return updatedText;
+}

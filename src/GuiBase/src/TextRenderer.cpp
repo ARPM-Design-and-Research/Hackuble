@@ -231,11 +231,13 @@ void TextRenderer::render() {
 
     for (int i = 0; i < labels.size(); i++) {
 
-        if (labels.at(i)->added == false)
+        if (labels.at(i)->added == false) {
             addTextToBuffer(labels.at(i));
-
-        if (labels.at(i)->update)
+        } 
+        else if (labels.at(i)->update) {
             updateLabel(labels.at(i));
+        }
+
     }
 
     glBindVertexArray(vao);

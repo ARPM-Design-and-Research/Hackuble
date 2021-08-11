@@ -12,6 +12,8 @@ using System.Runtime.InteropServices;
 
 using GUICLR;
 
+using VisualScripting;
+
 namespace Hackuble.Win.Controls
 {
 
@@ -64,6 +66,10 @@ namespace Hackuble.Win.Controls
 
                 this.DoubleBuffered = true;
             }
+
+            VisualScripting.Component comp = new VisualScripting.Component();
+            comp.setColor(255, 0, 0);
+            comp.addSlider("Slider 45", 0.5f, 0.0f, 1.0f);
         }
 
         public void resizeOpenGL(EventArgs e)

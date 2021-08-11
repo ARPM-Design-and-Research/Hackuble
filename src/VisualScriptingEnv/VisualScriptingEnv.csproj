@@ -44,5 +44,11 @@
     <Compile Include="Component.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GUICLR\GUICLR.vcxproj">
+      <Project>{3198326d-d273-4db6-be30-9fd209fe30a2}</Project>
+      <Name>GUICLR</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

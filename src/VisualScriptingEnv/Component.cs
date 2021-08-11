@@ -5,18 +5,40 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VisualScriptingEnv
+using GUICLR;
+
+namespace VisualScripting
 {
-    public abstract class Component : IDisposable
+    public class Component : IDisposable
     {
+
+        GUICLR.Component _component;
         public Component()
         {
-
+            _component = new GUICLR.Component("Component");
         }
 
         //BoundingBox
 
-        public string Name { get; set; }
+        public void addSlider(string title, float currentValue, float startValue, float endValue)
+        {
+            _component.addSlider(title, currentValue, startValue, endValue);
+        }
+
+        public void setColor(float r, float g, float b)
+        {
+            _component.setColor(r, g, b);
+        }
+
+        public string getName()
+        {
+            return _component.getTitle();
+        }
+
+        public void setName(string name)
+        {
+            _component.setTitle(name);
+        }
 
         public ComponentCollection Children { get; }
 

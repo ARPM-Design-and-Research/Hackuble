@@ -2,6 +2,12 @@
 
 #include "GUICLR.h"
 
+#include <string>
+
+#include <msclr\marshal_cppstd.h>
+
+using namespace msclr::interop;
+
 GUICLR::ManagedContext::ManagedContext() {
 	GuiContext::GetInstance();
 }
@@ -56,22 +62,39 @@ void GUICLR::ManagedContext::awaitInitialized() {
 
 
 
-GUICLR::Component::Component(std::string title) {
-	SynGUI::BaseWindow* component = GuiContext::GetInstance()->addWindow(title);
+GUICLR::Component::Component(System::String^ title) {
 
-	boundingBox.x0 = component->componentBoundingBox.x0;
-	boundingBox.y0 = component->componentBoundingBox.y0;
-	boundingBox.x1 = component->componentBoundingBox.x1;
-	boundingBox.y1 = component->componentBoundingBox.y1;
+	baseComponent = GuiContext::GetInstance()->addWindow(marshal_as<std::string>(title));
+
+	boundingBox.x0 = baseComponent->componentBoundingBox.x0;
+	boundingBox.y0 = baseComponent->componentBoundingBox.y0;
+	boundingBox.x1 = baseComponent->componentBoundingBox.x1;
+	boundingBox.y1 = baseComponent->componentBoundingBox.y1;
 }
 
 GUICLR::Component::~Component() {
 
 }
 
-void GUICLR::Component::addSlider(std::string title, float currentValue, float startValue, float endValue) {
-
+void GUICLR::Component::addSlider(System::String^ title, float currentValue, float startValue, float endValue) {
+	baseComponent->addSlider(marshal_as<std::string>(title), currentValue, startValue, endValue);
 }
+
+void GUICLR::Component::setColor(float r, float g, float b) {
+	baseComponent->setColor(glm::vec3(r/255.0f, g/255.0f, b/255.0f));
+}
+
+void GUICLR::Component::setTitle(System::String^ title) {
+	baseComponent->setTitle(marshal_as<std::string>(title));
+}
+
+System::String^ GUICLR::Component::getTitle() {
+	return marshal_as<System::String^>(baseComponent->getTitle());
+}
+
+/*GUICLR::BoundingBox GUICLR::Component::getBoundingBox() {
+	return ;
+}*/
 
 
 GUICLR::Slider::Slider() {
@@ -82,10 +105,10 @@ GUICLR::Slider::~Slider() {
 
 }
 
-GUICLR::BB::BB() {
+GUICLR::BoundingBox::BoundingBox() {
 
 }
 
-GUICLR::BB::~BB() {
+GUICLR::BoundingBox::~BoundingBox() {
 
 }
