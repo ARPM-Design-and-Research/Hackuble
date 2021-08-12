@@ -8,6 +8,7 @@
 #include "TextRenderer.h"
 #include "RenderElement.h"
 #include "glm.hpp"
+#include "BezierRenderer.h"
 
 #include "Helper.h"
 
@@ -40,6 +41,13 @@ namespace SynGUI {
 		void setValue(float value);
 
 		void calculateBoundingBox();
+
+		void OnMouseDown(std::shared_ptr<MouseEvent> eventArgs);
+		void OnMouseMove(std::shared_ptr<MouseEvent> eventArgs);
+		void OnMouseUp(std::shared_ptr<MouseEvent> eventArgs);
+
+		Bezier* bezierCurve = nullptr;
+		bool inputSelected;
 
 		std::string label;
 	};

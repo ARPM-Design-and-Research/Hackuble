@@ -4,6 +4,7 @@
 #include <vector>
 #include "Enum.h"
 
+#include "Event.h"
 /* The Component class is a base class for all components.
 *	
 * A component can have child components, which are stored in a
@@ -15,7 +16,7 @@
 
 namespace SynGUI {
 
-	class Component {
+	class Component : public EventHandler {
 	private:
 
 	public:

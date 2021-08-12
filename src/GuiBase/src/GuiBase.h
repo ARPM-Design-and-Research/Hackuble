@@ -39,6 +39,8 @@
 
 #include "gtc/random.hpp"
 
+#include <memory>
+
 
 
 namespace SynGUI {
@@ -56,7 +58,7 @@ namespace SynGUI {
 		std::vector<BaseWindow*> windows;
 
 		EventManager* eventManager;
-		Component* activeWindow = nullptr;
+		Component* activeComponent = nullptr;
 
 		TextLabel* fpsCounter;
 		double lastTime = 0;
@@ -68,13 +70,13 @@ namespace SynGUI {
 		void update();
 		void render();
 
-		void addEventToQueue(Event* event);
+		void addEventToQueue(std::shared_ptr<Event> event);
 
-		void OnMouseDown(MouseEvent* eventArgs);
-		void OnMouseUp(MouseEvent* eventArgs);
-		void OnMouseMove(MouseEvent* eventArgs);
-		void OnMouseWheel(MouseEvent* eventArgs);
-		void OnResize(ResizeEvent* eventArgs);
+		void OnMouseDown(std::shared_ptr<MouseEvent> eventArgs);
+		void OnMouseUp(std::shared_ptr<MouseEvent> eventArgs);
+		void OnMouseMove(std::shared_ptr<MouseEvent> eventArgs);
+		void OnMouseWheel(std::shared_ptr<MouseEvent> eventArgs);
+		void OnResize(std::shared_ptr<ResizeEvent> eventArgs);
 
 		unsigned char* getPixelData();
 

@@ -6,6 +6,8 @@
 
 #include "Event.h"
 
+#include <memory>
+
 /* The Camera class is a singleton class. So only one instance
 * of the class should be present at all times. To get the instance, simply
 * include this header and call Camera::GetInstance() to get the
@@ -30,10 +32,11 @@ namespace SynGUI {
 
 		bool panning = false;
 		glm::vec3 position;
+
+		glm::vec2 prevMousePos;
 	public:
 		
 		glm::vec3 zoom;
-		glm::vec3 center;
 
 		glm::mat4 proj;
 		glm::mat4 view;
@@ -71,10 +74,10 @@ namespace SynGUI {
 
 		void setWindowSize(glm::vec2 size);
 
-		void OnMouseMove(MouseEvent* eventArgs);
-		void OnMouseDown(MouseEvent* eventArgs);
-		void OnMouseUp(MouseEvent* eventArgs);
-		void OnMouseWheel(MouseEvent* eventArgs);
+		void OnMouseMove(std::shared_ptr<MouseEvent> eventArgs);
+		void OnMouseDown(std::shared_ptr<MouseEvent>  eventArgs);
+		void OnMouseUp(std::shared_ptr<MouseEvent>  eventArgs);
+		void OnMouseWheel(std::shared_ptr<MouseEvent>  eventArgs);
 
 		//static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	};

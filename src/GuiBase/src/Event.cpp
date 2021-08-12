@@ -4,6 +4,7 @@
 #include "Enum.h"
 #include <algorithm> 
 #include "Camera.h"
+#include "Component.h"
 
 using namespace SynGUI;
 
@@ -43,75 +44,77 @@ EventHandler::EventHandler() {
 
 }
 
-void EventHandler::OnMouseDown(MouseEvent* eventArgs) {}
-void EventHandler::OnMouseUp(MouseEvent* eventArgs) {}
-void EventHandler::OnMouseMove(MouseEvent* eventArgs) {}
-void EventHandler::OnMouseWheel(MouseEvent* eventArgs) {}
-void EventHandler::OnResize(ResizeEvent* eventArgs) {}
+void EventHandler::OnMouseDown(std::shared_ptr<MouseEvent> eventArgs) {}
+void EventHandler::OnMouseUp(std::shared_ptr<MouseEvent> eventArgs) {}
+void EventHandler::OnMouseMove(std::shared_ptr<MouseEvent> eventArgs) {}
+void EventHandler::OnMouseWheel(std::shared_ptr<MouseEvent> eventArgs) {}
+void EventHandler::OnResize(std::shared_ptr<ResizeEvent> eventArgs) {}
 
 
 EventManager::EventManager() {
 
 }
 
-static void SynGUI::convertMouseEvent(MouseEvent* eve) {
+static void SynGUI::convertMouseEvent(std::shared_ptr<MouseEvent> eve) {
 
-	glm::vec4 mousePosGlobal = glm::inverse(Camera::GetInstance()->getViewMatrix()) * glm::vec4(((MouseEvent*)eve)->rawPos.x * 2.0f, ((MouseEvent*)eve)->rawPos.y * 2.0f, 0.0f, 1.0f);
-	((MouseEvent*)eve)->pos.x = mousePosGlobal.x;
-	((MouseEvent*)eve)->pos.y = mousePosGlobal.y;
+	glm::vec4 mousePosGlobal = glm::inverse(Camera::GetInstance()->getViewMatrix()) * glm::vec4(eve->rawPos.x * 2.0f, eve->rawPos.y * 2.0f, 0.0f, 1.0f);
+	eve->pos.x = mousePosGlobal.x;
+	eve->pos.y = mousePosGlobal.y;
 }
 
 
 void EventManager::pollEvents() {
 
 	if (events.size() > 0) {
-		for (Event* eve : events) {
-
+		for (int i = 0; i < events.size(); i++) {
+			std::shared_ptr<Event> eve = events.at(i);
 			switch (eve->eventType)
 			{
 			case EventType::MOUSEDOWN:
 
-				if (((MouseEvent*)eve)->button == MouseButton::LEFT)
+				if (std::static_pointer_cast<MouseEvent>(eve)->button == MouseButton::LEFT)
 					leftMouseDown = true;
 
-				if (((MouseEvent*)eve)->button == MouseButton::RIGHT)
+				if (std::static_pointer_cast<MouseEvent>(eve)->button == MouseButton::RIGHT)
 					rightMouseDown = true;
 
-				convertMouseEvent((MouseEvent*)eve);
+				convertMouseEvent(std::static_pointer_cast<MouseEvent>(eve));
 
 				break;
 
 			case EventType::MOUSEUP:
 
-				if (((MouseEvent*)eve)->button == MouseButton::LEFT)
+				if (std::static_pointer_cast<MouseEvent>(eve)->button == MouseButton::LEFT)
 					leftMouseDown = false;
 
-				if (((MouseEvent*)eve)->button == MouseButton::RIGHT)
+				if (std::static_pointer_cast<MouseEvent>(eve)->button == MouseButton::RIGHT)
 					rightMouseDown = false;
 
-				convertMouseEvent((MouseEvent*)eve);
+				convertMouseEvent(std::static_pointer_cast<MouseEvent>(eve));
 
 				break;
 
 			case EventType::MOUSEWHEEL:
 
-				convertMouseEvent((MouseEvent*)eve);
+				convertMouseEvent(std::static_pointer_cast<MouseEvent>(eve));
 
 				break;
 
 			case EventType::MOUSEMOVE:
 
-				glm::vec3 mousePosGlobal = 1.0f/Camera::GetInstance()->zoom.x * glm::vec3(((MouseEvent*)eve)->rawPos.x * 2.0f, ((MouseEvent*)eve)->rawPos.y * 2.0f, 0.0f);
+				std::shared_ptr<MouseEvent> mouseEvent = std::static_pointer_cast<MouseEvent>(eve);
+
+				glm::vec4 mousePosGlobal = glm::inverse(Camera::GetInstance()->getViewMatrix()) * glm::vec4(mouseEvent->rawPos.x*2.0f, mouseEvent->rawPos.y*2.0f, 0.0f,1.0f);
 
 				mouseDelta = glm::vec2(mousePosGlobal.x, mousePosGlobal.y) - mousePos;
 				mousePos = glm::vec2(mousePosGlobal.x, mousePosGlobal.y);
-				((MouseEvent*)eve)->delta = mouseDelta;
-				((MouseEvent*)eve)->pos = mousePos;
+				mouseEvent->delta = mouseDelta;
+				mouseEvent->pos = mousePos;
 
 
-				mouseRawDelta = glm::vec2(((MouseEvent*)eve)->rawPos.x, ((MouseEvent*)eve)->rawPos.y) - mouseRawPos;
-				mouseRawPos = glm::vec2(((MouseEvent*)eve)->rawPos.x, ((MouseEvent*)eve)->rawPos.y);
-				((MouseEvent*)eve)->rawDelta = mouseRawDelta;
+				mouseRawDelta = glm::vec2(mouseEvent->rawPos.x, mouseEvent->rawPos.y) - mouseRawPos;
+				mouseRawPos = glm::vec2(mouseEvent->rawPos.x, mouseEvent->rawPos.y);
+				mouseEvent->rawDelta = mouseRawDelta;
 
 				break;
 			}
@@ -121,33 +124,33 @@ void EventManager::pollEvents() {
 				EventHandler* obj = listeners.at(i);
 				switch (eve->eventType) {
 				case EventType::MOUSEDOWN:
-					obj->OnMouseDown((MouseEvent*)eve);
+					obj->OnMouseDown(std::static_pointer_cast<MouseEvent>(eve));
 					break;
 				case EventType::MOUSEUP:
-					obj->OnMouseUp((MouseEvent*)eve);
+					obj->OnMouseUp(std::static_pointer_cast<MouseEvent>(eve));
 					break;
 				case EventType::MOUSEMOVE:
-					obj->OnMouseMove((MouseEvent*)eve);
+					obj->OnMouseMove(std::static_pointer_cast<MouseEvent>(eve));
 					break;
 				case EventType::MOUSEWHEEL:
-					obj->OnMouseWheel((MouseEvent*)eve);
+					obj->OnMouseWheel(std::static_pointer_cast<MouseEvent>(eve));
 					break;
 				case EventType::RESIZE:
-					obj->OnResize((ResizeEvent*)eve);
+					obj->OnResize(std::static_pointer_cast<ResizeEvent>(eve));
 					break;
 				}
 			}
 		}
 
-		for (int i = 0; i < events.size(); i++) {
+		/*for (int i = 0; i < events.size(); i++) {
 			delete events.at(i);
-		}
+		}*/
 
 		events.clear();
 	}
 }
 
-void EventManager::addEvent(Event* eve) {
+void EventManager::addEvent(std::shared_ptr<Event> eve) {
 	events.push_back(eve);
 }
 
@@ -164,9 +167,9 @@ void EventManager::removeListener(EventHandler* listener) {
 
 EventManager::~EventManager() {
 
-	for (int i = 0; i < events.size(); i++) {
+	/*for (int i = 0; i < events.size(); i++) {
 		delete events.at(i);
-	}
+	}*/
 
 	events.clear();
 

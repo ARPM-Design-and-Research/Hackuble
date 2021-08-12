@@ -80,7 +80,7 @@ void GuiContext::resize(int newWidth, int newHeight) {
 	SetWindowPos(windowHandle, NULL, 0, 0, r.right - r.left, r.bottom - r.top, NULL);
 
 	//gui->resize(newWidth, newHeight);
-	gui->addEventToQueue(new SynGUI::ResizeEvent(EventType::RESIZE, newWidth, newHeight));
+	gui->addEventToQueue(std::make_shared<SynGUI::ResizeEvent>(EventType::RESIZE, newWidth, newHeight));
 }
 
 
@@ -108,25 +108,25 @@ static MouseButton convertMouseButton(int button) {
 void GuiContext::onMouseMove(float x, float y, int mouseButton) {
 
 	if (initialized)
-		gui->addEventToQueue(new SynGUI::MouseEvent(EventType::MOUSEMOVE, x, y, convertMouseButton(mouseButton)));
+		gui->addEventToQueue(std::make_shared<SynGUI::MouseEvent>(EventType::MOUSEMOVE, x, y, convertMouseButton(mouseButton)));
 }
 
 void GuiContext::onMouseDown(float x, float y, int mouseButton) {
 
 	if (initialized)
-		gui->addEventToQueue(new SynGUI::MouseEvent(EventType::MOUSEDOWN, x, y, convertMouseButton(mouseButton)));
+		gui->addEventToQueue(std::make_shared<SynGUI::MouseEvent>(EventType::MOUSEDOWN, x, y, convertMouseButton(mouseButton)));
 }
 
 void GuiContext::onMouseUp(float x, float y, int mouseButton) {
 
 	if (initialized)
-		gui->addEventToQueue(new SynGUI::MouseEvent(EventType::MOUSEUP, x, y, convertMouseButton(mouseButton)));
+		gui->addEventToQueue(std::make_shared<SynGUI::MouseEvent>(EventType::MOUSEUP, x, y, convertMouseButton(mouseButton)));
 }
 
 void GuiContext::onMouseWheel(float x, float y, int delta) {
 
 	if (initialized)
-		gui->addEventToQueue(new SynGUI::MouseEvent(EventType::MOUSEWHEEL, x, y, delta));
+		gui->addEventToQueue(std::make_shared<SynGUI::MouseEvent>(EventType::MOUSEWHEEL, x, y, delta));
 }
 
 void GuiContext::onPaint() {
@@ -322,15 +322,16 @@ int GuiContext::createContext() {
 			DispatchMessage(&msg);
 		}
 
-		//std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
 		gui->update();
 
-		//if (onPaintEvent) {
-		gui->render();
-		SwapBuffers(DC);
-		onPaintEvent = false;
-		//}
+		if (onPaintEvent) {
+		//
+			gui->render();
+			SwapBuffers(DC);
+			onPaintEvent = false;
+		}
 	}
 
 	initialized = false;

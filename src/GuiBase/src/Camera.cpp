@@ -18,7 +18,6 @@ void Camera::setWindowSize(glm::vec2 size) {
 
 	windowSize = size;
 	proj = glm::ortho(0.0f, windowSize.x, windowSize.y, 0.0f, -1.0f, 1.0f);
-	center = glm::vec3(windowSize.x / 2.0f, windowSize.y / 2.0f, 0.0f);
 }
 
 Camera* Camera::GetInstance()
@@ -51,11 +50,10 @@ void Camera::init() {
 	//Setup projection matrix with 16:9 aspect ratio
 	proj = glm::ortho(0.0f, windowSize.x, windowSize.y, 0.0f, -1.0f, 1.0f);
 
-	//center = glm::vec3(windowSize.x / 2.0f, windowSize.y / 2.0f, 0.0f) + position;
-	zoomMat = glm::mat4(1.0f);
+	zoomMat = glm::scale(glm::mat4(1.0f), zoom);
 	//zoomMat = glm::translate(glm::mat4(1.0f), center) * glm::scale(glm::mat4(1.0f), zoom) * glm::translate(glm::mat4(1.0f), -center);
 
-	view = glm::translate(glm::mat4(1.0f), -position);// * zoomMat;
+	view = glm::translate(glm::mat4(1.0f), -position) * zoomMat;
 	mvp = proj * view;
 }
 
@@ -99,28 +97,29 @@ glm::vec3 Camera::getPosition() {
 	return position;
 }
 
-void Camera::OnMouseMove(MouseEvent* eventArgs) {
+void Camera::OnMouseMove(std::shared_ptr<MouseEvent>  eventArgs) {
 
 	if (panning) {
-		position += zoom * glm::vec3(-eventArgs->delta.x, -eventArgs->delta.y,0.0f);
+		glm::vec2 l = glm::inverse(view) * glm::vec4(eventArgs->rawDelta.x * 2.0f, eventArgs->rawDelta.y * 2.0f, 0.0f, 0.0f);
+		position += zoom * glm::vec3(-l.x,-l.y,0.0f);
 	}
 }
 
-void Camera::OnMouseDown(MouseEvent* eventArgs) {
+void Camera::OnMouseDown(std::shared_ptr<MouseEvent> eventArgs) {
 
 	if (eventArgs->button == MouseButton::RIGHT) {
 		panning = true;
 	}
 }
 
-void Camera::OnMouseUp(MouseEvent* eventArgs) {
+void Camera::OnMouseUp(std::shared_ptr<MouseEvent>  eventArgs) {
 
 	if (eventArgs->button == MouseButton::RIGHT) {
 		panning = false;
 	}
 }
 
-void Camera::OnMouseWheel(MouseEvent* eventArgs) {
+void Camera::OnMouseWheel(std::shared_ptr<MouseEvent>  eventArgs) {
 
 	if (!panning) {
 		zoom += eventArgs->wheelDelta / 480.0f;
@@ -136,30 +135,3 @@ void Camera::OnMouseWheel(MouseEvent* eventArgs) {
 		position += glm::vec3(offset.x, offset.y, offset.z);
 	}
 }
-
-//Key callback is used for now to gather key events and move the camera accordingly
-//void Camera::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-
-	/*if (key == GLFW_KEY_W) {
-		GetInstance()->position.y -= 10.0f/GetInstance()->zoom.x;
-	}
-
-	if (key == GLFW_KEY_S) {
-		GetInstance()->position.y += 10.0f/GetInstance()->zoom.x;
-	}
-
-	if (key == GLFW_KEY_A) {
-		GetInstance()->position.x -= 10.0f/GetInstance()->zoom.x;
-	}
-
-	if (key == GLFW_KEY_D) {
-		GetInstance()->position.x += 10.0f/GetInstance()->zoom.x;
-	}
-
-	if (key == GLFW_KEY_Q) {
-		GetInstance()->zoom += glm::vec3(0.1f)*GetInstance()->zoom.x;
-	}
-
-	if (key == GLFW_KEY_E) {
-		GetInstance()->zoom -= glm::vec3(0.1f) * GetInstance()->zoom.x;
-	}*/

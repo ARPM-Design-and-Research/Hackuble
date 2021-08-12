@@ -29,7 +29,7 @@ BaseWindow::BaseWindow(const std::string& _title, const std::string& _icon, glm:
 	calculateBoundingBox();
 }
 
-void BaseWindow::OnMouseMove(MouseEvent* eventArgs) {
+void BaseWindow::OnMouseMove(std::shared_ptr<MouseEvent> eventArgs) {
 	
 	if(eventArgs->button == MouseButton::LEFT)
 		translate(eventArgs->delta);

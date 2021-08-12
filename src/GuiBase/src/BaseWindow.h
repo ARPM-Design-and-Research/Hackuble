@@ -51,7 +51,7 @@ namespace SynGUI {
 
 		Slider* addSlider(const std::string& title, float currentValue = 0.0f, float startValue = 0.0f, float endValue = 1.0f);
 
-		void OnMouseMove(MouseEvent* eventArgs);
+		void OnMouseMove(std::shared_ptr<MouseEvent> eventArgs);
 
 		void setTitle(std::string title);
 		std::string getTitle();

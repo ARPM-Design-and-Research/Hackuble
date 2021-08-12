@@ -68,9 +68,11 @@ namespace Hackuble.Win.Controls
             }
 
             VisualScripting.Component comp = new VisualScripting.Component();
-            comp.setColor(255, 0, 0);
+            comp.setColor(255, 0, 255);
             comp.setName("From C#");
             comp.addSlider("Slider 1", 0.5f, 0.0f, 1.0f);
+            comp.addSlider("Slider 2", 0.2f, 0.0f, 1.0f);
+            comp.addSlider("My Slider", 0.5f, 0.0f, 100.0f);
         }
 
         public void resizeOpenGL(EventArgs e)
@@ -104,7 +106,7 @@ namespace Hackuble.Win.Controls
             if (!InVisualStudio())
                 context.onMouseMove(e.X, e.Y, (int)e.Button);
 
-            this.Invalidate();
+           this.Invalidate();
         }
 
         protected override void OnKeyPress(KeyPressEventArgs e)
@@ -149,7 +151,7 @@ namespace Hackuble.Win.Controls
 
             if (!InVisualStudio())
             {
-                //context.onPaint();
+                context.onPaint();
 
                 var area = new Rectangle(new Point(0, 0), new Size(windowWidth, windowHeight));
 

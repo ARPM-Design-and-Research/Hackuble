@@ -75,36 +75,46 @@ GuiBase::GuiBase(int _frameWidth, int _frameHeight) {
 	startGui();
 }
 
-void GuiBase::OnMouseDown(MouseEvent* eventArgs) {
+void GuiBase::OnMouseDown(std::shared_ptr<MouseEvent> eventArgs) {
 
-	if (activeWindow == nullptr && eventArgs->button == MouseButton::LEFT) {
+	if (activeComponent == nullptr && eventArgs->button == MouseButton::LEFT) {
 		for (BaseWindow* window : windows) {
 			BoundingBox b = ((Component*)window)->componentBoundingBox;
 
 			glm::vec2 mousePos = eventArgs->pos;
 			
-			if (mousePos.x > b.x0 && mousePos.x < b.x1 && mousePos.y > b.y0 && mousePos.y < b.y1) {
+			if (window->childComponents.size() > 0) {
+				for (Component* child : window->childComponents) {
+					if (mousePos.x > child->componentBoundingBox.x0 && mousePos.x < child->componentBoundingBox.x1 && mousePos.y > child->componentBoundingBox.y0 && mousePos.y < child->componentBoundingBox.y1) {
+						eventManager->addListener(child);
+						activeComponent = child;
+						break;
+					}
+				}
+			}
+
+			if (activeComponent == nullptr && mousePos.x > b.x0 && mousePos.x < b.x1 && mousePos.y > b.y0 && mousePos.y < b.y1) {
 				eventManager->addListener(window);
-				activeWindow = window;
+				activeComponent = window;
 				break;
 			}
 		}
 	}
 }
 
-void GuiBase::OnMouseUp(MouseEvent* eventArgs) {
+void GuiBase::OnMouseUp(std::shared_ptr<MouseEvent> eventArgs) {
 
-	if (activeWindow != nullptr && eventArgs->button == MouseButton::LEFT) {
-		eventManager->removeListener((BaseWindow*)activeWindow);
-		activeWindow = nullptr;
+	if (activeComponent != nullptr && eventArgs->button == MouseButton::LEFT) {
+		eventManager->removeListener((BaseWindow*)activeComponent);
+		activeComponent = nullptr;
 	}
 }
 
-void GuiBase::OnMouseMove(MouseEvent* eventArgs) {
+void GuiBase::OnMouseMove(std::shared_ptr<MouseEvent> eventArgs) {
 
 }
 
-void GuiBase::OnMouseWheel(MouseEvent* eventArgs) {
+void GuiBase::OnMouseWheel(std::shared_ptr<MouseEvent> eventArgs) {
 	
 }
 
@@ -142,9 +152,9 @@ void GuiBase::stopGui() {
 }
 
 void GuiBase::update() {
-	eventManager->pollEvents();
-
 	GUIRenderer::GetInstance()->update();
+
+	eventManager->pollEvents();
 }
 
 using namespace std::chrono;
@@ -160,8 +170,8 @@ void GuiBase::render() {
 
 	lastTime = t;
 
-	//fpsCounter->updateText(std::to_string(1000/delta));
-	fpsCounter->updateText(std::to_string(Camera::GetInstance()->zoom.x));
+	fpsCounter->updateText(std::to_string(1000/delta));
+	//fpsCounter->updateText(std::to_string(Camera::GetInstance()->zoom.x));
 
 }
 
@@ -169,14 +179,14 @@ unsigned char* GuiBase::getPixelData() {
 	return GUIRenderer::GetInstance()->getPixelData();
 }
 
-void GuiBase::OnResize(ResizeEvent* eventArgs) {
+void GuiBase::OnResize(std::shared_ptr<ResizeEvent> eventArgs) {
 	GUIRenderer::GetInstance()->setScreenSize(eventArgs->width, eventArgs->height);
 	frameWidth = eventArgs->width;
 	frameHeight = eventArgs->height;
 	resized = true;
 }
 
-void GuiBase::addEventToQueue(Event* _event) {
+void GuiBase::addEventToQueue(std::shared_ptr<Event> _event) {
 	eventManager->addEvent(_event);
 }
 
@@ -186,7 +196,6 @@ int GuiBase::startGui()
 
 	//GUIRenderer::GetInstance()->setScreenSize(frameWidth, frameHeight);
 	Camera::GetInstance()->setPosition(glm::vec3(-frameWidth, -frameHeight, 0.0f));
-	Camera::GetInstance()->setZoom(glm::vec3(3.0f));
 
 	int numWindow = 0;
 
@@ -194,6 +203,7 @@ int GuiBase::startGui()
 	IconRenderer::GetInstance()->addIcon("add.png", glm::vec2(15.0f, 0.0f));
 	IconRenderer::GetInstance()->addIcon("perlin.png", glm::vec2(30.0f, 0.0f));
 	IconRenderer::GetInstance()->addIcon("text.png", glm::vec2(45.0f, 0.0f));*/
+	//BezierRenderer::GetInstance()->addBezierCurve(glm::vec2(0.0f), glm::vec2(20.0f, 20.0f), glm::vec2(80.0f, 20.0f), glm::vec2(100.0f, 0.0f));
 	fpsCounter = TextRenderer::GetInstance()->addText("10");
 
 	int frame = 0;

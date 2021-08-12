@@ -152,8 +152,8 @@ void GUIRenderer::setScreenSize(int width, int height) {
 	frameHeight = height;
 
 	//Could cause problem on first call?
-	glDeleteTextures(1, &screenTexture);
-	glDeleteRenderbuffers(1, &renderBufferObject);
+	//glDeleteTextures(1, &screenTexture);
+	//glDeleteRenderbuffers(1, &renderBufferObject);
 
 	glGenTextures(1, &screenTexture);
 	GLCall(glBindTexture(GL_TEXTURE_2D, screenTexture));

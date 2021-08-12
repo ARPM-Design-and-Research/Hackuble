@@ -2,9 +2,9 @@
 
 #include <vector>
 #include "Enum.h"
-#include "Component.h"
 
 #include "glm.hpp"
+#include <memory>
 
 namespace SynGUI {
 
@@ -42,24 +42,24 @@ namespace SynGUI {
 	public:
 		EventHandler();
 
-		virtual void OnMouseDown(MouseEvent* eventArgs);
-		virtual void OnMouseUp(MouseEvent* eventArgs);
-		virtual void OnMouseMove(MouseEvent* eventArgs);
-		virtual void OnMouseWheel(MouseEvent* eventArgs);
-		virtual void OnResize(ResizeEvent* eventArgs);
+		virtual void OnMouseDown(std::shared_ptr<MouseEvent> eventArgs);
+		virtual void OnMouseUp(std::shared_ptr<MouseEvent> eventArgs);
+		virtual void OnMouseMove(std::shared_ptr<MouseEvent> eventArgs);
+		virtual void OnMouseWheel(std::shared_ptr<MouseEvent> eventArgs);
+		virtual void OnResize(std::shared_ptr<ResizeEvent> eventArgs);
 	};
 
 
 	class EventManager {
 	private:
 		std::vector<EventHandler*> listeners;
-		std::vector<Event*> events;
+		std::vector<std::shared_ptr<Event>> events;
 
 	public:
 		EventManager();
 		~EventManager();
 		void pollEvents();
-		void addEvent(Event* eve);
+		void addEvent(std::shared_ptr<Event> eve);
 		void addListener(EventHandler* listener);
 		void removeListener(EventHandler* listener);
 
@@ -73,5 +73,5 @@ namespace SynGUI {
 		glm::vec2 mouseRawDelta;
 	};
 
-	static void convertMouseEvent(MouseEvent* eventArgs);
+	static void convertMouseEvent(std::shared_ptr<MouseEvent> eve);
 }

@@ -48,7 +48,7 @@ namespace SynGUI {
 		unsigned int SSBO;
 		unsigned int VAO;
 
-		float lineWidth = 1.0f;
+		float lineWidth = 8.0f;
 
 		static BezierRenderer* GetInstance();
 
@@ -56,7 +56,8 @@ namespace SynGUI {
 		std::vector<glm::vec4> bezierVertices;
 
 		//Create new bezier curve
-		Bezier* addBezierCurve(glm::vec2 v1, glm::vec2 v2, glm::vec2 v3, glm::vec2 v4, glm::vec3 col = glm::vec3(1.0f), int res = 4);
+		Bezier* addBezierCurve(glm::vec2 v1, glm::vec2 v2, glm::vec2 v3, glm::vec2 v4, glm::vec3 col = glm::vec3(1.0f), int res = 20);
+		void removeBezierCurve(Bezier* bezier);
 
 		void addBezierToBuffer(Bezier* bezier);
 
