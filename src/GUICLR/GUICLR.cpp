@@ -13,7 +13,7 @@ GUICLR::ManagedContext::ManagedContext() {
 }
 
 GUICLR::ManagedContext::~ManagedContext() {
-	delete GuiContext::GetInstance();
+
 }
 
 void GUICLR::ManagedContext::getPixelData(array<unsigned char>^% pixelData) {
@@ -60,11 +60,14 @@ void GUICLR::ManagedContext::awaitInitialized() {
 	GuiContext::GetInstance()->awaitInitialized();
 }
 
+void GUICLR::ManagedContext::closeContext() {
+	GuiContext::GetInstance()->closeContext();
+}
 
 
 GUICLR::Component::Component(System::String^ title) {
 
-	baseComponent = GuiContext::GetInstance()->addWindow(marshal_as<std::string>(title));
+	baseComponent = GuiContext::GetInstance()->addWindow(marshal_as<std::string>(title)).get();
 
 	boundingBox.x0 = baseComponent->componentBoundingBox.x0;
 	boundingBox.y0 = baseComponent->componentBoundingBox.y0;

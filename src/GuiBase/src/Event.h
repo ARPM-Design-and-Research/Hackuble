@@ -52,7 +52,7 @@ namespace SynGUI {
 
 	class EventManager {
 	private:
-		std::vector<EventHandler*> listeners;
+		std::vector<std::shared_ptr<EventHandler>> listeners;
 		std::vector<std::shared_ptr<Event>> events;
 
 	public:
@@ -60,8 +60,8 @@ namespace SynGUI {
 		~EventManager();
 		void pollEvents();
 		void addEvent(std::shared_ptr<Event> eve);
-		void addListener(EventHandler* listener);
-		void removeListener(EventHandler* listener);
+		void addListener(std::shared_ptr<EventHandler> listener);
+		void removeListener(std::shared_ptr<EventHandler> listener);
 
 		bool leftMouseDown = false;
 		bool rightMouseDown = false;

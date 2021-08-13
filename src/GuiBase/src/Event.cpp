@@ -121,7 +121,9 @@ void EventManager::pollEvents() {
 
 
 			for (int i = 0; i < listeners.size(); i++) {
-				EventHandler* obj = listeners.at(i);
+
+				std::shared_ptr<EventHandler> obj = listeners.at(i);
+
 				switch (eve->eventType) {
 				case EventType::MOUSEDOWN:
 					obj->OnMouseDown(std::static_pointer_cast<MouseEvent>(eve));
@@ -154,11 +156,11 @@ void EventManager::addEvent(std::shared_ptr<Event> eve) {
 	events.push_back(eve);
 }
 
-void EventManager::addListener(EventHandler* listener) {
+void EventManager::addListener(std::shared_ptr<EventHandler> listener) {
 	listeners.push_back(listener);
 }
 
-void EventManager::removeListener(EventHandler* listener) {
+void EventManager::removeListener(std::shared_ptr<EventHandler> listener) {
 	auto it = find(listeners.begin(), listeners.end(), listener);
 
 	if(it != listeners.end())
@@ -173,9 +175,9 @@ EventManager::~EventManager() {
 
 	events.clear();
 
-	for (int i = 0; i < listeners.size(); i++) {
+	/*for (int i = 0; i < listeners.size(); i++) {
 		delete listeners.at(i);
-	}
+	}*/
 
 	listeners.clear();
 }

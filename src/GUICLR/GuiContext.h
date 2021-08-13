@@ -13,6 +13,8 @@
 
 #include "GuiBase.h"
 
+#include <memory>
+
 LRESULT CALLBACK window_procedure(HWND, UINT, WPARAM, LPARAM);
 
 class GuiContext {
@@ -21,16 +23,17 @@ private:
 	HDC DC;
 	HGLRC RC;
 	HWND windowHandle;
-	SynGUI::GuiBase* gui;
+	std::shared_ptr<SynGUI::GuiBase> gui;
 
 	bool initialized = false;
 	bool onPaintEvent = false;
+	bool destroyEvent = false;
 
-	static GuiContext* guiContext_;
-
-	GuiContext();
+	static std::shared_ptr<GuiContext> guiContext_;
 
 public:
+
+	GuiContext();
 
 	GuiContext(GuiContext& other) = delete;
 	/**
@@ -44,11 +47,11 @@ public:
 	 * object stored in the static field.
 	 */
 
-	static GuiContext* GetInstance();
+	static std::shared_ptr<GuiContext> GetInstance();
 
 	~GuiContext();
 	void createContextThread(int windowWidth, int windowHeight);
-	int createContext();
+	void createContext();
 
 	unsigned char* getPixelData();
 	void resize(int newWidth, int newHeight);
@@ -63,8 +66,10 @@ public:
 	void awaitInitialized();
 	void awaitResize();
 
+	void closeContext();
+
 	int windowWidth;
 	int windowHeight;
 
-	SynGUI::BaseWindow* addWindow(std::string title);
+	std::shared_ptr<SynGUI::BaseWindow> addWindow(std::string title);
 };

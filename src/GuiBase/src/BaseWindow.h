@@ -24,7 +24,7 @@
 
 namespace SynGUI {
 
-	class BaseWindow : public Component, public EventHandler {
+	class BaseWindow : public Component {
 	private:
 		Rectangle* backgroundRect;
 		Rectangle* topRect;
@@ -49,7 +49,7 @@ namespace SynGUI {
 		void translate(glm::vec2 _trans);
 		void setColor(glm::vec3 _color);
 
-		Slider* addSlider(const std::string& title, float currentValue = 0.0f, float startValue = 0.0f, float endValue = 1.0f);
+		std::shared_ptr<Slider> addSlider(const std::string& title, float currentValue = 0.0f, float startValue = 0.0f, float endValue = 1.0f);
 
 		void OnMouseMove(std::shared_ptr<MouseEvent> eventArgs);
 

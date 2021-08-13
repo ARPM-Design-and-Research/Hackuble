@@ -24,9 +24,9 @@ namespace SynGUI {
 	class Camera : public EventHandler {
 	protected:
 
-		static Camera* camera_;
+		static std::shared_ptr<Camera> camera_;
 
-		Camera();
+		
 
 		glm::vec2 windowSize;
 
@@ -35,6 +35,8 @@ namespace SynGUI {
 
 		glm::vec2 prevMousePos;
 	public:
+
+		Camera();
 		
 		glm::vec3 zoom;
 
@@ -56,7 +58,7 @@ namespace SynGUI {
 		 * object stored in the static field.
 		 */
 
-		static Camera* GetInstance();
+		static std::shared_ptr<Camera> GetInstance();
 
 		void update();
 		void init();

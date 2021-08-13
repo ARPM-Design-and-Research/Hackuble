@@ -31,6 +31,8 @@ Slider::Slider(const std::string& _label, glm::vec2 _pos, glm::vec2 _size, float
 	glm::vec2 p1 = pos + size;
 	valueLabel->setBox(glm::vec2(p1.x - 63.0f, pos.y+3.0f), glm::vec2(p1.x - 7.0f, pos.y+9.0f));
 	valueLabel->setZDepth(layer + 0.0003f);
+
+	calculateBoundingBox();
 }
 
 void Slider::setPosition(glm::vec2 _pos) {
@@ -90,8 +92,8 @@ void Slider::OnMouseMove(std::shared_ptr<MouseEvent> eventArgs) {
 
 		glm::vec2 v1 = glm::vec2((inputNode->box.x0 + inputNode->box.x1)/2.0f, (inputNode->box.y0 + inputNode->box.y1)/2.0f);
 		glm::vec2 v2 = glm::vec2(mousePos.x, mousePos.y);
-		glm::vec2 cp1 = glm::vec2(v1.x + (v2.x - v1.x) * 0.6f, v1.y);
-		glm::vec2 cp2 = glm::vec2(v2.x - (v2.x - v1.x) * 0.6f, v2.y);
+		glm::vec2 cp1 = glm::vec2(v1.x - glm::abs(v2.y - v1.y) * 1.6f, v1.y);
+		glm::vec2 cp2 = glm::vec2(v2.x + glm::abs(v2.y - v1.y) * 1.6f, v2.y);
 		bezierCurve->setControlPoints(v1, cp1, cp2, v2);
 	}
 }

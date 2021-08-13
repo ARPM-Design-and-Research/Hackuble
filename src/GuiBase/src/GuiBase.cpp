@@ -78,13 +78,13 @@ GuiBase::GuiBase(int _frameWidth, int _frameHeight) {
 void GuiBase::OnMouseDown(std::shared_ptr<MouseEvent> eventArgs) {
 
 	if (activeComponent == nullptr && eventArgs->button == MouseButton::LEFT) {
-		for (BaseWindow* window : windows) {
-			BoundingBox b = ((Component*)window)->componentBoundingBox;
+		for (std::shared_ptr<BaseWindow> window : windows) {
+			BoundingBox b = std::static_pointer_cast<Component>(window)->componentBoundingBox;
 
 			glm::vec2 mousePos = eventArgs->pos;
 			
 			if (window->childComponents.size() > 0) {
-				for (Component* child : window->childComponents) {
+				for (std::shared_ptr<Component> child : window->childComponents) {
 					if (mousePos.x > child->componentBoundingBox.x0 && mousePos.x < child->componentBoundingBox.x1 && mousePos.y > child->componentBoundingBox.y0 && mousePos.y < child->componentBoundingBox.y1) {
 						eventManager->addListener(child);
 						activeComponent = child;
@@ -105,7 +105,8 @@ void GuiBase::OnMouseDown(std::shared_ptr<MouseEvent> eventArgs) {
 void GuiBase::OnMouseUp(std::shared_ptr<MouseEvent> eventArgs) {
 
 	if (activeComponent != nullptr && eventArgs->button == MouseButton::LEFT) {
-		eventManager->removeListener((BaseWindow*)activeComponent);
+		eventManager->removeListener(activeComponent);
+		activeComponent->OnMouseUp(eventArgs);
 		activeComponent = nullptr;
 	}
 }
@@ -118,11 +119,11 @@ void GuiBase::OnMouseWheel(std::shared_ptr<MouseEvent> eventArgs) {
 	
 }
 
-BaseWindow* GuiBase::addWindow(std::string title) {
+std::shared_ptr<BaseWindow> GuiBase::addWindow(std::string title) {
 
 	maxWindow++;
 	//TODO: Fix Memory leaks for BaseWindow
-	BaseWindow* windowComp = new BaseWindow(title, "add.png", glm::vec2(120.0f, 70.0f), glm::vec2(0,0), glm::vec3(1.0f), 0.001f * (float)(maxWindow + 1));
+	std::shared_ptr<BaseWindow> windowComp = std::make_shared<BaseWindow>(title, "add.png", glm::vec2(120.0f, 70.0f), glm::vec2(0,0), glm::vec3(1.0f), 0.001f * (float)(maxWindow + 1));
 	windows.push_back(windowComp);
 
 	//eventManager->addListener((EventHandler*)windowComp);
@@ -138,9 +139,9 @@ BaseWindow* GuiBase::addWindow(std::string title) {
 
 void GuiBase::stopGui() {
 
-	for (int i = 0; i < windows.size(); i++) {
+	/*for (int i = 0; i < windows.size(); i++) {
 		delete windows.at(i);
-	}
+	}*/
 
 	windows.clear();
 	maxWindow = 0;
@@ -210,8 +211,8 @@ int GuiBase::startGui()
 
 	eventManager = new EventManager();
 
-	eventManager->addListener(this);
-	eventManager->addListener(Camera::GetInstance());
+	//eventManager->addListener(shared_from_this());
+	eventManager->addListener(std::static_pointer_cast<EventHandler>(Camera::GetInstance()));
 
 	//addWindow("Component 1");
 	//addWindow("Component 2");

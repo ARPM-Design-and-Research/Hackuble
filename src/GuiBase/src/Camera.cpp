@@ -7,7 +7,7 @@
 
 using namespace SynGUI;
 
-Camera* Camera::camera_ = nullptr;
+std::shared_ptr<Camera> Camera::camera_ = nullptr;
 
 //Called when window is resized to recalculate the matrices
 void Camera::setWindowSize(glm::vec2 size) {
@@ -20,14 +20,14 @@ void Camera::setWindowSize(glm::vec2 size) {
 	proj = glm::ortho(0.0f, windowSize.x, windowSize.y, 0.0f, -1.0f, 1.0f);
 }
 
-Camera* Camera::GetInstance()
+std::shared_ptr<Camera> Camera::GetInstance()
 {
 	/**
 	 * This is a safer way to create an instance. instance = new Singleton is
 	 * dangeruous in case two instance threads wants to access at the same time
 	 */
 	if (camera_ == nullptr) {
-		camera_ = new Camera();
+		camera_ = std::make_shared<Camera>();
 	}
 	return camera_;
 }
@@ -39,7 +39,7 @@ Camera::Camera() {
 void Camera::deinit() {
 
 	camera_ = nullptr;
-	delete this;
+	//delete this;
 }
 
 //Called automatically by GUIRenderer

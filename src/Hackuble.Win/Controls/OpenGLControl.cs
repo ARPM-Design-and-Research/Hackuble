@@ -75,6 +75,12 @@ namespace Hackuble.Win.Controls
             comp.addSlider("My Slider", 0.5f, 0.0f, 100.0f);
         }
 
+        public void closeOpenGL()
+        {
+            context.closeContext();
+
+        }
+
         public void resizeOpenGL(EventArgs e)
         {
             if (!InVisualStudio())

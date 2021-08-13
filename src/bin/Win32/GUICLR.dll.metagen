@@ -26,6 +26,7 @@ Class GUICLR.ManagedContext: AutoLayout, AnsiClass, Class, Public, BeforeFieldIn
     onPaint(): PrivateScope, Public, HideBySig
     awaitInitialized(): PrivateScope, Public, HideBySig
     awaitResize(): PrivateScope, Public, HideBySig
+    closeContext(): PrivateScope, Public, HideBySig
     Dispose(): PrivateScope, Public, Final, Virtual, HideBySig
 Class GUICLR.BoundingBox: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName

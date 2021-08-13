@@ -5,16 +5,16 @@
 
 std::string name = "Syncode GUI";
 
-GuiContext* GuiContext::guiContext_ = nullptr;
+std::shared_ptr<GuiContext> GuiContext::guiContext_ = nullptr;
 
-GuiContext* GuiContext::GetInstance()
+std::shared_ptr<GuiContext> GuiContext::GetInstance()
 {
 	/**
 	 * This is a safer way to create an instance. instance = new Singleton is
 	 * dangeruous in case two instance threads wants to access at the same time
 	 */
 	if (guiContext_ == nullptr) {
-		guiContext_ = new GuiContext();
+		guiContext_ = std::make_shared<GuiContext>();
 	}
 	return guiContext_;
 }
@@ -134,11 +134,11 @@ void GuiContext::onPaint() {
 	onPaintEvent = true;
 }
 
-SynGUI::BaseWindow* GuiContext::addWindow(std::string title) {
+std::shared_ptr<BaseWindow> GuiContext::addWindow(std::string title) {
 	return gui->addWindow(title);
 }
 
-int GuiContext::createContext() {
+void GuiContext::createContext() {
 
 	HINSTANCE hInstance = GetModuleHandle(NULL);
 
@@ -155,7 +155,7 @@ int GuiContext::createContext() {
 
 	if (windowClass == 0) {
 		OutputDebugString(L"registerClass() failed.");
-		return 1;
+		return;
 	}
 
 	// create temporary window
@@ -183,24 +183,24 @@ int GuiContext::createContext() {
 	const int fakePFDID = ChoosePixelFormat(fakeDC, &fakePFD);
 	if (fakePFDID == 0) {
 		OutputDebugString(L"ChoosePixelFormat() failed.");
-		return 1;
+		return;
 	}
 
 	if (SetPixelFormat(fakeDC, fakePFDID, &fakePFD) == false) {
 		OutputDebugString(L"SetPixelFormat() failed.");
-		return 1;
+		return;
 	}
 
 	HGLRC fakeRC = wglCreateContext(fakeDC);	// Rendering Contex
 
 	if (fakeRC == 0) {
 		OutputDebugString(L"wglCreateContext() failed.");
-		return 1;
+		return;
 	}
 
 	if (wglMakeCurrent(fakeDC, fakeRC) == false) {
 		OutputDebugString(L"wglMakeCurrent() failed.");
-		return 1;
+		return;
 	}
 
 	// get pointers to functions (or init opengl loader here)
@@ -252,7 +252,7 @@ int GuiContext::createContext() {
 
 	if (status == false || numFormats == 0) {
 		OutputDebugString(L"wglChoosePixelFormatARB() failed.");
-		return 1;
+		return;
 	}
 
 	PIXELFORMATDESCRIPTOR PFD;
@@ -272,7 +272,7 @@ int GuiContext::createContext() {
 	RC = wglCreateContextAttribsARB(DC, 0, contextAttribs);
 	if (RC == NULL) {
 		OutputDebugString(L"wglCreateContextAttribsARB() failed.");
-		return 1;
+		return;
 	}
 
 	// delete temporary context and window
@@ -283,7 +283,7 @@ int GuiContext::createContext() {
 	DestroyWindow(fakeWND);
 	if (!wglMakeCurrent(DC, RC)) {
 		OutputDebugString(L"wglMakeCurrent() failed.");
-		return 1;
+		return;
 	}
 
 	// init opengl loader here (extra safe version)
@@ -308,7 +308,9 @@ int GuiContext::createContext() {
 
 	MSG msg;
 
-	gui = new SynGUI::GuiBase(windowWidth, windowHeight);
+	gui = std::make_shared<SynGUI::GuiBase>(windowWidth, windowHeight);
+
+	gui->eventManager->addListener(gui);
 
 	initialized = true;
 
@@ -320,6 +322,11 @@ int GuiContext::createContext() {
 
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
+		}
+
+		if (destroyEvent) {
+			DestroyWindow(windowHandle);
+			break;
 		}
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
@@ -337,10 +344,11 @@ int GuiContext::createContext() {
 	initialized = false;
 
 	gui->stopGui();
-	delete gui;
 	/* ********** */
+}
 
-	return 0;
+void GuiContext::closeContext() {
+	destroyEvent = true;
 }
 
 // Procedure that processes window events

@@ -55,10 +55,10 @@ namespace SynGUI {
 
 		int maxWindow = 0;
 		//GLFWwindow* window;
-		std::vector<BaseWindow*> windows;
+		std::vector<std::shared_ptr<BaseWindow>> windows;
 
 		EventManager* eventManager;
-		Component* activeComponent = nullptr;
+		std::shared_ptr<Component> activeComponent = nullptr;
 
 		TextLabel* fpsCounter;
 		double lastTime = 0;
@@ -66,7 +66,7 @@ namespace SynGUI {
 
 		int startGui();
 		void stopGui();
-		BaseWindow* addWindow(std::string title);
+		std::shared_ptr<BaseWindow> addWindow(std::string title);
 		void update();
 		void render();
 

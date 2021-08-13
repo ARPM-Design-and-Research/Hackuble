@@ -98,6 +98,7 @@ namespace Hackuble.Win
             this.Controls.Add(this.statusStrip1);
             this.Name = "VisualScriptingEnv";
             this.Text = "VisualScriptingEnv";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.VisualScriptingEnv_FormClosed);
             this.Load += new System.EventHandler(this.VisualScriptingEnv_Load);
             this.ResizeEnd += new System.EventHandler(this.VisualScriptingEnv_ResizeEnd);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.VisualScriptingEnv_Paint);

@@ -27,7 +27,7 @@ void Component::translate(glm::vec2 _translate) {
 	}
 }
 
-void Component::addChildComponent(Component* comp) {
+void Component::addChildComponent(std::shared_ptr<Component> comp) {
 
 	childComponents.push_back(comp);
 }
@@ -38,7 +38,7 @@ void Component::calculateBoundingBox() {
 
 Component::~Component() {
 
-	for (int i = 0; i < childComponents.size(); i++) {
+	/*for (int i = 0; i < childComponents.size(); i++) {
 		delete childComponents.at(i);
-	}
+	}*/
 }

@@ -9,6 +9,7 @@
 #include "RenderElement.h"
 #include "glm.hpp"
 #include "BezierRenderer.h"
+#include "Component.h"
 
 #include "Helper.h"
 

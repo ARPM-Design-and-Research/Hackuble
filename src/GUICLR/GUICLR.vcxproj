@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="clr_scoped_ptr.h" />
     <ClInclude Include="GUICLR.h" />
     <ClInclude Include="GuiContext.h" />
     <ClInclude Include="resource.h" />

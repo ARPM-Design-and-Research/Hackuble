@@ -7,6 +7,7 @@ using namespace System::Windows::Forms;
 using namespace System::Runtime::InteropServices;
 
 #include "GuiBase.h"
+#include "clr_scoped_ptr.h"
 
 
 namespace GUICLR {
@@ -32,6 +33,8 @@ namespace GUICLR {
 
 		void awaitInitialized();
 		void awaitResize();
+
+		void closeContext();
 		// TODO: Add your methods for this class here.
 	};
 
@@ -48,7 +51,8 @@ namespace GUICLR {
 
 	public ref class Component {
 	private:
-		SynGUI::BaseWindow* baseComponent;
+		//TODO: Fix having direct pointer to baseComponent
+		BaseWindow* baseComponent;
 		GUICLR::BoundingBox boundingBox;
 	public:
 		Component(System::String^ title);

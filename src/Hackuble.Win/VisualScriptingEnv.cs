@@ -58,12 +58,18 @@ namespace Hackuble.Win
 
         private void VisualScriptingEnv_Resize(object sender, EventArgs e)
         {
+           if(this.openGLControl1 != null)
             this.openGLControl1.Size = new System.Drawing.Size((this.Size.Width), (this.Size.Height - (this.toolStrip1.Height + statusStrip1.Height)));
         }
 
         private void VisualScriptingEnv_ResizeEnd(object sender, EventArgs e)
         {
             this.openGLControl1.resizeOpenGL(e);
+        }
+
+        private void VisualScriptingEnv_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            this.openGLControl1.closeOpenGL();
         }
     }
 }
