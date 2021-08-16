@@ -34,15 +34,15 @@ GuiContext::~GuiContext() {
 
 void GuiContext::awaitInitialized() {
 
-	while (!initialized) {
-
+	while (!GuiContext::GetInstance()->initialized) {
+		internalCounter++;
 	}
 }
 
 void GuiContext::awaitResize() {
 
 	while (!gui->resized) {
-
+		internalCounter++;
 	}
 
 	gui->resized = false;
@@ -329,16 +329,16 @@ void GuiContext::createContext() {
 			break;
 		}
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		//std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
 		gui->update();
 
-		if (onPaintEvent) {
+		//if (onPaintEvent) {
 		//
 			gui->render();
 			SwapBuffers(DC);
 			onPaintEvent = false;
-		}
+		//}
 	}
 
 	initialized = false;

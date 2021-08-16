@@ -102,7 +102,7 @@ namespace Hackuble.Win.Controls
         {
             base.OnMouseHover(e);
 
-            this.Invalidate();
+            this.Refresh();
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -112,7 +112,7 @@ namespace Hackuble.Win.Controls
             if (!InVisualStudio())
                 context.onMouseMove(e.X, e.Y, (int)e.Button);
 
-           this.Invalidate();
+            this.Refresh();
         }
 
         protected override void OnKeyPress(KeyPressEventArgs e)
@@ -128,7 +128,7 @@ namespace Hackuble.Win.Controls
             if (!InVisualStudio())
                 context.onMouseDown(e.X, e.Y, (int)e.Button);
 
-            this.Invalidate();
+            this.Refresh();
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
@@ -138,7 +138,7 @@ namespace Hackuble.Win.Controls
             if (!InVisualStudio())
                 context.onMouseUp(e.X, e.Y, (int)e.Button);
 
-            this.Invalidate();
+            this.Refresh();
         }
 
         protected override void OnMouseWheel(MouseEventArgs e)
@@ -148,7 +148,7 @@ namespace Hackuble.Win.Controls
             if (!InVisualStudio())
                 context.onMouseWheel(e.X, e.Y, e.Delta);
 
-            this.Invalidate();
+            this.Refresh();
         }
 
         protected override void OnPaint(PaintEventArgs e)

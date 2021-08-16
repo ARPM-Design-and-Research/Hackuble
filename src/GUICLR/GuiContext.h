@@ -31,6 +31,10 @@ private:
 
 	static std::shared_ptr<GuiContext> guiContext_;
 
+	void createContext();
+
+	int internalCounter = 0;
+
 public:
 
 	GuiContext();
@@ -51,7 +55,6 @@ public:
 
 	~GuiContext();
 	void createContextThread(int windowWidth, int windowHeight);
-	void createContext();
 
 	unsigned char* getPixelData();
 	void resize(int newWidth, int newHeight);
