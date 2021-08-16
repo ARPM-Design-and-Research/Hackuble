@@ -11,6 +11,27 @@ Assembly System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=
 	hash=None, flags=None
 Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
 	hash=None, flags=None
+Class GUICLR.BoundingBox: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(SynGUI.BoundingBox*): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Interfaces:
+    System.IDisposable
+  Methods:
+    getLeftBound(): PrivateScope, Public, HideBySig
+    getRightBound(): PrivateScope, Public, HideBySig
+    getTopBound(): PrivateScope, Public, HideBySig
+    getBottomBound(): PrivateScope, Public, HideBySig
+    Dispose(): PrivateScope, Public, Final, Virtual, HideBySig
+Class GUICLR.Component: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(System.String): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Interfaces:
+    System.IDisposable
+  Methods:
+    addSlider(String, Single, Single, Single): PrivateScope, Public, HideBySig
+    setColor(Int32, Int32, Int32): PrivateScope, Public, HideBySig
+    setTitle(String): PrivateScope, Public, HideBySig
+    getTitle(): PrivateScope, Public, HideBySig
+    getBoundingBox(): PrivateScope, Public, HideBySig
+    Dispose(): PrivateScope, Public, Final, Virtual, HideBySig
 Class GUICLR.ManagedContext: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Interfaces:
@@ -27,27 +48,6 @@ Class GUICLR.ManagedContext: AutoLayout, AnsiClass, Class, Public, BeforeFieldIn
     awaitInitialized(): PrivateScope, Public, HideBySig
     awaitResize(): PrivateScope, Public, HideBySig
     closeContext(): PrivateScope, Public, HideBySig
-    Dispose(): PrivateScope, Public, Final, Virtual, HideBySig
-Class GUICLR.BoundingBox: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
-    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-  Interfaces:
-    System.IDisposable
-  Fields:
-    Single x0 : Public
-    Single y0 : Public
-    Single x1 : Public
-    Single y1 : Public
-  Methods:
-    Dispose(): PrivateScope, Public, Final, Virtual, HideBySig
-Class GUICLR.Component: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
-    Void .ctor(System.String): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-  Interfaces:
-    System.IDisposable
-  Methods:
-    addSlider(String, Single, Single, Single): PrivateScope, Public, HideBySig
-    setColor(Single, Single, Single): PrivateScope, Public, HideBySig
-    setTitle(String): PrivateScope, Public, HideBySig
-    getTitle(): PrivateScope, Public, HideBySig
     Dispose(): PrivateScope, Public, Final, Virtual, HideBySig
 Class GUICLR.Slider: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName

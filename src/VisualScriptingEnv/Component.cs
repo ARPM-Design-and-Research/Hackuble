@@ -13,9 +13,11 @@ namespace VisualScripting
     {
 
         GUICLR.Component _component;
+        GUICLR.BoundingBox _boundingBox;
         public Component()
         {
             _component = new GUICLR.Component("Component");
+            _boundingBox = _component.getBoundingBox();
         }
 
         //BoundingBox
@@ -25,7 +27,7 @@ namespace VisualScripting
             _component.addSlider(title, currentValue, startValue, endValue);
         }
 
-        public void setColor(float r, float g, float b)
+        public void setColor(int r, int g, int b)
         {
             _component.setColor(r, g, b);
         }

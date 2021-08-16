@@ -69,10 +69,15 @@ namespace Hackuble.Win.Controls
 
             VisualScripting.Component comp = new VisualScripting.Component();
             comp.setColor(255, 0, 255);
-            comp.setName("From C#");
+            comp.setName("Comp 1");
             comp.addSlider("Slider 1", 0.5f, 0.0f, 1.0f);
             comp.addSlider("Slider 2", 0.2f, 0.0f, 1.0f);
             comp.addSlider("My Slider", 0.5f, 0.0f, 100.0f);
+
+            VisualScripting.Component comp1 = new VisualScripting.Component();
+            comp1.setColor(0, 0, 255);
+            comp1.setName("Comp 2");
+            comp1.addSlider("Slider 1", 0.5f, 0.0f, 1.0f);
         }
 
         public void closeOpenGL()

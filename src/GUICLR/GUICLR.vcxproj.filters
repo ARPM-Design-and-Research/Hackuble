@@ -27,12 +27,30 @@
     <ClInclude Include="clr_scoped_ptr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Component_CLR.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundingBox_CLR.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Slider_CLR.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUICLR.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GuiContext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Component_CLR.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Slider_CLR.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundingBox_CLR.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
