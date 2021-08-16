@@ -14,20 +14,15 @@ namespace VisualScripting
     {
         GUICLR.Component _component;
         GUICLR.BoundingBox _boundingBox;
+        Guid _instanceGuid;
+        private Color _color;
+
         public Component()
         {
             _component = new GUICLR.Component("Component");
             _boundingBox = _component.getBoundingBox();
+            this._instanceGuid = Guid.NewGuid();
         }
-
-        //BoundingBox
-
-        public void addSlider(string title, SliderState sliderState, float currentValue, float startValue, float endValue)
-        {
-            _component.addSlider(title, sliderState, currentValue, startValue, endValue);
-        }
-
-        private Color _color;
         public Component(string title)
         {
             _component = new GUICLR.Component(title);
@@ -37,8 +32,8 @@ namespace VisualScripting
             g = ((int)_color.G);
             b = ((int)_color.B);
             _component.setColor(r, g, b);
+            this._instanceGuid = Guid.NewGuid();
         }
-
         public Component(string title, Color color)
         {
             _component = new GUICLR.Component(title);
@@ -48,8 +43,13 @@ namespace VisualScripting
             g = ((int)_color.G);
             b = ((int)_color.B);
             _component.setColor(r, g, b);
+            this._instanceGuid = Guid.NewGuid();
         }
 
+        //BoundingBox
+
+        public Guid InstanceGuid { get => _instanceGuid; }
+        public ComponentCollection Children { get; }
         public string Name
         {
             get
@@ -61,7 +61,6 @@ namespace VisualScripting
                 _component.setTitle(value);
             }
         }
-
         public Color Color
         {
             get
@@ -79,20 +78,41 @@ namespace VisualScripting
             }
         }
 
-        //BoundingBox
-
-        public void addInputSlider(string title, float currentValue, float startValue, float endValue)
+        public void AddSlider(SliderState sliderState, string title, float currentValue, float startValue, float endValue)
         {
-            _component.addSlider(title, SliderState.INPUT, currentValue, startValue, endValue);
+            _component.addSlider(title, sliderState, currentValue, startValue, endValue);
         }
 
-        public ComponentCollection Children { get; }
-
+        public static bool operator== (Component A, Component B)
+        {
+            return (A.InstanceGuid == B.InstanceGuid);
+        }
+        public static bool operator !=(Component A, Component B)
+        {
+            return (A.InstanceGuid != B.InstanceGuid);
+        }
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Component)) return false;
+            Component c = obj as Component;
+            return (this.InstanceGuid == c.InstanceGuid);
+        }
+        public bool Equals(Component other)
+        {
+            return (this.InstanceGuid == other.InstanceGuid);
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+        public override string ToString()
+        {
+            return this.Name;
+        }
         public void Dispose()
         {
             _component.Dispose();
         }
-
         ~Component()
         {
             this.Dispose();
@@ -106,7 +126,22 @@ namespace VisualScripting
 
         //BoundingBox
 
-        public Component this[int index] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Component this[int index]
+        {
+            get
+            {
+                return this._components[index];
+            }
+            set
+            {
+                if (index < 0) throw new IndexOutOfRangeException("Index cannot be <0.");
+                if (this._components.Length > index)
+                {
+                    this._components[index] = value;
+                }
+                else throw new IndexOutOfRangeException($"Index {index} is out of range [0 - {(this._components.Length - 1)}].");
+            }
+        }
 
         public int Count => _components.Length;
 
@@ -114,7 +149,7 @@ namespace VisualScripting
 
         public void Add(Component item)
         {
-            throw new NotImplementedException();
+            this._components.Append<Component>(item);
         }
 
         public void Clear()
@@ -124,37 +159,79 @@ namespace VisualScripting
 
         public bool Contains(Component item)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < this._components.Length; i++)
+            {
+                if (item == this._components[i])
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public void CopyTo(Component[] array, int arrayIndex)
         {
-            throw new NotImplementedException();
+            this._components.CopyTo(array, arrayIndex);
         }
 
         public IEnumerator<Component> GetEnumerator()
         {
-            return (IEnumerator<Component>)_components.GetEnumerator();
+            return (IEnumerator<Component>)this._components.GetEnumerator();
         }
 
         public int IndexOf(Component item)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < this._components.Length; i++)
+            {
+                if (item == this._components[i])
+                {
+                    return i;
+                }
+            }
+            return -1;
         }
 
         public void Insert(int index, Component item)
         {
-            throw new NotImplementedException();
+            int n = this._components.Length + 1;
+            Component[] newarr = new Component[n];
+            for (int i = 0; i < n + 1; i++)
+            {
+                if (i < index - 1)
+                    newarr[i] = this._components[i];
+                else if (i == index - 1)
+                    newarr[i] = item;
+                else
+                    newarr[i] = this._components[i - 1];
+            }
+            this._components = newarr;
         }
 
         public bool Remove(Component item)
         {
-            throw new NotImplementedException();
+            int i = this.IndexOf(item);
+            if (i != -1)
+            {
+                this.RemoveAt(i);
+                return true;
+            }
+            else return false;
         }
 
         public void RemoveAt(int index)
         {
-            throw new NotImplementedException();
+            int n = this._components.Length + 1;
+            Component[] newarr = new Component[n];
+            for (int i = 0; i < n - 1; i++)
+            {
+                if (i < index - 1)
+                    newarr[i] = this._components[i];
+                else if (i == index - 1)
+                    continue;
+                else
+                    newarr[i] = this._components[i + 1];
+            }
+            this._components = newarr;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -162,4 +239,6 @@ namespace VisualScripting
             return _components.GetEnumerator();
         }
     }
+
+    
 }

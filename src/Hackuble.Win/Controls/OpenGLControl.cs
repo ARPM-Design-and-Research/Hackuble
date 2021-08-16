@@ -72,13 +72,13 @@ namespace Hackuble.Win.Controls
                 this.DoubleBuffered = true;
             }
 
-            VisualScripting.Component comp = new VisualScripting.Component("Comp 1", Color.Green);
-            comp.addInputSlider("Slider 1", 0.5f, 0.0f, 1.0f);
-            comp.addInputSlider("Slider 2", 0.2f, 0.0f, 1.0f);
-            comp.addInputSlider("My Slider", 10.5f, 0.0f, 100.0f);
+            //VisualScripting.Component comp = new VisualScripting.Component("Comp 1", Color.Green);
+            //comp.addInputSlider("Slider 1", 0.5f, 0.0f, 1.0f);
+            //comp.addInputSlider("Slider 2", 0.2f, 0.0f, 1.0f);
+            //comp.addInputSlider("My Slider", 10.5f, 0.0f, 100.0f);
 
-            VisualScripting.Component comp1 = new VisualScripting.Component("Comp 2", Color.OrangeRed);
-            comp1.addInputSlider("Slider 1", 0.5f, 0.0f, 1.0f);
+            //VisualScripting.Component comp1 = new VisualScripting.Component("Comp 2", Color.OrangeRed);
+            //comp1.addInputSlider("Slider 1", 0.5f, 0.0f, 1.0f);
         }
 
         public void closeOpenGL()
@@ -95,7 +95,7 @@ namespace Hackuble.Win.Controls
                     pivotX = this.ClientRectangle.X;
                     pivotY = this.ClientRectangle.Y;
                 }
-                if (windowHeight != this.ClientSize.Height || windowWidth != this.ClientSize.Width)
+                if (windowHeight != this.Size.Height || windowWidth != this.Size.Width)
                 {
                     windowWidth = this.ClientSize.Width;
                     windowHeight = this.ClientSize.Height;
@@ -180,20 +180,20 @@ namespace Hackuble.Win.Controls
             {
                 context.onPaint();
 
-                if (pivotX != this.ClientRectangle.X || pivotY != this.ClientRectangle.Y)
-                {
-                    pivotX = this.ClientRectangle.X;
-                    pivotY = this.ClientRectangle.Y;
-                }
-                if (windowHeight != this.ClientSize.Height || windowWidth != this.ClientSize.Width)
-                {
-                    windowWidth = this.ClientSize.Width;
-                    windowHeight = this.ClientSize.Height;
-                }
+                //if (pivotX != this.ClientRectangle.X || pivotY != this.ClientRectangle.Y)
+                //{
+                //    pivotX = this.ClientRectangle.X;
+                //    pivotY = this.ClientRectangle.Y;
+                //}
+                //if (windowHeight != this.ClientSize.Height || windowWidth != this.ClientSize.Width)
+                //{
+                //    windowWidth = this.ClientSize.Width;
+                //    windowHeight = this.ClientSize.Height;
+                //}
                 area = new Rectangle(new Point(pivotX, pivotY), new Size(windowWidth, windowHeight));
 
                 context.getPixelData(ref pixelData);
-                UpdateBitmap(pixelData, windowWidth, windowHeight, drawingBitmap);
+                UpdateBitmap(pixelData, drawingBitmap);
                 e.Graphics.DrawImage(drawingBitmap, area);
             }
 
@@ -211,15 +211,15 @@ namespace Hackuble.Win.Controls
         }
 
 
-        private static void UpdateBitmap(byte[] arr, int width, int height, Bitmap bit)
+        private static void UpdateBitmap(byte[] arr, Bitmap bit)
         {
-            var rect = new Rectangle(0, 0, width, height);
+            var rect = new Rectangle(0, 0, bit.Width, bit.Height);
             var bmpData = bit.LockBits(rect, ImageLockMode.ReadWrite, bit.PixelFormat);
 
             // Row-by-row copy
-            var arrRowLength = width * Image.GetPixelFormatSize(bit.PixelFormat) / 8;
+            var arrRowLength = bit.Width * Image.GetPixelFormatSize(bit.PixelFormat) / 8;
             var ptr = bmpData.Scan0;
-            for (var i = height - 1; i >= 0; i--)
+            for (var i = bit.Height - 1; i >= 0; i--)
             {
                 Marshal.Copy(arr, i * arrRowLength, ptr, arrRowLength);
                 ptr += bmpData.Stride;

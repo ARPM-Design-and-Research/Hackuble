@@ -12,6 +12,7 @@ namespace Hackuble.Win
 {
     public partial class VisualScriptingEnv : Form
     {
+        private int count = 0;
         private Controls.OpenGLControl openGLControl1;
         public VisualScriptingEnv()
         {
@@ -70,6 +71,33 @@ namespace Hackuble.Win
         private void VisualScriptingEnv_FormClosed(object sender, FormClosedEventArgs e)
         {
             this.openGLControl1.closeOpenGL();
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            count++;
+            VisualScripting.Component comp = new VisualScripting.Component($"Comp {count}", Color.Green);
+            comp.AddSlider(GUICLR.SliderState.INPUT, "Slider 1", 0.5f, 0.0f, 1.0f);
+            comp.AddSlider(GUICLR.SliderState.INPUT, "Slider 2", 0.2f, 0.0f, 1.0f);
+            comp.AddSlider(GUICLR.SliderState.INPUT, "Slider 3", 10.5f, 0.0f, 100.0f);
+            comp.AddSlider(GUICLR.SliderState.OUTPUT, "Slider 4", 10.5f, 0.0f, 100.0f);
+        }
+
+        private void toolStripButton2_Click(object sender, EventArgs e)
+        {
+            count++;
+            VisualScripting.Component comp = new VisualScripting.Component($"Comp {count}", Color.OrangeRed);
+            comp.AddSlider(GUICLR.SliderState.INPUT, "Slider 1", 0.5f, 0.0f, 1.0f);
+            comp.AddSlider(GUICLR.SliderState.INPUT, "Slider 2", 0.2f, 0.0f, 1.0f);
+            comp.AddSlider(GUICLR.SliderState.INPUT, "Slider 3", 10.5f, 0.0f, 100.0f);
+            comp.AddSlider(GUICLR.SliderState.INPUT, "Slider 4", 10.5f, 0.0f, 100.0f);
+            comp.AddSlider(GUICLR.SliderState.INPUT, "Slider 5", 10.5f, 0.0f, 100.0f);
+            comp.AddSlider(GUICLR.SliderState.INPUT, "Slider 6", 10.5f, 0.0f, 100.0f);
+            comp.AddSlider(GUICLR.SliderState.OUTPUT, "Slider 7", 10.5f, 0.0f, 100.0f);
+            comp.AddSlider(GUICLR.SliderState.OUTPUT, "Slider 8", 10.5f, 0.0f, 100.0f);
+            comp.AddSlider(GUICLR.SliderState.OUTPUT, "Slider 9", 10.5f, 0.0f, 100.0f);
+            comp.AddSlider(GUICLR.SliderState.OUTPUT, "Slider 10", 10.5f, 0.0f, 100.0f);
+            comp.AddSlider(GUICLR.SliderState.OUTPUT, "Slider 11", 10.5f, 0.0f, 100.0f);
         }
     }
 }
