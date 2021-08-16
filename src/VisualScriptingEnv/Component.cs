@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,8 +12,8 @@ namespace VisualScripting
 {
     public class Component : IDisposable
     {
-
         GUICLR.Component _component;
+<<<<<<< Updated upstream
         GUICLR.BoundingBox _boundingBox;
         public Component()
         {
@@ -28,25 +29,72 @@ namespace VisualScripting
         }
 
         public void setColor(int r, int g, int b)
+=======
+        private Color _color;
+        public Component(string title)
         {
+            _component = new GUICLR.Component(title);
+            _color = Color.FromArgb(255, 103, 0);
+            float r, g, b;
+            r = ((int)_color.R);
+            g = ((int)_color.G);
+            b = ((int)_color.B);
             _component.setColor(r, g, b);
         }
 
-        public string getName()
+        public Component(string title, Color color)
         {
-            return _component.getTitle();
+            _component = new GUICLR.Component(title);
+            _color = color;
+            float r, g, b;
+            r = ((int)_color.R);
+            g = ((int)_color.G);
+            b = ((int)_color.B);
+            _component.setColor(r, g, b);
         }
 
-        public void setName(string name)
+        public string Name
+>>>>>>> Stashed changes
         {
-            _component.setTitle(name);
+            get
+            {
+                return _component.getTitle();
+            }
+            set
+            {
+                _component.setTitle(value);
+            }
+        }
+
+        public Color Color
+        {
+            get
+            {
+                return _color;
+            }
+            set
+            {
+                _color = value;
+                float r, g, b;
+                r = ((int)_color.R);
+                g = ((int)_color.G);
+                b = ((int)_color.B);
+                _component.setColor(r, g, b);
+            }
+        }
+
+        //BoundingBox
+
+        public void addSlider(string title, float currentValue, float startValue, float endValue)
+        {
+            _component.addSlider(title, currentValue, startValue, endValue);
         }
 
         public ComponentCollection Children { get; }
 
         public void Dispose()
         {
-
+            _component.Dispose();
         }
 
         ~Component()
@@ -59,8 +107,6 @@ namespace VisualScripting
     {
         private Component[] _components;
         private Component _parent;
-
-
 
         //BoundingBox
 

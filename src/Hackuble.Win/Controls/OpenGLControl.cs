@@ -67,6 +67,7 @@ namespace Hackuble.Win.Controls
                 this.DoubleBuffered = true;
             }
 
+<<<<<<< Updated upstream
             VisualScripting.Component comp = new VisualScripting.Component();
             comp.setColor(255, 0, 255);
             comp.setName("Comp 1");
@@ -84,6 +85,12 @@ namespace Hackuble.Win.Controls
         {
             context.closeContext();
 
+=======
+            VisualScripting.Component comp = new VisualScripting.Component("From C#");
+            comp.addSlider("Slider 1", 0.5f, 0.0f, 1.0f);
+            comp.addSlider("Slider 2", 0.2f, 0.0f, 1.0f);
+            comp.addSlider("My Slider", 0.5f, 0.0f, 100.0f);
+>>>>>>> Stashed changes
         }
 
         public void resizeOpenGL(EventArgs e)
