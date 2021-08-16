@@ -37,6 +37,9 @@ namespace Hackuble.Win.Controls
 
         int windowWidth;
         int windowHeight;
+        int pivotX;
+        int pivotY;
+        Rectangle area;
         Bitmap drawingBitmap;
 
         public static bool InVisualStudio()
@@ -49,12 +52,14 @@ namespace Hackuble.Win.Controls
         {
             InitializeComponent();
 
-            this.Size = new System.Drawing.Size(width, height);
+            this.ClientSize = new System.Drawing.Size(width, height);
 
             if (!InVisualStudio())
             {
-                windowWidth = this.Size.Width;
-                windowHeight = this.Size.Height;
+                windowWidth = this.ClientSize.Width;
+                windowHeight = this.ClientSize.Height;
+                pivotX = this.Location.X;
+                pivotY = this.Location.Y;
 
                 pixelData = new byte[4 * windowWidth * windowHeight];
 
@@ -67,46 +72,41 @@ namespace Hackuble.Win.Controls
                 this.DoubleBuffered = true;
             }
 
-<<<<<<< Updated upstream
-            VisualScripting.Component comp = new VisualScripting.Component();
-            comp.setColor(255, 0, 255);
-            comp.setName("Comp 1");
-            comp.addSlider("Slider 1", SliderState.INPUT, 0.5f, 0.0f, 1.0f);
-            comp.addSlider("Slider 2", SliderState.OUTPUT, 0.2f, 0.0f, 1.0f);
-            comp.addSlider("My Slider", SliderState.OUTPUT, 10.5f, 0.0f, 100.0f);
+            VisualScripting.Component comp = new VisualScripting.Component("Comp 1", Color.Green);
+            comp.addInputSlider("Slider 1", 0.5f, 0.0f, 1.0f);
+            comp.addInputSlider("Slider 2", 0.2f, 0.0f, 1.0f);
+            comp.addInputSlider("My Slider", 10.5f, 0.0f, 100.0f);
 
-            VisualScripting.Component comp1 = new VisualScripting.Component();
-            comp1.setColor(0, 0, 255);
-            comp1.setName("Comp 2");
-            comp1.addSlider("Slider 1", SliderState.INPUT, 0.5f, 0.0f, 1.0f);
+            VisualScripting.Component comp1 = new VisualScripting.Component("Comp 2", Color.OrangeRed);
+            comp1.addInputSlider("Slider 1", 0.5f, 0.0f, 1.0f);
         }
 
         public void closeOpenGL()
         {
             context.closeContext();
-
-=======
-            VisualScripting.Component comp = new VisualScripting.Component("From C#");
-            comp.addSlider("Slider 1", 0.5f, 0.0f, 1.0f);
-            comp.addSlider("Slider 2", 0.2f, 0.0f, 1.0f);
-            comp.addSlider("My Slider", 0.5f, 0.0f, 100.0f);
->>>>>>> Stashed changes
         }
 
         public void resizeOpenGL(EventArgs e)
         {
             if (!InVisualStudio())
             {
+                if (pivotX != this.Location.X || pivotY != this.Location.Y)
+                {
+                    pivotX = this.Location.X;
+                    pivotY = this.Location.Y;
+                }
+                if (windowHeight != this.ClientSize.Height || windowWidth != this.ClientSize.Width)
+                {
+                    windowWidth = this.ClientSize.Width;
+                    windowHeight = this.ClientSize.Height;
 
-                windowWidth = this.Size.Width;
-                windowHeight = this.Size.Height;
+                    context.resize(windowWidth, windowHeight);
+                    context.awaitResize();
 
-                context.resize(windowWidth, windowHeight);
-                context.awaitResize();
+                    pixelData = new byte[4 * windowWidth * windowHeight];
 
-                pixelData = new byte[4 * windowWidth * windowHeight];
-
-                drawingBitmap = new Bitmap(windowWidth, windowHeight, PixelFormat.Format32bppArgb);
+                    drawingBitmap = new Bitmap(windowWidth, windowHeight, PixelFormat.Format32bppArgb);
+                }
             }
         }
 
@@ -114,7 +114,8 @@ namespace Hackuble.Win.Controls
         {
             base.OnMouseHover(e);
 
-            this.Refresh();
+            if (!InVisualStudio())
+                this.Refresh();
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -122,9 +123,11 @@ namespace Hackuble.Win.Controls
             base.OnMouseMove(e);
 
             if (!InVisualStudio())
+            {
                 context.onMouseMove(e.X, e.Y, (int)e.Button);
 
-            this.Refresh();
+                this.Refresh();
+            }
         }
 
         protected override void OnKeyPress(KeyPressEventArgs e)
@@ -138,9 +141,11 @@ namespace Hackuble.Win.Controls
             base.OnMouseClick(e);
 
             if (!InVisualStudio())
+            {
                 context.onMouseDown(e.X, e.Y, (int)e.Button);
 
-            this.Refresh();
+                this.Refresh();
+            }
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
@@ -148,9 +153,11 @@ namespace Hackuble.Win.Controls
             base.OnMouseUp(e);
 
             if (!InVisualStudio())
+            { 
                 context.onMouseUp(e.X, e.Y, (int)e.Button);
 
-            this.Refresh();
+                this.Refresh();
+            }
         }
 
         protected override void OnMouseWheel(MouseEventArgs e)
@@ -158,9 +165,11 @@ namespace Hackuble.Win.Controls
             base.OnMouseWheel(e);
 
             if (!InVisualStudio())
+            {
                 context.onMouseWheel(e.X, e.Y, e.Delta);
 
-            this.Refresh();
+                this.Refresh();
+            }
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -171,50 +180,26 @@ namespace Hackuble.Win.Controls
             {
                 context.onPaint();
 
-                var area = new Rectangle(new Point(0, 0), new Size(windowWidth, windowHeight));
-
-                //if (this.ProgressBar != null)
-                //{
-                //    // set maximum
-                //    this.ProgressBar.Maximum = windowWidth * windowHeight;
-                //    this.ProgressBar.Value = 0;
-                //}
-
-                //using (Bitmap b = new Bitmap(windowWidth, windowHeight))
-                //{
-                //    byte[] pixelData = new byte[4 * windowWidth * windowHeight];
-                //    context.getPixelData(ref pixelData);
-                //    b.SetResolution(windowWidth, windowHeight);
-                //    using (Graphics g = Graphics.FromImage(b))
-                //    {
-                //        g.Clear(Color.Red);
-                //        //draw each pixel
-                //        int position = 0;
-                //        for (int y = 0; y < b.Height; y++)
-                //        {
-                //            for (int x = 0; x < b.Width; x++)
-                //            {
-                //                Color newColor = Color.FromArgb(BitConverter.ToInt32(pixelData, (position * 4)));
-                //                b.SetPixel(x, y, newColor);
-                //                position++;
-                //                //if (this.ProgressBar != null)
-                //                //{
-                //                //    //set value
-                //                //    this.ProgressBar.Value = position;
-                //                //}
-                //            }
-                //        }
-                //    }
-                //    b.RotateFlip(RotateFlipType.RotateNoneFlipY);
-                //    e.Graphics.DrawImage(b, area);
-                //}
+                if (pivotX != this.Location.X || pivotY != this.Location.Y)
+                {
+                    pivotX = this.Location.X;
+                    pivotY = this.Location.Y;
+                }
+                if (windowHeight != this.ClientSize.Height || windowWidth != this.ClientSize.Width)
+                {
+                    windowWidth = this.ClientSize.Width;
+                    windowHeight = this.ClientSize.Height;
+                }
+                area = new Rectangle(new Point(pivotX, pivotY), new Size(windowWidth, windowHeight));
 
                 context.getPixelData(ref pixelData);
                 UpdateBitmap(pixelData, windowWidth, windowHeight, drawingBitmap);
                 e.Graphics.DrawImage(drawingBitmap, area);
             }
 
-            //calc fps
+            //
+            //      FPS CALCULATION
+            //
             _framesRendered++;
             if ((DateTime.Now - _lastTime).TotalSeconds >= 1)
             {
@@ -228,7 +213,6 @@ namespace Hackuble.Win.Controls
 
         private static void UpdateBitmap(byte[] arr, int width, int height, Bitmap bit)
         {
-            //var output = new Bitmap(width, height, pixelFormat);
             var rect = new Rectangle(0, 0, width, height);
             var bmpData = bit.LockBits(rect, ImageLockMode.ReadWrite, bit.PixelFormat);
 
@@ -240,7 +224,6 @@ namespace Hackuble.Win.Controls
                 Marshal.Copy(arr, i * arrRowLength, ptr, arrRowLength);
                 ptr += bmpData.Stride;
             }
-            //output.Save("test.png");
             bit.UnlockBits(bmpData);
         }
 

@@ -324,16 +324,13 @@ void GuiContext::createContext() {
 			DispatchMessage(&msg);
 		}
 
-<<<<<<< Updated upstream
 		if (destroyEvent) {
 			DestroyWindow(windowHandle);
 			break;
 		}
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
-=======
 		//std::this_thread::sleep_for(std::chrono::milliseconds(1));
->>>>>>> Stashed changes
+		//std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
 		gui->update();
 

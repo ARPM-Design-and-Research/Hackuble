@@ -13,7 +13,6 @@ namespace VisualScripting
     public class Component : IDisposable
     {
         GUICLR.Component _component;
-<<<<<<< Updated upstream
         GUICLR.BoundingBox _boundingBox;
         public Component()
         {
@@ -28,14 +27,12 @@ namespace VisualScripting
             _component.addSlider(title, sliderState, currentValue, startValue, endValue);
         }
 
-        public void setColor(int r, int g, int b)
-=======
         private Color _color;
         public Component(string title)
         {
             _component = new GUICLR.Component(title);
             _color = Color.FromArgb(255, 103, 0);
-            float r, g, b;
+            int r, g, b;
             r = ((int)_color.R);
             g = ((int)_color.G);
             b = ((int)_color.B);
@@ -46,7 +43,7 @@ namespace VisualScripting
         {
             _component = new GUICLR.Component(title);
             _color = color;
-            float r, g, b;
+            int r, g, b;
             r = ((int)_color.R);
             g = ((int)_color.G);
             b = ((int)_color.B);
@@ -54,7 +51,6 @@ namespace VisualScripting
         }
 
         public string Name
->>>>>>> Stashed changes
         {
             get
             {
@@ -75,7 +71,7 @@ namespace VisualScripting
             set
             {
                 _color = value;
-                float r, g, b;
+                int r, g, b;
                 r = ((int)_color.R);
                 g = ((int)_color.G);
                 b = ((int)_color.B);
@@ -85,9 +81,9 @@ namespace VisualScripting
 
         //BoundingBox
 
-        public void addSlider(string title, float currentValue, float startValue, float endValue)
+        public void addInputSlider(string title, float currentValue, float startValue, float endValue)
         {
-            _component.addSlider(title, currentValue, startValue, endValue);
+            _component.addSlider(title, SliderState.INPUT, currentValue, startValue, endValue);
         }
 
         public ComponentCollection Children { get; }
