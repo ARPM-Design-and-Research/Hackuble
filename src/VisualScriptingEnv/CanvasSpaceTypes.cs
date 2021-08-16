@@ -6,12 +6,18 @@ using System.Threading.Tasks;
 
 namespace VisualScriptingEnv
 {
-    public class BoundingBox
+    public class BoundingBox : IEquatable<BoundingBox>
     {
         public BoundingBox(CanvasPoint point, CanvasSize size)
         {
             this.Location = point;
             this.Size = size;
+        }
+        public BoundingBox(CanvasPoint pointA, CanvasPoint pointB)
+        {
+            BoundingBox b = BoundingBox.FromLTRB(pointA.X, pointA.Y, pointB.X, pointB.Y);
+            this.Location = b.Location;
+            this.Size = b.Size;
         }
         public BoundingBox(double x, double y, double w, double h)
         {
@@ -139,76 +145,113 @@ namespace VisualScriptingEnv
             BoundingBox bbOut = new BoundingBox(new CanvasPoint(x, y), new CanvasSize(w, h));
             return bbOut;
         }
-        public BoundingBox Inflate(CanvasSize s)
+        public BoundingBox InflateCopy(CanvasSize s)
         {
             return new BoundingBox(this.Location, new CanvasSize((this.Size.Width + s.Width), (this.Size.Height + s.Height)));
         }
-        public BoundingBox Offset(CanvasSize s)
+        public BoundingBox OffsetCopy(CanvasSize s)
         {
             return new BoundingBox(new CanvasPoint((this.Location.X + s.Width), (this.Location.Y + s.Height)), new CanvasSize((this.Size.Width + s.Width), (this.Size.Height + s.Height)));
         }
-        public BoundingBox Offset(double x1, double x2, double y1, double y2)
+        public BoundingBox OffsetCopy(double x1, double x2, double y1, double y2)
         {
             return new BoundingBox(new CanvasPoint((this.Location.X + x1), (this.Location.Y + y1)), new CanvasSize((this.Size.Width + x2), (this.Size.Height + y2)));
         }
-
-        //public static BoundingBox operator + (BoundingBox A, BoundingBox B)
-        //{
-        //    return BoundingBox.Union(A, B);
-        //}
-        //public static BoundingBox operator -(BoundingBox A, BoundingBox B)
-        //{
-        //    return BoundingBox.Intersect(A, B);
-        //}
-        //public static BoundingBox Intersect(BoundingBox a, BoundingBox b)
-        //{
-        //    if (CheckIntersection(a, b))
-        //    {
-        //        if (a.Contains(b, false)) return b;
-        //        else if (b.Contains(a, false)) return a;
-        //        else
-        //        {
-        //            int aVSb = 0;
-        //            foreach (CanvasPoint p in a.GetPoints())
-        //            {
-        //                if (b.Contains(p, false))
-        //                {
-        //                    aVSb++;
-        //                }
-        //            }
-        //            foreach (CanvasPoint p in b.GetPoints())
-        //            {
-        //                if (a.Contains(p, false))
-        //                {
-        //                    aVSb--;
-        //                }
-        //            }
-
-        //            double x, y, w, h;
-        //            if (aVSb == 0)
-        //            {
-        //                if (a.Location.X <= b.Location.X) x = a.Location.X;
-        //                else x = b.Location.X;
-        //                if (a.Location.X <= b.Location.X) x = a.Location.X;
-        //                else x = b.Location.X;
-        //            }
-        //            BoundingBox bbOut = new BoundingBox(x, y, w, h);
-        //            return bbOut;
-        //        }
-        //    }
-        //    else return null;
-        //}
-        public static bool CheckIntersection(BoundingBox a, BoundingBox b)
+        public static bool CheckIntersection(BoundingBox a, BoundingBox b, bool strict = false)
         {
-            foreach (CanvasPoint p in a.GetPoints()) if (b.Contains(p, false)) return true;
-            foreach (CanvasPoint p in b.GetPoints()) if (a.Contains(p, false)) return true;
+            foreach (CanvasPoint p in a.GetPoints()) if (b.Contains(p, strict)) return true;
+            foreach (CanvasPoint p in b.GetPoints()) if (a.Contains(p, strict)) return true;
             return false;
         }
-        //public static BoundingBox Union(BoundingBox a, BoundingBox b)
-        //{
+        public static BoundingBox Intersect(BoundingBox a, BoundingBox b)
+        {
+            if (CheckIntersection(a, b))
+            {
+                double nl, nt, nr, nb;
+                if (a.Left <= b.Left) nl = b.Left;
+                else nl = a.Left;
+                if (a.Top <= b.Top) nt = b.Top;
+                else nt = a.Top;
+                if (a.Right >= b.Right) nr = b.Right;
+                else nr = a.Right;
+                if (a.Bottom >= b.Bottom) nb = b.Bottom;
+                else nb = a.Bottom;
+                return BoundingBox.FromLTRB(nl, nt, nr, nb);
+            }
+            else return null;
+        }
+        public static BoundingBox Union(BoundingBox a, BoundingBox b)
+        {
+            if (CheckIntersection(a, b))
+            {
+                double nl, nt, nr, nb;
+                if (a.Left <= b.Left) nl = a.Left;
+                else nl = b.Left;
+                if (a.Top <= b.Top) nt = a.Top;
+                else nt = b.Top;
+                if (a.Right >= b.Right) nr = a.Right;
+                else nr = b.Right;
+                if (a.Bottom >= b.Bottom) nb = a.Bottom;
+                else nb = b.Bottom;
+                return BoundingBox.FromLTRB(nl, nt, nr, nb);
+            }
+            else return null;
+        }
+        public static BoundingBox Trim(BoundingBox box, BoundingBox cutter)
+        {
+            if (CheckIntersection(box, cutter))
+            {
+                double nr, nb;
+                double nl = box.Left;
+                double nt = box.Top;
+                if ((box.Left == cutter.Left) || (box.Top == cutter.Top)) return null;
+                if (box.Left > cutter.Left) nr = cutter.Right;
+                else nr = cutter.Left;
+                if (box.Top > cutter.Top) nb = cutter.Top;
+                else nb = cutter.Bottom;
+                return BoundingBox.FromLTRB(nl, nt, nr, nb);
+            }
+            else return null;
+        }
+        public bool Equals(BoundingBox other)
+        {
+            return ((this.Size == other.Size) && (this.Location == other.Location));
+        }
+        public override bool Equals(object obj)
+        {
+            if (!(obj is BoundingBox)) return false;
+            BoundingBox c = obj as BoundingBox;
+            return ((this.Size == c.Size) && (this.Location == c.Location));
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+        public override string ToString()
+        {
+            return ($"BoundingBox(X={this.Location.X}, Y={this.Location.Y}, W={this.Size.Width}, H={this.Size.Height})");
+        }
+        public bool IsValid()
+        {
+            return (this.Size.Area() > 0.0);
+        }
 
-        //    BoundingBox bbOut = new BoundingBox(x, y, w, h);
-        //}
+        public static BoundingBox operator + (BoundingBox A, BoundingBox B)
+        {
+            return BoundingBox.Union(A, B);
+        }
+        public static BoundingBox operator - (BoundingBox A, BoundingBox B)
+        {
+            return BoundingBox.Intersect(A, B);
+        }
+        public static bool operator == (BoundingBox A, BoundingBox B)
+        {
+            return ((A.Size == B.Size) && (A.Location == B.Location));
+        }
+        public static bool operator != (BoundingBox A, BoundingBox B)
+        {
+            return ((A.Size != B.Size) || (A.Location != B.Location));
+        }
     }
 
     public class CanvasPoint : IEquatable<CanvasSize>, IEquatable<CanvasPoint>
@@ -227,21 +270,21 @@ namespace VisualScriptingEnv
             return ($"CanvasPoint({this.X.ToString()}, {this.Y.ToString()})");
         }
 
-        public static CanvasSize operator +(CanvasPoint A, CanvasPoint B)
+        public static CanvasSize operator + (CanvasPoint A, CanvasPoint B)
         {
             return new CanvasSize((A.X + B.X), (A.Y + B.Y));
         }
-        public static CanvasSize operator -(CanvasPoint A, CanvasPoint B)
+        public static CanvasSize operator - (CanvasPoint A, CanvasPoint B)
         {
             return new CanvasSize((A.X - B.X), (A.Y - B.Y));
         }
-        public static bool operator ==(CanvasPoint A, CanvasPoint B)
+        public static bool operator == (CanvasPoint A, CanvasPoint B)
         {
             return ((A.X == B.X) && (A.Y == B.Y));
         }
-        public static bool operator !=(CanvasPoint A, CanvasPoint B)
+        public static bool operator != (CanvasPoint A, CanvasPoint B)
         {
-            return ((A.X != B.X) && (A.Y != B.Y));
+            return ((A.X != B.X) || (A.Y != B.Y));
         }
         public override bool Equals(object obj)
         {
@@ -284,21 +327,21 @@ namespace VisualScriptingEnv
             return ($"CanvasSize({this.Width.ToString()}, {this.Height.ToString()})");
         }
 
-        public static CanvasSize operator +(CanvasSize A, CanvasSize B)
+        public static CanvasSize operator + (CanvasSize A, CanvasSize B)
         {
             return new CanvasSize((A.Width + B.Width), (A.Height + B.Height));
         }
-        public static CanvasSize operator -(CanvasSize A, CanvasSize B)
+        public static CanvasSize operator - (CanvasSize A, CanvasSize B)
         {
             return new CanvasSize((A.Width - B.Width), (A.Height - B.Height));
         }
-        public static bool operator ==(CanvasSize A, CanvasSize B)
+        public static bool operator == (CanvasSize A, CanvasSize B)
         {
             return ((A.Width == B.Width) && (A.Height == B.Height));
         }
-        public static bool operator !=(CanvasSize A, CanvasSize B)
+        public static bool operator != (CanvasSize A, CanvasSize B)
         {
-            return ((A.Width != B.Width) && (A.Height != B.Height));
+            return ((A.Width != B.Width) || (A.Height != B.Height));
         }
         public override bool Equals(object obj)
         {
@@ -319,6 +362,11 @@ namespace VisualScriptingEnv
         {
             return ((this.Width == other.Width) && (this.Height == other.Height));
         }
+        public double Area()
+        {
+            return (this.Width * this.Height);
+        }
+
         public static implicit operator CanvasSize(CanvasPoint v)
         {
             CanvasSize s = new CanvasSize(v.X, v.Y);

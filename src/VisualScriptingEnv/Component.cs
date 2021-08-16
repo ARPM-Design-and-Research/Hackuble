@@ -83,11 +83,11 @@ namespace VisualScripting
             _component.addSlider(title, sliderState, currentValue, startValue, endValue);
         }
 
-        public static bool operator== (Component A, Component B)
+        public static bool operator == (Component A, Component B)
         {
             return (A.InstanceGuid == B.InstanceGuid);
         }
-        public static bool operator !=(Component A, Component B)
+        public static bool operator != (Component A, Component B)
         {
             return (A.InstanceGuid != B.InstanceGuid);
         }
