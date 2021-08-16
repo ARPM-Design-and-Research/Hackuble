@@ -58,8 +58,8 @@ namespace Hackuble.Win.Controls
             {
                 windowWidth = this.ClientSize.Width;
                 windowHeight = this.ClientSize.Height;
-                pivotX = this.Location.X;
-                pivotY = this.Location.Y;
+                pivotX = this.ClientRectangle.X;
+                pivotY = this.ClientRectangle.Y;
 
                 pixelData = new byte[4 * windowWidth * windowHeight];
 
@@ -90,10 +90,10 @@ namespace Hackuble.Win.Controls
         {
             if (!InVisualStudio())
             {
-                if (pivotX != this.Location.X || pivotY != this.Location.Y)
+                if (pivotX != this.ClientRectangle.X || pivotY != this.ClientRectangle.Y)
                 {
-                    pivotX = this.Location.X;
-                    pivotY = this.Location.Y;
+                    pivotX = this.ClientRectangle.X;
+                    pivotY = this.ClientRectangle.Y;
                 }
                 if (windowHeight != this.ClientSize.Height || windowWidth != this.ClientSize.Width)
                 {
@@ -180,10 +180,10 @@ namespace Hackuble.Win.Controls
             {
                 context.onPaint();
 
-                if (pivotX != this.Location.X || pivotY != this.Location.Y)
+                if (pivotX != this.ClientRectangle.X || pivotY != this.ClientRectangle.Y)
                 {
-                    pivotX = this.Location.X;
-                    pivotY = this.Location.Y;
+                    pivotX = this.ClientRectangle.X;
+                    pivotY = this.ClientRectangle.Y;
                 }
                 if (windowHeight != this.ClientSize.Height || windowWidth != this.ClientSize.Width)
                 {
