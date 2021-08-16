@@ -36,6 +36,7 @@ namespace Hackuble.Win
             this.openGLControl1.Paint += OpenGLControl1_Paint;
             this.Controls.Add(this.openGLControl1);
             this.openGLControl1.BringToFront();
+            this.statusStrip1.SendToBack();
             this.openGLControl1.ResumeLayout(false);
             this.openGLControl1.PerformLayout();
             this.ResumeLayout(false);
@@ -59,8 +60,11 @@ namespace Hackuble.Win
 
         private void VisualScriptingEnv_Resize(object sender, EventArgs e)
         {
-           if(this.openGLControl1 != null)
-            this.openGLControl1.Size = new System.Drawing.Size((this.Size.Width), (this.Size.Height - (this.toolStrip1.Height + statusStrip1.Height)));
+            if (this.openGLControl1 != null)
+            {
+                this.openGLControl1.Size = new System.Drawing.Size((this.ClientSize.Width), (this.ClientSize.Height - (this.toolStrip1.Height + statusStrip1.Height)));
+                this.openGLControl1.BringToFront();
+            }
         }
 
         private void VisualScriptingEnv_ResizeEnd(object sender, EventArgs e)
@@ -76,7 +80,9 @@ namespace Hackuble.Win
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
             count++;
-            VisualScripting.Component comp = new VisualScripting.Component($"Comp {count}", Color.Green);
+            VisualScripting.TestComp comp = new VisualScripting.TestComp();
+            comp.Name = $"Comp {count}";
+            comp.Color = Color.Green;
             comp.AddSlider(GUICLR.SliderState.INPUT, "Slider 1", 0.5f, 0.0f, 1.0f);
             comp.AddSlider(GUICLR.SliderState.INPUT, "Slider 2", 0.2f, 0.0f, 1.0f);
             comp.AddSlider(GUICLR.SliderState.INPUT, "Slider 3", 10.5f, 0.0f, 100.0f);
@@ -86,7 +92,9 @@ namespace Hackuble.Win
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
             count++;
-            VisualScripting.Component comp = new VisualScripting.Component($"Comp {count}", Color.OrangeRed);
+            VisualScripting.TestComp comp = new VisualScripting.TestComp();
+            comp.Name = $"Comp {count}";
+            comp.Color = Color.OrangeRed;
             comp.AddSlider(GUICLR.SliderState.INPUT, "Slider 1", 0.5f, 0.0f, 1.0f);
             comp.AddSlider(GUICLR.SliderState.INPUT, "Slider 2", 0.2f, 0.0f, 1.0f);
             comp.AddSlider(GUICLR.SliderState.INPUT, "Slider 3", 10.5f, 0.0f, 100.0f);

@@ -90,22 +90,30 @@ namespace Hackuble.Win.Controls
         {
             if (!InVisualStudio())
             {
-                if (pivotX != this.ClientRectangle.X || pivotY != this.ClientRectangle.Y)
+                try
                 {
-                    pivotX = this.ClientRectangle.X;
-                    pivotY = this.ClientRectangle.Y;
+                    if (pivotX != this.ClientRectangle.X || pivotY != this.ClientRectangle.Y)
+                    {
+                        pivotX = this.ClientRectangle.X;
+                        pivotY = this.ClientRectangle.Y;
+                    }
+                    if (windowHeight != this.Size.Height || windowWidth != this.Size.Width)
+                    {
+                        windowWidth = this.ClientSize.Width;
+                        windowHeight = this.ClientSize.Height;
+
+                        context.resize(windowWidth, windowHeight);
+                        context.awaitResize();
+
+                        pixelData = new byte[4 * windowWidth * windowHeight];
+
+                        drawingBitmap = new Bitmap(windowWidth, windowHeight, PixelFormat.Format32bppArgb);
+                    }
                 }
-                if (windowHeight != this.Size.Height || windowWidth != this.Size.Width)
+                catch (Exception ex)
                 {
-                    windowWidth = this.ClientSize.Width;
-                    windowHeight = this.ClientSize.Height;
-
-                    context.resize(windowWidth, windowHeight);
-                    context.awaitResize();
-
-                    pixelData = new byte[4 * windowWidth * windowHeight];
-
-                    drawingBitmap = new Bitmap(windowWidth, windowHeight, PixelFormat.Format32bppArgb);
+                    ex.ToString();
+                    return;
                 }
             }
         }

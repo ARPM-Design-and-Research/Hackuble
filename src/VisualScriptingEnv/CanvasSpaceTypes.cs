@@ -145,6 +145,20 @@ namespace VisualScriptingEnv
             BoundingBox bbOut = new BoundingBox(new CanvasPoint(x, y), new CanvasSize(w, h));
             return bbOut;
         }
+        public void Inflate(CanvasSize s)
+        {
+            this.Size = this.Size + s;
+        }
+        public void Offset(CanvasSize s)
+        {
+            this.Size = this.Size + s;
+            this.Location = this.Location + ((CanvasPoint)s);
+        }
+        public void Offset(double x1, double x2, double y1, double y2)
+        {
+            this.Location = this.Location + new CanvasPoint(x1, y1);
+            this.Size = this.Size + new CanvasSize(x2, y2);
+        }
         public BoundingBox InflateCopy(CanvasSize s)
         {
             return new BoundingBox(this.Location, new CanvasSize((this.Size.Width + s.Width), (this.Size.Height + s.Height)));
@@ -165,6 +179,7 @@ namespace VisualScriptingEnv
         }
         public static BoundingBox Intersect(BoundingBox a, BoundingBox b)
         {
+            if (a == b) return a;
             if (CheckIntersection(a, b))
             {
                 double nl, nt, nr, nb;
@@ -182,6 +197,7 @@ namespace VisualScriptingEnv
         }
         public static BoundingBox Union(BoundingBox a, BoundingBox b)
         {
+            if (a == b) return a;
             if (CheckIntersection(a, b))
             {
                 double nl, nt, nr, nb;
@@ -196,6 +212,29 @@ namespace VisualScriptingEnv
                 return BoundingBox.FromLTRB(nl, nt, nr, nb);
             }
             else return null;
+        }
+        public static BoundingBox MassUnion(BoundingBox[] array)
+        {
+            BoundingBox bbOut = null;
+            for (int i = 0; i < array.Length; i++)
+            {
+                BoundingBox bbTempA = array[i];
+                for (int j = 0; j < array.Length; j++)
+                {
+                    BoundingBox bbTempB = BoundingBox.Union(bbTempA, array[j]);
+                    bbTempA = bbTempB;
+                }
+                if (bbTempA != array[i])
+                {
+                    if (bbOut == null) bbOut = bbTempA;
+                    else
+                    {
+                        BoundingBox bbTempC = BoundingBox.Union(bbOut, bbTempA);
+                        if (bbTempC != null) bbOut = bbTempC;
+                    }
+                }
+            }
+            return bbOut;
         }
         public static BoundingBox Trim(BoundingBox box, BoundingBox cutter)
         {

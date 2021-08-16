@@ -10,19 +10,19 @@ using GUICLR;
 
 namespace VisualScripting
 {
-    public class Component : IDisposable
+    public class TestComp : Component
     {
-        GUICLR.Component _component;
-        GUICLR.BoundingBox _boundingBox;
-        Guid _instanceGuid;
+        public TestComp() : base("Test Component")
+        {
+        }
+
+        public override Guid ElementGuid => new Guid("733d497c-d74e-4b86-adde-86b61c45b87a");
+    }
+
+    public abstract class Component : Element
+    {
         private Color _color;
 
-        public Component()
-        {
-            _component = new GUICLR.Component("Component");
-            _boundingBox = _component.getBoundingBox();
-            this._instanceGuid = Guid.NewGuid();
-        }
         public Component(string title)
         {
             _component = new GUICLR.Component(title);
@@ -46,21 +46,6 @@ namespace VisualScripting
             this._instanceGuid = Guid.NewGuid();
         }
 
-        //BoundingBox
-
-        public Guid InstanceGuid { get => _instanceGuid; }
-        public ComponentCollection Children { get; }
-        public string Name
-        {
-            get
-            {
-                return _component.getTitle();
-            }
-            set
-            {
-                _component.setTitle(value);
-            }
-        }
         public Color Color
         {
             get
@@ -78,26 +63,66 @@ namespace VisualScripting
             }
         }
 
-        public void AddSlider(SliderState sliderState, string title, float currentValue, float startValue, float endValue)
+        public abstract override Guid ElementGuid { get; }
+
+        public void AddSlider(SliderState sliderState, string title, float currentValue, float startValue, float endValue) //!!!!!!!!!!!!!!!!!!!!!!!
         {
             _component.addSlider(title, sliderState, currentValue, startValue, endValue);
         }
+    }
 
-        public static bool operator == (Component A, Component B)
+    public abstract class Element : IDisposable
+    {
+        protected GUICLR.Component _component; //!!!!!!!!!!!!!!!!!!!!!!!
+        protected GUICLR.BoundingBox _boundingBox; //!!!!!!!!!!!!!!!!!!!!!!!
+        protected Guid _instanceGuid;
+
+        public Element()
+        {
+            //_component = new GUICLR.Component("Element"); //!!!!!!!!!!!!!!!!!!!!!!!
+            //_boundingBox = _component.getBoundingBox(); //!!!!!!!!!!!!!!!!!!!!!!!
+            this._instanceGuid = Guid.NewGuid();
+        }        
+
+        public VisualScriptingEnv.BoundingBox Bounds //!!!!!!!!!!!!!!!!!!!!!!!
+        {
+            get
+            {
+                //return this._boundingBox;
+                return VisualScriptingEnv.BoundingBox.FromLTRB((double)this._boundingBox.getLeftBound(), (double)this._boundingBox.getTopBound(), (double)this._boundingBox.getRightBound(), (double)this._boundingBox.getBottomBound());
+            }
+        }
+        public Guid InstanceGuid { get => _instanceGuid; }
+        public ComponentCollection Children { get; }
+        public string Name //!!!!!!!!!!!!!!!!!!!!!!!
+        {
+            get
+            {
+                return _component.getTitle();
+            }
+            set
+            {
+                _component.setTitle(value);
+            }
+        }
+        public string ElementType { get; set; }
+        public abstract Guid ElementGuid { get; }
+
+        public static bool operator == (Element A, Element B)
         {
             return (A.InstanceGuid == B.InstanceGuid);
         }
-        public static bool operator != (Component A, Component B)
+        public static bool operator != (Element A, Element B)
         {
             return (A.InstanceGuid != B.InstanceGuid);
         }
         public override bool Equals(object obj)
         {
-            if (!(obj is Component)) return false;
-            Component c = obj as Component;
+            if (!(obj is Element)) return false;
+            Element c = obj as Element;
             return (this.InstanceGuid == c.InstanceGuid);
         }
-        public bool Equals(Component other)
+        public bool Equals(Element other)
         {
             return (this.InstanceGuid == other.InstanceGuid);
         }
@@ -113,20 +138,30 @@ namespace VisualScripting
         {
             _component.Dispose();
         }
-        ~Component()
+        ~Element()
         {
             this.Dispose();
         }
     }
 
-    public class ComponentCollection : IList<Component>, ICollection<Component>, IEnumerable<Component>
+    public class ComponentCollection : IList<Element>, ICollection<Element>, IEnumerable<Element>
     {
-        private Component[] _components;
-        private Component _parent;
+        private Element[] _components;
+        private Element _parent;
+        private bool _readOnly;
 
-        //BoundingBox
+        public ComponentCollection() : base()
+        {
+            this._parent = null;
+            this._readOnly = false;
+        }
+        public ComponentCollection(Element owner) : base()
+        {
+            this._parent = owner;
+            this._readOnly = false;
+        }
 
-        public Component this[int index]
+        public Element this[int index]
         {
             get
             {
@@ -143,21 +178,19 @@ namespace VisualScripting
             }
         }
 
+        public Element Owner => this._parent;
         public int Count => _components.Length;
 
-        public bool IsReadOnly => false;
-
-        public void Add(Component item)
+        public bool IsReadOnly => _readOnly;
+        public void Add(Element item)
         {
-            this._components.Append<Component>(item);
+            this._components.Append<Element>(item);
         }
-
         public void Clear()
         {
-            _components = new Component[] { };
+            _components = new Element[] { };
         }
-
-        public bool Contains(Component item)
+        public bool Contains(Element item)
         {
             for (int i = 0; i < this._components.Length; i++)
             {
@@ -168,18 +201,15 @@ namespace VisualScripting
             }
             return false;
         }
-
-        public void CopyTo(Component[] array, int arrayIndex)
+        public void CopyTo(Element[] array, int arrayIndex)
         {
             this._components.CopyTo(array, arrayIndex);
         }
-
-        public IEnumerator<Component> GetEnumerator()
+        public IEnumerator<Element> GetEnumerator()
         {
-            return (IEnumerator<Component>)this._components.GetEnumerator();
+            return (IEnumerator<Element>)this._components.GetEnumerator();
         }
-
-        public int IndexOf(Component item)
+        public int IndexOf(Element item)
         {
             for (int i = 0; i < this._components.Length; i++)
             {
@@ -190,11 +220,10 @@ namespace VisualScripting
             }
             return -1;
         }
-
-        public void Insert(int index, Component item)
+        public void Insert(int index, Element item)
         {
             int n = this._components.Length + 1;
-            Component[] newarr = new Component[n];
+            Element[] newarr = new Element[n];
             for (int i = 0; i < n + 1; i++)
             {
                 if (i < index - 1)
@@ -206,8 +235,7 @@ namespace VisualScripting
             }
             this._components = newarr;
         }
-
-        public bool Remove(Component item)
+        public bool Remove(Element item)
         {
             int i = this.IndexOf(item);
             if (i != -1)
@@ -217,11 +245,10 @@ namespace VisualScripting
             }
             else return false;
         }
-
         public void RemoveAt(int index)
         {
             int n = this._components.Length + 1;
-            Component[] newarr = new Component[n];
+            Element[] newarr = new Element[n];
             for (int i = 0; i < n - 1; i++)
             {
                 if (i < index - 1)
@@ -233,10 +260,16 @@ namespace VisualScripting
             }
             this._components = newarr;
         }
-
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _components.GetEnumerator();
+        }
+        public VisualScriptingEnv.BoundingBox GetUnionBounds()
+        {
+            VisualScriptingEnv.BoundingBox[] bbArray;
+            bbArray = new VisualScriptingEnv.BoundingBox[this._components.Length];
+            for (int i = 0; i < this._components.Length; i++) bbArray[i] = this._components[i].Bounds;
+            return VisualScriptingEnv.BoundingBox.MassUnion(bbArray);
         }
     }
 
