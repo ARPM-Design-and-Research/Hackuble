@@ -18,8 +18,8 @@ GUICLR::Component::~Component() {
 
 }
 
-void GUICLR::Component::addSlider(System::String^ title, float currentValue, float startValue, float endValue) {
-	_baseComponent->addSlider(marshal_as<std::string>(title), currentValue, startValue, endValue);
+void GUICLR::Component::addSlider(System::String^ title, GUICLR::SliderState _sliderState, float currentValue, float startValue, float endValue) {
+	_baseComponent->addSlider(marshal_as<std::string>(title), (SynGUI::SliderState)_sliderState, currentValue, startValue, endValue);
 }
 
 void GUICLR::Component::setColor(int r, int g, int b) {

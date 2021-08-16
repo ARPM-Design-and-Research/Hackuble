@@ -7,6 +7,13 @@ using namespace System;
 using namespace System::Runtime::InteropServices;
 
 namespace GUICLR {
+
+	public enum class SliderState {
+		INPUT,
+		OUTPUT,
+		NONE
+	};
+
 	public ref class Component : public IDisposable {
 	private:
 		//TODO: Fix having direct pointer to baseComponent
@@ -16,7 +23,7 @@ namespace GUICLR {
 		Component(System::String^ title);
 		~Component();
 
-		void addSlider(System::String^ title, float currentValue, float startValue, float endValue);
+		void addSlider(System::String^ title, GUICLR::SliderState _sliderState, float currentValue, float startValue, float endValue);
 		void setColor(int r, int g, int b);
 		void setTitle(System::String^ title);
 		System::String^ getTitle();

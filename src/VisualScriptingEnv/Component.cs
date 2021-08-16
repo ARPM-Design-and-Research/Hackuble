@@ -22,9 +22,9 @@ namespace VisualScripting
 
         //BoundingBox
 
-        public void addSlider(string title, float currentValue, float startValue, float endValue)
+        public void addSlider(string title, SliderState sliderState, float currentValue, float startValue, float endValue)
         {
-            _component.addSlider(title, currentValue, startValue, endValue);
+            _component.addSlider(title, sliderState, currentValue, startValue, endValue);
         }
 
         public void setColor(int r, int g, int b)

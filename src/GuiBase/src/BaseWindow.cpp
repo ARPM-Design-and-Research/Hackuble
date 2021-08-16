@@ -81,8 +81,8 @@ void BaseWindow::setColor(glm::vec3 _color) {
 }
 
 //Adds a slider to the component
-std::shared_ptr<Slider> BaseWindow::addSlider(const std::string& title, float currentValue, float startValue, float endValue) {
-	std::shared_ptr<Slider> slider = std::make_shared<Slider>(title, pos + glm::vec2(0.0f, currentHeight), glm::vec2(size.x - 5.0f, 12.0f), currentValue, startValue, endValue, layer);
+std::shared_ptr<Slider> BaseWindow::addSlider(const std::string& title, SliderState _sliderState, float currentValue, float startValue, float endValue) {
+	std::shared_ptr<Slider> slider = std::make_shared<Slider>(title, _sliderState, pos + glm::vec2(0.0f, currentHeight), glm::vec2(size.x - 5.0f, 12.0f), currentValue, startValue, endValue, layer);
 	addChildComponent(std::static_pointer_cast<Component>(slider));
 
 	currentHeight += 14.0f;

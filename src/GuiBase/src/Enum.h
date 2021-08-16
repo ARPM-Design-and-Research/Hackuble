@@ -7,6 +7,12 @@
 
 namespace SynGUI {
 
+	enum class SliderState {
+		INPUT,
+		OUTPUT,
+		NONE
+	};
+
 	enum class Pivot {
 		CENTER,
 		TOP_LEFT,

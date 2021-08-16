@@ -49,7 +49,7 @@ namespace SynGUI {
 		void translate(glm::vec2 _trans);
 		void setColor(glm::vec3 _color);
 
-		std::shared_ptr<Slider> addSlider(const std::string& title, float currentValue = 0.0f, float startValue = 0.0f, float endValue = 1.0f);
+		std::shared_ptr<Slider> addSlider(const std::string& title, SliderState _sliderState, float currentValue = 0.0f, float startValue = 0.0f, float endValue = 1.0f);
 
 		void OnMouseMove(std::shared_ptr<MouseEvent> eventArgs);
 

@@ -33,9 +33,11 @@ namespace SynGUI {
 		float endValue;
 		float currentValue;
 
+		SliderState sliderState;
+
 	public:
 
-		Slider(const std::string& label, glm::vec2 _pos, glm::vec2 size, float _currentValue = 0.0f, float _startValue = 0.0f, float _endValue = 1.0f, float layer = 0.0f);
+		Slider(const std::string& label, SliderState _sliderState, glm::vec2 _pos, glm::vec2 size, float _currentValue = 0.0f, float _startValue = 0.0f, float _endValue = 1.0f, float layer = 0.0f);
 
 		void setPosition(glm::vec2 _pos);
 		void translate(glm::vec2 translate);

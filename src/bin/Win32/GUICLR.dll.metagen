@@ -26,12 +26,19 @@ Class GUICLR.Component: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   Interfaces:
     System.IDisposable
   Methods:
-    addSlider(String, Single, Single, Single): PrivateScope, Public, HideBySig
+    addSlider(String, SliderState, Single, Single, Single): PrivateScope, Public, HideBySig
     setColor(Int32, Int32, Int32): PrivateScope, Public, HideBySig
     setTitle(String): PrivateScope, Public, HideBySig
     getTitle(): PrivateScope, Public, HideBySig
     getBoundingBox(): PrivateScope, Public, HideBySig
     Dispose(): PrivateScope, Public, Final, Virtual, HideBySig
+Struct GUICLR.SliderState: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    GUICLR.SliderState INPUT = 0 : Public, Static, Literal, HasDefault
+    GUICLR.SliderState OUTPUT = 1 : Public, Static, Literal, HasDefault
+    GUICLR.SliderState NONE = 2 : Public, Static, Literal, HasDefault
 Class GUICLR.ManagedContext: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Interfaces:
