@@ -22,7 +22,7 @@ namespace SynGUI {
 		int index;
 		Rectangle(glm::vec2 pos_, glm::vec2 size_, float r0_, float r1_, float r2_, float r3_, glm::vec3 color_, float _zDepth);
 		
-
+		glm::vec2 pos;
 		glm::vec2 size;
 		float r0, r1, r2, r3;
 		glm::vec3 color;
@@ -32,6 +32,8 @@ namespace SynGUI {
 	public:
 		~Rectangle();
 
+		void setPosition(glm::vec2 pos);
+		void translate(glm::vec2 translate);
 		void setColor(glm::vec3 color_);
 		void setSize(glm::vec2 size_);
 		void setRadius(float r0, float r1, float r2, float r3);

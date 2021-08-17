@@ -14,7 +14,7 @@ GUICLR::RenderElement::~RenderElement() {
 	_renderElement = nullptr;
 }
 
-void GUICLR::RenderElement::translate(Vector2 translate) {
+/*void GUICLR::RenderElement::translate(Vector2 translate) {
 
 	if (_renderElement == nullptr)
 		throw gcnew NullReferenceException("Render Element is not initialized or has been deleted");
@@ -27,7 +27,7 @@ void GUICLR::RenderElement::setPosition(Vector2 pos) {
 		throw gcnew NullReferenceException("Render Element is not initialized or has been deleted");
 
 	_renderElement->setPosition(glm::vec2(pos.X, pos.Y));
-}
+}*/
 
 void GUICLR::RenderElement::setZDepth(float depth) {
 	if (_renderElement == nullptr)

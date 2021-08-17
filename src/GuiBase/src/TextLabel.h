@@ -41,6 +41,10 @@ public:
 	TextLabel(const std::string& _text, float fontSize, glm::vec2 pos = glm::vec2(0.0f,0.0f), Pivot pivot = Pivot::BOTTOM_LEFT, float zDepth = 0.0f);
 
 
+	glm::vec2 pos;
+	glm::vec2 size;
+	BoundingBox box;
+
 	//Calculates font size based on bounding box given
 	void wrapHorizontalInBoundingBox();
 	void setHorizontalWidth(float width);

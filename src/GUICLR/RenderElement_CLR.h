@@ -14,8 +14,8 @@ namespace GUICLR {
 		RenderElement();
 		~RenderElement();
 
-		void translate(Vector2 translate);
-		void setPosition(Vector2 position);
+		//void translate(Vector2 translate);
+		//void setPosition(Vector2 position);
 		void setZDepth(float depth);
 		void setVisible(bool visible);
 

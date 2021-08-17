@@ -12,7 +12,7 @@ BaseWindow::BaseWindow(const std::string& _title, const std::string& _icon, glm:
 	layer = _layer;
 
 	//Some offsets for rendering the background rectangle and accent rectangle
-	backgroundRect = RectangleRenderer::GetInstance()->addRectangle(pos, size, 3.0f, 3.0f, 3.0f, 3.0f, glm::vec3(115.0f / 255.0f), layer + 0.0f);
+	/*backgroundRect = RectangleRenderer::GetInstance()->addRectangle(pos, size, 3.0f, 3.0f, 3.0f, 3.0f, glm::vec3(115.0f / 255.0f), layer + 0.0f);
 	topRect = RectangleRenderer::GetInstance()->addRectangle(pos, glm::vec2(size.x, 4.0f), 3.0f, 3.0f, 0.0f, 0.0f, color, layer + 0.0001f);
 
 	//The title of the component
@@ -26,18 +26,18 @@ BaseWindow::BaseWindow(const std::string& _title, const std::string& _icon, glm:
 	//Tracker to keep the current height of the component, so more elements can be added dynamically
 	currentHeight = 24.0f;
 
-	calculateBoundingBox();
+	calculateBoundingBox();*/
 }
 
 void BaseWindow::OnMouseMove(std::shared_ptr<MouseEvent> eventArgs) {
 	
-	if(eventArgs->button == MouseButton::LEFT)
-		translate(eventArgs->delta);
+	/*if (eventArgs->button == MouseButton::LEFT)
+		translate(eventArgs->delta);*/
 }
 
 void BaseWindow::translate(glm::vec2 _trans) {
 
-	glm::vec2 translate = _trans;
+	/*glm::vec2 translate = _trans;
 
 	Component::translate(translate);
 
@@ -47,14 +47,14 @@ void BaseWindow::translate(glm::vec2 _trans) {
 
 	icon->translate(translate);
 
-	calculateBoundingBox();
+	calculateBoundingBox();*/
 }
 
 
 //Sets the positions of the component and children components
 void BaseWindow::setPosition(glm::vec2 _pos) {
 
-	glm::vec2 translate = _pos - pos;
+	/*glm::vec2 translate = _pos - pos;
 
 	Component::translate(translate);
 	
@@ -64,39 +64,41 @@ void BaseWindow::setPosition(glm::vec2 _pos) {
 
 	icon->translate(translate);
 
-	calculateBoundingBox();
+	calculateBoundingBox();*/
 }
 
 void BaseWindow::setTitle(std::string title) {
-	titleLabel->updateText(title);
+	//titleLabel->updateText(title);
 }
 
 std::string BaseWindow::getTitle() {
-	return titleLabel->getCurrentText();
+	//return titleLabel->getCurrentText();
+	return nullptr;
 }
 
 void BaseWindow::setColor(glm::vec3 _color) {
-	color = _color;
-	topRect->setColor(color);
+	/*color = _color;
+	topRect->setColor(color);*/
 }
 
 //Adds a slider to the component
 std::shared_ptr<Slider> BaseWindow::addSlider(const std::string& title, SliderState _sliderState, float currentValue, float startValue, float endValue) {
-	std::shared_ptr<Slider> slider = std::make_shared<Slider>(title, _sliderState, pos + glm::vec2(0.0f, currentHeight), glm::vec2(size.x - 5.0f, 12.0f), currentValue, startValue, endValue, layer);
+	/*std::shared_ptr<Slider> slider = std::make_shared<Slider>(title, _sliderState, pos + glm::vec2(0.0f, currentHeight), glm::vec2(size.x - 5.0f, 12.0f), currentValue, startValue, endValue, layer);
 	addChildComponent(std::static_pointer_cast<Component>(slider));
 
 	currentHeight += 14.0f;
 
 	backgroundRect->setSize(glm::vec2(size.x, currentHeight));
 
-	return slider;
+	return slider;*/
+	return nullptr;
 }
 
 void BaseWindow::calculateBoundingBox() {
-	componentBoundingBox.x0 = backgroundRect->box.x0;
+	/*componentBoundingBox.x0 = backgroundRect->box.x0;
 	componentBoundingBox.y0 = backgroundRect->box.y0;
 	componentBoundingBox.x1 = backgroundRect->box.x1;
-	componentBoundingBox.y1 = backgroundRect->box.y1;
+	componentBoundingBox.y1 = backgroundRect->box.y1;*/
 }
 
 BaseWindow::~BaseWindow() {

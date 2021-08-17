@@ -27,7 +27,17 @@ void Rectangle::setColor(glm::vec3 color_) {
 	update = true;
 }
 
+void Rectangle::setPosition(glm::vec2 _pos) {
+	pos = _pos;
 
+	update = true;
+}
+
+void Rectangle::translate(glm::vec2 translate) {
+	pos += translate;
+
+	update = true;
+}
 
 void Rectangle::setSize(glm::vec2 _size) {
 	//TODO: Add pivot functionality

@@ -15,5 +15,8 @@ namespace GUICLR {
 		Icon(String^ iconName, Vector2 pos, Vector2 size);
 		~Icon();
 
+		void setPosition(Vector2 pos);
+		void translate(Vector2 translate);
+
 	};
 }

@@ -9,11 +9,17 @@ Icon::Icon(const std::string& name, glm::vec2 _pos, glm::vec2 _size, Pivot _pivo
 	pivot = _pivot;
 	zDepth = _zDepth;
 	iconName = name;
+	size = _size;
+}
 
-	//TODO: Add pivot functionality
-	box.x0 = pos.x;
-	box.y0 = pos.y;
+void Icon::setPosition(glm::vec2 _pos) {
+	pos = _pos;
 
-	box.x1 = box.x0 + _size.x;
-	box.y1 = box.y0 + _size.y;
+	update = true;
+}
+
+void Icon::translate(glm::vec2 translate) {
+	pos += translate;
+
+	update = true;
 }

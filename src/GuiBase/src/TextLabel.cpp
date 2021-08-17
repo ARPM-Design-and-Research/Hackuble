@@ -82,7 +82,10 @@ void TextLabel::setPosition(glm::vec2 _pos) {
     float width = box.x1 - box.x0;
     float height = box.y1 - box.y0;
 
-    setBox(glm::vec2(_pos.x,  _pos.y), glm::vec2(_pos.x+width, _pos.y + height));
+    box.x0 = _pos.x;
+    box.y0 = _pos.y;
+    box.x1 = _pos.x + width;
+    box.y1 = _pos.y + height;
 
     update = true;
 }
@@ -93,7 +96,11 @@ void TextLabel::translate(glm::vec2 translate) {
     float width = box.x1 - box.x0;
     float height = box.y1 - box.y0;
 
-    setBox(glm::vec2(box.x0 + translate.x, box.y0 + translate.y), glm::vec2(box.x0 + translate.x + width, box.y0 + translate.y + height));
+    box.x0 = box.x0 + translate.x;
+    box.y0 = box.y0 + translate.y;
+    box.x1 = box.x1 + translate.x;
+    box.y1 = box.y1 + translate.y;
+
 
     update = true;
 }

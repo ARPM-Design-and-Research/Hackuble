@@ -18,3 +18,17 @@ GUICLR::Icon::~Icon() {
 	delete _icon;
 	_icon = nullptr;
 }
+
+void GUICLR::Icon::setPosition(Vector2 pos) {
+	if (_icon == nullptr)
+		throw gcnew NullReferenceException("Icon is not initialized or has been deleted");
+
+	_icon->setPosition(glm::vec2(pos.X, pos.Y));
+}
+
+void GUICLR::Icon::translate(Vector2 trans) {
+	if (_icon == nullptr)
+		throw gcnew NullReferenceException("Icon is not initialized or has been deleted");
+
+	_icon->translate(glm::vec2(trans.X, trans.Y));
+}

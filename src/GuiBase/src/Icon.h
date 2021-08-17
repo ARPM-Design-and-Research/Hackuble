@@ -19,6 +19,13 @@ namespace SynGUI {
 		bool added = false;
 		std::string iconName;
 
+		glm::vec2 pos;
+		glm::vec2 size;
+
 		Icon(const std::string& iconName, glm::vec2 pos, glm::vec2 size, Pivot pivot, float zDepth);
+
+	public:
+		void setPosition(glm::vec2 pos);
+		void translate(glm::vec2 translate);
 	};
 }

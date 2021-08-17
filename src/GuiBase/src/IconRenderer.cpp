@@ -138,10 +138,15 @@ void IconRenderer::render() {
 void IconRenderer::addIconToBuffer(Icon* _icon) {
     Icon* icon = _icon;
 
-    glm::vec2 p1 = glm::vec2(icon->box.x0, icon->box.y0);
+    glm::vec2 p1 = glm::vec2(icon->pos.x, icon->pos.y);
+    glm::vec2 p2 = glm::vec2(icon->pos.x + icon->size.x, icon->pos.y);
+    glm::vec2 p3 = glm::vec2(icon->pos.x + icon->size.x, icon->pos.y + icon->size.y);
+    glm::vec2 p4 = glm::vec2(icon->pos.x, icon->pos.y + icon->size.y);
+
+    /*glm::vec2 p1 = glm::vec2(icon->box.x0, icon->box.y0);
     glm::vec2 p2 = glm::vec2(icon->box.x0, icon->box.y1);
     glm::vec2 p3 = glm::vec2(icon->box.x1, icon->box.y1);
-    glm::vec2 p4 = glm::vec2(icon->box.x1, icon->box.y0);
+    glm::vec2 p4 = glm::vec2(icon->box.x1, icon->box.y0);*/
 
     IconInfo iconInfo = getIconInfo(_icon->iconName);
 
@@ -201,10 +206,10 @@ void IconRenderer::updateIcon(Icon* icon) {
 
     int offset = icon->index * 30;
 
-    glm::vec2 p1 = glm::vec2(icon->box.x0, icon->box.y0);
-    glm::vec2 p2 = glm::vec2(icon->box.x0, icon->box.y1);
-    glm::vec2 p3 = glm::vec2(icon->box.x1, icon->box.y1);
-    glm::vec2 p4 = glm::vec2(icon->box.x1, icon->box.y0);
+    glm::vec2 p1 = glm::vec2(icon->pos.x, icon->pos.y);
+    glm::vec2 p2 = glm::vec2(icon->pos.x + icon->size.x, icon->pos.y);
+    glm::vec2 p3 = glm::vec2(icon->pos.x + icon->size.x, icon->pos.y + icon->size.y);
+    glm::vec2 p4 = glm::vec2(icon->pos.x, icon->pos.y + icon->size.y);
 
     IconInfo iconInfo = getIconInfo(icon->iconName);
 

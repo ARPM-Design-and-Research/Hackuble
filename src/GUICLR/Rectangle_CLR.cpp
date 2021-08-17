@@ -21,6 +21,20 @@ void GUICLR::Rectangle::deleteRectangle() {
 	_rectangle = nullptr;
 }
 
+void GUICLR::Rectangle::setPosition(Vector2 position) {
+	if (_rectangle == nullptr)
+		throw gcnew NullReferenceException("Rectangle is not initialized or has been deleted");
+
+	_rectangle->setPosition(glm::vec2(position.X, position.Y));
+}
+
+void GUICLR::Rectangle::translate(Vector2 trans) {
+	if (_rectangle == nullptr)
+		throw gcnew NullReferenceException("Rectangle is not initialized or has been deleted");
+
+	_rectangle->translate(glm::vec2(trans.X, trans.Y));
+}
+
 void GUICLR::Rectangle::setColor(Color _color) {
 	if (_rectangle == nullptr)
 		throw gcnew NullReferenceException("Rectangle is not initialized or has been deleted");

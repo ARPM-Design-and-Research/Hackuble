@@ -9,9 +9,9 @@ RenderElement::RenderElement() {
 
 }
 
-void RenderElement::setPosition(glm::vec2 _pos) {
+/*void RenderElement::setPosition(glm::vec2 _pos) {
 	//TODO: Add pivot functionality
-	pos = _pos;
+	/*pos = _pos;
 	
 	float width = box.x1 - box.x0;
 	float height = box.y1 - box.y0;
@@ -25,7 +25,7 @@ void RenderElement::setPosition(glm::vec2 _pos) {
 }
 
 void RenderElement::translate(glm::vec2 translate) {
-	pos += translate;
+	/*pos += translate;
 
 	float width = box.x1 - box.x0;
 	float height = box.y1 - box.y0;
@@ -36,15 +36,14 @@ void RenderElement::translate(glm::vec2 translate) {
 	box.y1 = pos.y + height;
 
 	update = true;
-}
+}*/
 
 void RenderElement::setZDepth(float _depth) {
 	zDepth = _depth;
 
 	update = true;
 }
-
-void RenderElement::setBox(glm::vec2 c1, glm::vec2 c2) {
+/*void RenderElement::setBox(glm::vec2 c1, glm::vec2 c2) {
 	box.x0 = c1.x;
 	box.y0 = c1.y;
 
@@ -52,7 +51,7 @@ void RenderElement::setBox(glm::vec2 c1, glm::vec2 c2) {
 	box.y1 = c2.y;
 
 	update = true;
-}
+}*/
 
 void RenderElement::setVisible(bool visible) {
 	render = visible;
