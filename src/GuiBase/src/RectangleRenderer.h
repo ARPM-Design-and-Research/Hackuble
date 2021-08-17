@@ -28,6 +28,9 @@ namespace SynGUI {
 	class Rectangle;
 
 	class RectangleRenderer {
+	private:
+		int shader_mvp;
+		int shader_viewMatrix;
 	protected:
 		static RectangleRenderer* rectangleRenderer_;
 

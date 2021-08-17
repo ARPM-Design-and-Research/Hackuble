@@ -24,6 +24,20 @@ void BezierRenderer::init() {
 
 	ShaderProgramSource expSource = ParseShader("res/shaders/Bezier-Exp.shader");
 	BezierShader = CreateShader(expSource.VertexSource, expSource.FragmentSource);
+	glUseProgram(BezierShader);
+
+	GLCall(shader_mvp = glGetUniformLocation(BezierShader, "u_mvp"));
+	ASSERT(shader_mvp != -1);
+
+	//TODO: set resolution automatically
+	GLCall(shader_res = glGetUniformLocation(BezierShader, "u_resolution"));
+	ASSERT(shader_res != -1);
+
+	GLCall(shader_thickness = glGetUniformLocation(BezierShader, "u_thickness"));
+	ASSERT(shader_thickness != -1);
+
+	GLCall(shader_color = glGetUniformLocation(BezierShader, "u_color"));
+	ASSERT(shader_color != -1);
 
 	glGenVertexArrays(1,&VAO);
 	glGenBuffers(1, &SSBO);
@@ -54,24 +68,12 @@ void BezierRenderer::render() {
 	glBindVertexArray(VAO);
 	GLCall(glUseProgram(BezierShader));
 
-	GLCall(int mvp = glGetUniformLocation(BezierShader, "u_mvp"));
-	ASSERT(mvp != -1);
-	GLCall(glUniformMatrix4fv(mvp, 1, GL_FALSE, &Camera::GetInstance()->getMVP()[0][0]));
-
-	//TODO: set resolution automatically
-	GLCall(int res = glGetUniformLocation(BezierShader, "u_resolution"));
-	ASSERT(res != -1);
-	GLCall(glUniform2f(res, 1280.0f * 2.0f, 720.0f * 2.0f));
-
-	GLCall(int thick = glGetUniformLocation(BezierShader, "u_thickness"));
-	ASSERT(thick != -1);
+	GLCall(glUniformMatrix4fv(shader_mvp, 1, GL_FALSE, &Camera::GetInstance()->getMVP()[0][0]));
+	GLCall(glUniform2f(shader_res, Camera::GetInstance()->windowSize.x * 2.0f, Camera::GetInstance()->windowSize.y * 2.0f));
 	
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, SSBO);
 
 	int offset = 0;
-
-	GLCall(int color = glGetUniformLocation(BezierShader, "u_color"));
-	ASSERT(color != -1);
 
 	for (int i = 0; i < bezierCurves.size(); i++) {
 		
@@ -79,8 +81,8 @@ void BezierRenderer::render() {
 			GLsizei N1 = (GLsizei)bezierCurves.at(i)->resolution + 2;
 			glm::vec3 c = bezierCurves.at(i)->color;
 
-			GLCall(glUniform1f(thick,bezierCurves.at(i)->lineWidth));
-			GLCall(glUniform3f(color, c.x, c.y, c.z));
+			GLCall(glUniform1f(shader_thickness,bezierCurves.at(i)->lineWidth));
+			GLCall(glUniform3f(shader_color, c.x, c.y, c.z));
 			glDrawArrays(GL_TRIANGLES, offset * 6, 6 * (N1 - 1));
 		}
 

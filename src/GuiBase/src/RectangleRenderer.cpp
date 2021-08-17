@@ -237,6 +237,14 @@ void RectangleRenderer::init() {
 	unsigned int shader = CreateShader(source.VertexSource, source.FragmentSource);
 	RectangleShader = shader;
 
+	glUseProgram(RectangleShader);
+
+	GLCall(shader_mvp = glGetUniformLocation(RectangleShader, "u_MVP"));
+	ASSERT(shader_mvp != -1);
+
+	GLCall(shader_viewMatrix = glGetUniformLocation(RectangleShader, "u_MV"));
+	ASSERT(shader_viewMatrix != -1);
+
 	//Generate VAO and VBO and bind attrib pointers
 	GLCall(glGenVertexArrays(1, &vertexArrayObject));
 	GLCall(glBindVertexArray(vertexArrayObject));
@@ -287,6 +295,7 @@ void RectangleRenderer::init() {
 	glEnableVertexAttribArray(8);
 	glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 12, (GLvoid*)(sizeof(float) * 8));
 	glVertexAttribDivisor(8, 1);
+
 }
 
 
@@ -313,13 +322,8 @@ void RectangleRenderer::render() {
 	GLCall(glBindVertexArray(vertexArrayObject));
 	GLCall(glUseProgram(RectangleShader));
 
-	GLCall(int mvp = glGetUniformLocation(RectangleShader, "u_MVP"));
-	ASSERT(mvp != -1);
-	GLCall(glUniformMatrix4fv(mvp, 1, GL_FALSE, &Camera::GetInstance()->getMVP()[0][0]));
-
-	GLCall(int mv = glGetUniformLocation(RectangleShader, "u_MV"));
-	ASSERT(mv != -1);
-	GLCall(glUniformMatrix4fv(mv, 1, GL_FALSE, &Camera::GetInstance()->getViewMatrix()[0][0]));
+	GLCall(glUniformMatrix4fv(shader_mvp, 1, GL_FALSE, &Camera::GetInstance()->getMVP()[0][0]));
+	GLCall(glUniformMatrix4fv(shader_viewMatrix, 1, GL_FALSE, &Camera::GetInstance()->getViewMatrix()[0][0]));
 
 	int continousCount = 0;
 	int startIndex = 0;

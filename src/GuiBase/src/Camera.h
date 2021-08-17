@@ -26,10 +26,6 @@ namespace SynGUI {
 
 		static std::shared_ptr<Camera> camera_;
 
-		
-
-		glm::vec2 windowSize;
-
 		bool panning = false;
 		glm::vec3 position;
 
@@ -45,6 +41,8 @@ namespace SynGUI {
 		glm::mat4 zoomMat;
 
 		glm::mat4 mvp;
+
+		glm::vec2 windowSize;
 
 		Camera(Camera& other) = delete;
 		/**

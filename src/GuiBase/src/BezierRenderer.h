@@ -22,6 +22,11 @@ namespace SynGUI {
 	class Bezier;
 
 	class BezierRenderer {
+	private:
+		int shader_mvp;
+		int shader_res;
+		int shader_thickness;
+		int shader_color;
 	protected:
 
 		static BezierRenderer* bezierRenderer_;
