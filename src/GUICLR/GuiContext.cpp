@@ -138,6 +138,14 @@ std::shared_ptr<BaseWindow> GuiContext::addWindow(std::string title) {
 	return gui->addWindow(title);
 }
 
+/*SynGUI::Rectangle* GuiContext::addRectangle(glm::vec2 pos, glm::vec2 size, float r1, float r2, float r3, float r4, glm::vec3 col, float zDepth) {
+	return gui->addRectangle(pos, size, r1, r2, r3, r4, col, zDepth);
+}*/
+
+std::shared_ptr<SynGUI::GuiBase> GuiContext::getGUI() {
+	return gui;
+}
+
 void GuiContext::createContext() {
 
 	HINSTANCE hInstance = GetModuleHandle(NULL);

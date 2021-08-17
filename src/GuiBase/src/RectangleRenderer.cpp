@@ -275,6 +275,18 @@ void RectangleRenderer::init() {
 
 	GLCall(glGenBuffers(1, &rectBuffer));
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, rectBuffer));
+
+	glEnableVertexAttribArray(6);
+	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 12, 0);
+	glVertexAttribDivisor(6, 1);
+
+	glEnableVertexAttribArray(7);
+	glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 12, (GLvoid*)(sizeof(float) * 4));
+	glVertexAttribDivisor(7, 1);
+
+	glEnableVertexAttribArray(8);
+	glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 12, (GLvoid*)(sizeof(float) * 8));
+	glVertexAttribDivisor(8, 1);
 }
 
 
@@ -285,6 +297,9 @@ void RectangleRenderer::init() {
 */
 void RectangleRenderer::render() {
 	
+	if (isUpdateBuffer)
+		updateBuffer();
+
 	//Checks to see if rectangle has update flag
 	for (int i = 0; i < rectangles.size(); i++) {
 
@@ -306,10 +321,24 @@ void RectangleRenderer::render() {
 	ASSERT(mv != -1);
 	GLCall(glUniformMatrix4fv(mv, 1, GL_FALSE, &Camera::GetInstance()->getViewMatrix()[0][0]));
 
-	glDrawArraysInstanced(GL_TRIANGLES, 0, 72, rectangles.size());
-}
+	int continousCount = 0;
+	int startIndex = 0;
 
-//TODO: Add functionality to remove rectangle
+	for (int i = 0; i < rectangles.size(); i++) {
+		if (rectangles.at(i)->render) {
+			continousCount++;
+		}
+		else {
+			glDrawArraysInstancedBaseInstance(GL_TRIANGLES, 0, 72, continousCount, startIndex);
+			startIndex = i + 1;
+			continousCount = 0;
+		}
+
+		if (i == rectangles.size() - 1) {
+			glDrawArraysInstancedBaseInstance(GL_TRIANGLES, 0, 72, continousCount, startIndex);
+		}
+	}
+}
 
 /* Create a new rectangle with the specific parameters, adds it to the buffer
 * and sends it to the gpu.
@@ -318,40 +347,20 @@ void RectangleRenderer::addRectangleToBuffer(Rectangle* rectangle) {
 
 	Rectangle* rect = rectangle;
 
-	//for (int i = rect->index; i < rectangles.size(); i++) {
-		rectData.push_back(rect->pos.x);
-		rectData.push_back(rect->pos.y);
-		rectData.push_back(rect->size.x);
-		rectData.push_back(rect->size.y);
-		rectData.push_back(rect->r0);
-		rectData.push_back(rect->r1);
-		rectData.push_back(rect->r2);
-		rectData.push_back(rect->r3);
-		rectData.push_back(rect->color.r);
-		rectData.push_back(rect->color.g);
-		rectData.push_back(rect->color.b);
-		rectData.push_back(rect->zDepth);
-	//}
+	rectData.push_back(rect->pos.x);
+	rectData.push_back(rect->pos.y);
+	rectData.push_back(rect->size.x);
+	rectData.push_back(rect->size.y);
+	rectData.push_back(rect->r0);
+	rectData.push_back(rect->r1);
+	rectData.push_back(rect->r2);
+	rectData.push_back(rect->r3);
+	rectData.push_back(rect->color.r);
+	rectData.push_back(rect->color.g);
+	rectData.push_back(rect->color.b);
+	rectData.push_back(rect->zDepth);
 
-	GLCall(glBindVertexArray(vertexArrayObject));
-
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, rectBuffer));
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * rectData.size(), rectData.data(), GL_DYNAMIC_DRAW);
-
-	/* Code for sending rectangle specific data per instance
-	*/
-
-	glEnableVertexAttribArray(6);
-	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 12, 0);
-	glVertexAttribDivisor(6, 1);
-
-	glEnableVertexAttribArray(7);
-	glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 12, (GLvoid*)(sizeof(float) * 4));
-	glVertexAttribDivisor(7, 1);
-
-	glEnableVertexAttribArray(8);
-	glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 12, (GLvoid*)(sizeof(float) * 8));
-	glVertexAttribDivisor(8, 1);
+	isUpdateBuffer = true;
 
 	rect->added = true;
 }
@@ -381,16 +390,6 @@ void RectangleRenderer::deinit() {
 */
 void RectangleRenderer::updateRectangle(Rectangle* rectangle) {
 	int index = rectangle->index;
-
-	//Probably redudant so commented it out
-	/*rectangles[index]->pos = rectangle->pos;
-	rectangles[index]->size = rectangle->size;
-	rectangles[index]->r0 = rectangle->r0;
-	rectangles[index]->r1 = rectangle->r1;
-	rectangles[index]->r2 = rectangle->r2;
-	rectangles[index]->r3 = rectangle->r3;
-	rectangles[index]->color = rectangle->color;
-	rectangles[index]->zDepth = rectangle->zDepth;*/
 	
 	rectData[index * 12 + 0] = rectangle->pos.x;
 	rectData[index * 12 + 1] = rectangle->pos.y;
@@ -410,6 +409,33 @@ void RectangleRenderer::updateRectangle(Rectangle* rectangle) {
 	glBufferSubData(GL_ARRAY_BUFFER, index * sizeof(float) * 12, sizeof(float) * 12, &rectData[index*12]);
 
 	rectangle->update = false;
+}
+
+void RectangleRenderer::removeRectangle(Rectangle* rectangle) {
+	int index = rectangle->index;
+
+	int bufferOffset = 0;
+	for (int i = 0; i < index; i++) {
+		bufferOffset += 12;
+	}
+
+	rectData.erase(rectData.begin() + bufferOffset, rectData.begin() + bufferOffset + 12);
+
+	rectangles.erase(rectangles.begin() + index);
+
+	for (int i = index; i < rectangles.size(); i++) {
+		rectangles.at(i)->index--;
+	}
+
+	isUpdateBuffer = true;
+
+	delete rectangle;
+}
+
+void RectangleRenderer::updateBuffer() {
+	glBindVertexArray(vertexArrayObject);
+	glBindBuffer(GL_ARRAY_BUFFER, rectBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * rectData.size(), rectData.data(), GL_DYNAMIC_DRAW);
 }
 
 Rectangle* RectangleRenderer::addRectangle(glm::vec2 pos, glm::vec2 size, float r1, float r2, float r3, float r4, glm::vec3 color, float zDepth) {

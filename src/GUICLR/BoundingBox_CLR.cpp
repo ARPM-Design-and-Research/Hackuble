@@ -12,18 +12,18 @@ GUICLR::BoundingBox::~BoundingBox() {
 
 }
 
-float GUICLR::BoundingBox::getLeftBound() {
+float GUICLR::BoundingBox::getX() {
 	return _boundingBox->x0;
 }
 
-float GUICLR::BoundingBox::getRightBound() {
-	return _boundingBox->x1;
-}
-
-float GUICLR::BoundingBox::getTopBound() {
+float GUICLR::BoundingBox::getY() {
 	return _boundingBox->y0;
 }
 
-float GUICLR::BoundingBox::getBottomBound() {
-	return _boundingBox->y1;
+float GUICLR::BoundingBox::getWidth() {
+	return _boundingBox->x1 - _boundingBox->x0;
+}
+
+float GUICLR::BoundingBox::getHeight() {
+	return _boundingBox->y1 - _boundingBox->y0;
 }

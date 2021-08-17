@@ -5,6 +5,7 @@
 using namespace System;
 using namespace System::Windows::Forms;
 using namespace System::Runtime::InteropServices;
+using namespace System::Numerics;
 
 #include "GuiBase.h"
 #include "clr_scoped_ptr.h"
@@ -33,6 +34,8 @@ namespace GUICLR {
 
 		void awaitInitialized();
 		void awaitResize();
+
+		Vector2 screenToWorldSpace(Vector2 screenSpace);
 
 		void closeContext();
 		// TODO: Add your methods for this class here.

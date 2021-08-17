@@ -81,5 +81,10 @@ namespace SynGUI {
 		unsigned char* getPixelData();
 
 		bool resized = false;
+
+		Rectangle* addRectangle(glm::vec2 pos, glm::vec2 size, float r1, float r2, float r3, float r4, glm::vec3 col, float zDepth);
+		void removeRectangle(Rectangle* rectangle);
+
+		glm::vec2 screenToWorldSpace(glm::vec2 screenSpace);
 	};
 }

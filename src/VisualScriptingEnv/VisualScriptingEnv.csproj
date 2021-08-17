@@ -42,7 +42,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CanvasSpaceTypes.cs" />
     <Compile Include="Component.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -53,3 +53,7 @@ void RenderElement::setBox(glm::vec2 c1, glm::vec2 c2) {
 
 	update = true;
 }
+
+void RenderElement::setVisible(bool visible) {
+	render = visible;
+}

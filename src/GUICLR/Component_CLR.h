@@ -2,6 +2,7 @@
 
 #include "BoundingBox_CLR.h"
 #include "GuiContext.h"
+#include "clr_scoped_ptr.h"
 
 using namespace System;
 using namespace System::Runtime::InteropServices;

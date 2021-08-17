@@ -22,6 +22,7 @@ namespace SynGUI {
 	protected:
 
 		bool update = false;
+		bool render = true;
 		glm::vec2 pos;
 		Pivot pivot;
 
@@ -33,6 +34,7 @@ namespace SynGUI {
 		void setPosition(glm::vec2 pos);
 		void translate(glm::vec2 translate);
 		void setZDepth(float depth);
+		void setVisible(bool visible);
 
 		void setBox(glm::vec2 c1, glm::vec2 c2);
 		BoundingBox box;

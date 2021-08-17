@@ -11,9 +11,9 @@ namespace GUICLR {
 		BoundingBox(SynGUI::BoundingBox* bbBox);
 		~BoundingBox();
 
-		float getLeftBound();
-		float getRightBound();
-		float getTopBound();
-		float getBottomBound();
+		float getX();
+		float getY();
+		float getWidth();
+		float getHeight();
 	};
 }

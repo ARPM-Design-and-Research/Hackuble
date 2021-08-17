@@ -20,6 +20,7 @@ namespace SynGUI {
 	private:
 		int index;
 		Rectangle(glm::vec2 pos_, glm::vec2 size_, float r0_, float r1_, float r2_, float r3_, glm::vec3 color_, float _zDepth);
+		~Rectangle();
 
 		glm::vec2 size;
 		float r0, r1, r2, r3;

@@ -137,6 +137,19 @@ std::shared_ptr<BaseWindow> GuiBase::addWindow(std::string title) {
 	return windowComp;
 }
 
+SynGUI::Rectangle* GuiBase::addRectangle(glm::vec2 pos, glm::vec2 size, float r1, float r2, float r3, float r4, glm::vec3 col, float zDepth) {
+	return RectangleRenderer::GetInstance()->addRectangle(pos, size, r1, r2, r3, r4, col, zDepth);
+}
+
+void GuiBase::removeRectangle(Rectangle* rectangle) {
+	RectangleRenderer::GetInstance()->removeRectangle(rectangle);
+}
+
+glm::vec2 GuiBase::screenToWorldSpace(glm::vec2 screenSpace) {
+	glm::vec4 worldSpace = glm::inverse(Camera::GetInstance()->getViewMatrix())* glm::vec4(screenSpace.x * 2.0f, screenSpace.y * 2.0f, 0.0f, 1.0f);
+	return glm::vec2(worldSpace.x, worldSpace.y);
+}
+
 void GuiBase::stopGui() {
 
 	/*for (int i = 0; i < windows.size(); i++) {

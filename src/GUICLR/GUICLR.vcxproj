@@ -151,6 +151,7 @@
     <ClInclude Include="Component_CLR.h" />
     <ClInclude Include="GUICLR.h" />
     <ClInclude Include="GuiContext.h" />
+    <ClInclude Include="Rectangle_CLR.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Slider_CLR.h" />
   </ItemGroup>
@@ -159,6 +160,7 @@
     <ClCompile Include="Component_CLR.cpp" />
     <ClCompile Include="GUICLR.cpp" />
     <ClCompile Include="GuiContext.cpp" />
+    <ClCompile Include="Rectangle_CLR.cpp" />
     <ClCompile Include="Slider_CLR.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -170,6 +172,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>

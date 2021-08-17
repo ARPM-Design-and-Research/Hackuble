@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Numerics;
 
 using GUICLR;
 
@@ -39,8 +40,9 @@ namespace Hackuble.Win.Controls
         int windowHeight;
         int pivotX;
         int pivotY;
-        Rectangle area;
+        System.Drawing.Rectangle area;
         Bitmap drawingBitmap;
+        GUICLR.Rectangle rectangle1;
 
         public static bool InVisualStudio()
         {
@@ -72,13 +74,19 @@ namespace Hackuble.Win.Controls
                 this.DoubleBuffered = true;
             }
 
-            //VisualScripting.Component comp = new VisualScripting.Component("Comp 1", Color.Green);
-            //comp.addInputSlider("Slider 1", 0.5f, 0.0f, 1.0f);
-            //comp.addInputSlider("Slider 2", 0.2f, 0.0f, 1.0f);
-            //comp.addInputSlider("My Slider", 10.5f, 0.0f, 100.0f);
+            GUICLR.Rectangle rectangle = new GUICLR.Rectangle();
+            rectangle.setColor(Color.Aqua);
+            rectangle.setPosition(new System.Numerics.Vector2(-100, -100));
 
-            //VisualScripting.Component comp1 = new VisualScripting.Component("Comp 2", Color.OrangeRed);
-            //comp1.addInputSlider("Slider 1", 0.5f, 0.0f, 1.0f);
+            rectangle1 = new GUICLR.Rectangle();
+            rectangle1.setColor(Color.Orange);
+
+            GUICLR.Rectangle rectangle2 = new GUICLR.Rectangle();
+            rectangle2.setColor(Color.Green);
+            rectangle2.setPosition(new System.Numerics.Vector2(100, 100));
+
+            //rectangle.deleteRectangle();
+
         }
 
         public void closeOpenGL()
@@ -133,6 +141,9 @@ namespace Hackuble.Win.Controls
             if (!InVisualStudio())
             {
                 context.onMouseMove(e.X, e.Y, (int)e.Button);
+
+                Vector2 worldMouse = context.screenToWorldSpace(new Vector2(e.X, e.Y));
+                rectangle1.setPosition(worldMouse);
 
                 this.Refresh();
             }
@@ -198,7 +209,7 @@ namespace Hackuble.Win.Controls
                 //    windowWidth = this.ClientSize.Width;
                 //    windowHeight = this.ClientSize.Height;
                 //}
-                area = new Rectangle(new Point(pivotX, pivotY), new Size(windowWidth, windowHeight));
+                area = new System.Drawing.Rectangle(new Point(pivotX, pivotY), new Size(windowWidth, windowHeight));
 
                 context.getPixelData(ref pixelData);
                 UpdateBitmap(pixelData, drawingBitmap);
@@ -221,7 +232,7 @@ namespace Hackuble.Win.Controls
 
         private static void UpdateBitmap(byte[] arr, Bitmap bit)
         {
-            var rect = new Rectangle(0, 0, bit.Width, bit.Height);
+            var rect = new System.Drawing.Rectangle(0, 0, bit.Width, bit.Height);
             var bmpData = bit.LockBits(rect, ImageLockMode.ReadWrite, bit.PixelFormat);
 
             // Row-by-row copy

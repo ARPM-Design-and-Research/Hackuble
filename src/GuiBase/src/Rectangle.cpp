@@ -14,11 +14,10 @@ Rectangle::Rectangle(glm::vec2 pos_, glm::vec2 size_, float r0_, float r1_, floa
 	r3 = r3_;
 	color = color_;
 	zDepth = zDepth_;
+}
 
-	box.x0 = pos.x;
-	box.y0 = pos.y;
-	box.x1 = pos.x + size.x;
-	box.y1 = pos.y + size.y;
+Rectangle::~Rectangle() {
+
 }
 
 
@@ -32,10 +31,6 @@ void Rectangle::setColor(glm::vec3 color_) {
 
 void Rectangle::setSize(glm::vec2 _size) {
 	//TODO: Add pivot functionality
-
-	box.x1 = box.x0 + _size.x;
-	box.y1 = box.y0 + _size.y;
-
 	size = _size;
 
 	update = true;

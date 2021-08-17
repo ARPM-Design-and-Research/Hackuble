@@ -58,3 +58,8 @@ void GUICLR::ManagedContext::awaitInitialized() {
 void GUICLR::ManagedContext::closeContext() {
 	GuiContext::GetInstance()->closeContext();
 }
+
+Vector2 GUICLR::ManagedContext::screenToWorldSpace(Vector2 screenSpace) {
+	glm::vec2 worldSpace = GuiContext::GetInstance()->getGUI()->screenToWorldSpace(glm::vec2(screenSpace.X, screenSpace.Y));
+	return Vector2(worldSpace.x, worldSpace.y);
+}
