@@ -39,6 +39,12 @@
     <ClInclude Include="Slider_CLR.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="RenderElement_CLR.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bezier_CLR.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUICLR.cpp">
@@ -57,6 +63,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Rectangle_CLR.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderElement_CLR.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Bezier_CLR.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

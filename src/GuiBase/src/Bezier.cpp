@@ -33,3 +33,7 @@ void Bezier::setControlPoints(glm::vec2 v1, glm::vec2 v2, glm::vec2 v3, glm::vec
 
 	update = true;
 }
+
+void Bezier::setThickness(float thickness) {
+	lineWidth = thickness;
+}

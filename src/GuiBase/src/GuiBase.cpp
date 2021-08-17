@@ -145,6 +145,14 @@ void GuiBase::removeRectangle(Rectangle* rectangle) {
 	RectangleRenderer::GetInstance()->removeRectangle(rectangle);
 }
 
+SynGUI::Bezier * GuiBase::addBezier(glm::vec2 v1, glm::vec2 v2, glm::vec2 v3, glm::vec2 v4, glm::vec3 col, int res) {
+	return BezierRenderer::GetInstance()->addBezierCurve(v1, v2, v3, v4, col, res);
+}
+
+void GuiBase::removeBezier(Bezier* bezier) {
+	BezierRenderer::GetInstance()->removeBezierCurve(bezier);
+}
+
 glm::vec2 GuiBase::screenToWorldSpace(glm::vec2 screenSpace) {
 	glm::vec4 worldSpace = glm::inverse(Camera::GetInstance()->getViewMatrix())* glm::vec4(screenSpace.x * 2.0f, screenSpace.y * 2.0f, 0.0f, 1.0f);
 	return glm::vec2(worldSpace.x, worldSpace.y);

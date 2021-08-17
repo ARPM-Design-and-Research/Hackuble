@@ -85,6 +85,9 @@ namespace SynGUI {
 		Rectangle* addRectangle(glm::vec2 pos, glm::vec2 size, float r1, float r2, float r3, float r4, glm::vec3 col, float zDepth);
 		void removeRectangle(Rectangle* rectangle);
 
+		Bezier* addBezier(glm::vec2 v1, glm::vec2 v2, glm::vec2 v3, glm::vec2 v4, glm::vec3 col, int res);
+		void removeBezier(Bezier* bezier);
+
 		glm::vec2 screenToWorldSpace(glm::vec2 screenSpace);
 	};
 }

@@ -89,7 +89,7 @@ namespace VisualScripting
             get
             {
                 //return this._boundingBox;
-                return VisualScriptingEnv.BoundingBox.FromLTRB((double)this._boundingBox.getLeftBound(), (double)this._boundingBox.getTopBound(), (double)this._boundingBox.getRightBound(), (double)this._boundingBox.getBottomBound());
+                return VisualScriptingEnv.BoundingBox.FromLTRB((double)this._boundingBox.getX(), (double)this._boundingBox.getY(), (double)this._boundingBox.getWidth(), (double)this._boundingBox.getHeight());
             }
         }
         public Guid InstanceGuid { get => _instanceGuid; }

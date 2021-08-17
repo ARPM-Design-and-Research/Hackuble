@@ -74,16 +74,14 @@ namespace Hackuble.Win.Controls
                 this.DoubleBuffered = true;
             }
 
-            GUICLR.Rectangle rectangle = new GUICLR.Rectangle();
-            rectangle.setColor(Color.Aqua);
-            rectangle.setPosition(new System.Numerics.Vector2(-100, -100));
+            GUICLR.Rectangle rectangle = new GUICLR.Rectangle(new Vector2(-100,-100),new Vector2(100,50),5.0f,5.0f,5.0f,5.0f,Color.Aqua);
 
-            rectangle1 = new GUICLR.Rectangle();
-            rectangle1.setColor(Color.Orange);
+            rectangle1 = new GUICLR.Rectangle(new Vector2(0,0),new Vector2(100,100),2.0f,2.0f,2.0f,2.0f,Color.OrangeRed);
 
-            GUICLR.Rectangle rectangle2 = new GUICLR.Rectangle();
-            rectangle2.setColor(Color.Green);
-            rectangle2.setPosition(new System.Numerics.Vector2(100, 100));
+            GUICLR.Rectangle rectangle2 = new GUICLR.Rectangle(new Vector2(100,100),new Vector2(100,50), 10.0f,10.0f,10.0f,10.0f, Color.Green);
+
+            GUICLR.Bezier bezier = new GUICLR.Bezier(new Vector2(0, 0), new Vector2(50, 0), new Vector2(50, 50), new Vector2(100, 50), Color.Blue);
+            bezier.setThickness(15);
 
             //rectangle.deleteRectangle();
 

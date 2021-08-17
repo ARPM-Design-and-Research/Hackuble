@@ -7,19 +7,42 @@ Assembly System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561
 	hash=None, flags=None
 Assembly System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
 	hash=None, flags=None
+Assembly System.Drawing.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a: 
+	hash=None, flags=None
+Assembly System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a: 
+	hash=None, flags=None
+Assembly System.Numerics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
 Assembly System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
 	hash=None, flags=None
 Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
 	hash=None, flags=None
+Class GUICLR.RenderElement: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Interfaces:
+    System.IDisposable
+  Methods:
+    translate(Vector2): PrivateScope, Public, HideBySig
+    setPosition(Vector2): PrivateScope, Public, HideBySig
+    setZDepth(Single): PrivateScope, Public, HideBySig
+    setVisible(Boolean(HasFieldMarshal)): PrivateScope, Public, HideBySig
+    Dispose(): PrivateScope, Public, Final, Virtual, HideBySig
+Class GUICLR.Bezier: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :GUICLR.RenderElement
+    Void .ctor(System.Numerics.Vector2, System.Numerics.Vector2, System.Numerics.Vector2, System.Numerics.Vector2, System.Drawing.Color): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    setColor(Color): PrivateScope, Public, HideBySig
+    setControlPoints(Vector2, Vector2, Vector2, Vector2): PrivateScope, Public, HideBySig
+    setThickness(Single): PrivateScope, Public, HideBySig
 Class GUICLR.BoundingBox: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(SynGUI.BoundingBox*): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Interfaces:
     System.IDisposable
   Methods:
-    getLeftBound(): PrivateScope, Public, HideBySig
-    getRightBound(): PrivateScope, Public, HideBySig
-    getTopBound(): PrivateScope, Public, HideBySig
-    getBottomBound(): PrivateScope, Public, HideBySig
+    getX(): PrivateScope, Public, HideBySig
+    getY(): PrivateScope, Public, HideBySig
+    getWidth(): PrivateScope, Public, HideBySig
+    getHeight(): PrivateScope, Public, HideBySig
     Dispose(): PrivateScope, Public, Final, Virtual, HideBySig
 Class GUICLR.Component: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(System.String): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
@@ -54,8 +77,17 @@ Class GUICLR.ManagedContext: AutoLayout, AnsiClass, Class, Public, BeforeFieldIn
     onPaint(): PrivateScope, Public, HideBySig
     awaitInitialized(): PrivateScope, Public, HideBySig
     awaitResize(): PrivateScope, Public, HideBySig
+    screenToWorldSpace(Vector2): PrivateScope, Public, HideBySig
     closeContext(): PrivateScope, Public, HideBySig
     Dispose(): PrivateScope, Public, Final, Virtual, HideBySig
+Class GUICLR.Rectangle: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :GUICLR.RenderElement
+    Void .ctor(System.Numerics.Vector2, System.Numerics.Vector2, Single, Single, Single, Single, System.Drawing.Color): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    setColor(Color): PrivateScope, Public, HideBySig
+    setSize(Vector2): PrivateScope, Public, HideBySig
+    setRadius(Single, Single, Single, Single): PrivateScope, Public, HideBySig
+    deleteRectangle(): PrivateScope, Public, HideBySig
 Class GUICLR.Slider: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Interfaces:

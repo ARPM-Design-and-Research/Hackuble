@@ -48,6 +48,9 @@ void BezierRenderer::render() {
 			updateBezierCurve(bezierCurves.at(i));
 	}
 
+	if (isUpdateBuffer)
+		updateBuffer();
+
 	glBindVertexArray(VAO);
 	GLCall(glUseProgram(BezierShader));
 
@@ -62,8 +65,7 @@ void BezierRenderer::render() {
 
 	GLCall(int thick = glGetUniformLocation(BezierShader, "u_thickness"));
 	ASSERT(thick != -1);
-	GLCall(glUniform1f(thick, lineWidth));
-
+	
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, SSBO);
 
 	int offset = 0;
@@ -73,11 +75,14 @@ void BezierRenderer::render() {
 
 	for (int i = 0; i < bezierCurves.size(); i++) {
 		
-		GLsizei N1 = (GLsizei)bezierCurves.at(i)->resolution + 2;
-		glm::vec3 c = bezierCurves.at(i)->color;
+		if (bezierCurves.at(i)->render) {
+			GLsizei N1 = (GLsizei)bezierCurves.at(i)->resolution + 2;
+			glm::vec3 c = bezierCurves.at(i)->color;
 
-		GLCall(glUniform3f(color, c.x, c.y, c.z));
-		glDrawArrays(GL_TRIANGLES, offset*6, 6 * (N1 - 1));
+			GLCall(glUniform1f(thick,bezierCurves.at(i)->lineWidth));
+			GLCall(glUniform3f(color, c.x, c.y, c.z));
+			glDrawArrays(GL_TRIANGLES, offset * 6, 6 * (N1 - 1));
+		}
 
 		offset += bezierCurves.at(i)->resolution + 3;
 	}
@@ -139,9 +144,11 @@ void BezierRenderer::addBezierToBuffer(Bezier* _bezier) {
 	bezierVertices.push_back(glm::vec4(v4.x, v4.y, bezier->zDepth, 1.0f));
 	bezierVertices.push_back(glm::vec4(v4.x, v4.y, bezier->zDepth, 1.0f));
 
-	glBindVertexArray(VAO);
+	/*glBindVertexArray(VAO);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, SSBO);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, bezierVertices.size() * sizeof(glm::vec4), bezierVertices.data(), GL_DYNAMIC_DRAW);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, bezierVertices.size() * sizeof(glm::vec4), bezierVertices.data(), GL_DYNAMIC_DRAW);*/
+
+	isUpdateBuffer = true;
 
 	bezier->added = true;
 }
@@ -208,6 +215,12 @@ void BezierRenderer::updateBezierCurve(Bezier* bezier) {
 	bezier->update = false;
 }
 
+void BezierRenderer::updateBuffer() {
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, SSBO);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, bezierVertices.size() * sizeof(glm::vec4), bezierVertices.data(), GL_DYNAMIC_DRAW);
+}
+
 Bezier* BezierRenderer::addBezierCurve(glm::vec2 v1, glm::vec2 v2, glm::vec2 v3, glm::vec2 v4, glm::vec3 col, int res) {
 	Bezier* bezier = new Bezier(v1, v2, v3, v4, col, res);
 	bezier->index = bezierCurves.size();
@@ -236,6 +249,8 @@ void BezierRenderer::removeBezierCurve(Bezier* bezier) {
 	for (int i = index; i < bezierCurves.size(); i++) {
 		bezierCurves.at(i)->index--;
 	}
+
+	isUpdateBuffer = true;
 }
 
 //Cleanup - this is called automatically by GUIRenderer
@@ -251,8 +266,4 @@ void BezierRenderer::deinit() {
 
 	bezierRenderer_ = nullptr;
 	delete this;
-}
-
-void BezierRenderer::setLineWidth(float width) {
-	lineWidth = width;
 }

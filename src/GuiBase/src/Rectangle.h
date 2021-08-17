@@ -10,6 +10,7 @@
 * For now, the position refers to the top left corner of the rectangle. The size refers to the width
 * and height of the rectangle.
 */
+
 namespace SynGUI {
 	class RectangleRenderer;
 
@@ -20,7 +21,7 @@ namespace SynGUI {
 	private:
 		int index;
 		Rectangle(glm::vec2 pos_, glm::vec2 size_, float r0_, float r1_, float r2_, float r3_, glm::vec3 color_, float _zDepth);
-		~Rectangle();
+		
 
 		glm::vec2 size;
 		float r0, r1, r2, r3;
@@ -29,6 +30,8 @@ namespace SynGUI {
 		bool added = false;
 
 	public:
+		~Rectangle();
+
 		void setColor(glm::vec3 color_);
 		void setSize(glm::vec2 size_);
 		void setRadius(float r0, float r1, float r2, float r3);

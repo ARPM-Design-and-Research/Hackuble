@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GuiBase.h"
+#include "RenderElement_CLR.h"
 
 using namespace System;
 using namespace System::Drawing;
@@ -8,26 +9,11 @@ using namespace System::Numerics;
 
 namespace GUICLR {
 
-	public ref class RenderElement {
-	protected:
-		SynGUI::RenderElement* _renderElement = nullptr;
-	public:
-		RenderElement();
-		~RenderElement();
-
-		void translate(Vector2 translate);
-		void setPosition(Vector2 position);
-		void setZDepth(float depth);
-		void setVisible(bool visible);
-
-		//void setBox(glm::vec2 p1, glm::vec2 p2);
-	};
-
 	public ref class Rectangle : public RenderElement {
 	private:
 		SynGUI::Rectangle* _rectangle = nullptr;
 	public:
-		Rectangle();
+		Rectangle(Vector2 pos, Vector2 size, float r1, float r2, float r3, float r4, Color color);
 		~Rectangle();
 
 		void setColor(Color color_);

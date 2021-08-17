@@ -25,10 +25,12 @@ namespace SynGUI {
 	protected:
 
 		static BezierRenderer* bezierRenderer_;
-
 		void updateBezierCurve(Bezier* bezier);
-
 		BezierRenderer();
+
+		void updateBuffer();
+
+		bool isUpdateBuffer = false;
 
 	public:
 
@@ -48,8 +50,6 @@ namespace SynGUI {
 		unsigned int SSBO;
 		unsigned int VAO;
 
-		float lineWidth = 8.0f;
-
 		static BezierRenderer* GetInstance();
 
 		std::vector<Bezier*> bezierCurves;
@@ -61,8 +61,6 @@ namespace SynGUI {
 
 		void addBezierToBuffer(Bezier* bezier);
 
-		//Change line width of bezier curve
-		void setLineWidth(float width);
 
 		void init();
 		void render();

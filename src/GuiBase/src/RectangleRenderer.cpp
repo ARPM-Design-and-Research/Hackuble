@@ -296,9 +296,6 @@ void RectangleRenderer::init() {
 * All rectangles are drawn using a single draw call.
 */
 void RectangleRenderer::render() {
-	
-	if (isUpdateBuffer)
-		updateBuffer();
 
 	//Checks to see if rectangle has update flag
 	for (int i = 0; i < rectangles.size(); i++) {
@@ -309,6 +306,9 @@ void RectangleRenderer::render() {
 		if (rectangles.at(i)->update)
 			updateRectangle(rectangles.at(i));
 	}
+
+	if (isUpdateBuffer)
+		updateBuffer();
 
 	GLCall(glBindVertexArray(vertexArrayObject));
 	GLCall(glUseProgram(RectangleShader));
@@ -428,8 +428,6 @@ void RectangleRenderer::removeRectangle(Rectangle* rectangle) {
 	}
 
 	isUpdateBuffer = true;
-
-	delete rectangle;
 }
 
 void RectangleRenderer::updateBuffer() {

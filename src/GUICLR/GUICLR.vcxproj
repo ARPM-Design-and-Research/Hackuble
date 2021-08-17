@@ -146,21 +146,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Bezier_CLR.h" />
     <ClInclude Include="BoundingBox_CLR.h" />
     <ClInclude Include="clr_scoped_ptr.h" />
     <ClInclude Include="Component_CLR.h" />
     <ClInclude Include="GUICLR.h" />
     <ClInclude Include="GuiContext.h" />
     <ClInclude Include="Rectangle_CLR.h" />
+    <ClInclude Include="RenderElement_CLR.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Slider_CLR.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bezier_CLR.cpp" />
     <ClCompile Include="BoundingBox_CLR.cpp" />
     <ClCompile Include="Component_CLR.cpp" />
     <ClCompile Include="GUICLR.cpp" />
     <ClCompile Include="GuiContext.cpp" />
     <ClCompile Include="Rectangle_CLR.cpp" />
+    <ClCompile Include="RenderElement_CLR.cpp" />
     <ClCompile Include="Slider_CLR.cpp" />
   </ItemGroup>
   <ItemGroup>
