@@ -42,6 +42,9 @@ namespace SynGUI {
 
 	class IconRenderer {
 	private:
+		int shader_mvp;
+		int shader_atlasTexPos;
+
 		IconInfo getIconInfo(const std::string& iconName);
 
 		std::map<std::string, quicktype::FrameValue> iconMetadata;
@@ -63,6 +66,9 @@ namespace SynGUI {
 		unsigned int iconShader;
 
 		void addIconToBuffer(Icon* icon);
+		void updateBuffer();
+
+		bool isUpdateBuffer = false;
 
 	public:
 
@@ -85,6 +91,7 @@ namespace SynGUI {
 		void render();
 
 		Icon* addIcon(const std::string& iconName, glm::vec2 pos = glm::vec2(0.0f), glm::vec2 size = glm::vec2(10.0f), Pivot pivot = Pivot::TOP_LEFT, float zDepth = 0.0f);
+		void removeIcon(Icon* icon);
 
 		void updateIcon(Icon* icon);
 

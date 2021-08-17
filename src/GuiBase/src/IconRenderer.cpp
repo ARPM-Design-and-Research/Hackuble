@@ -79,6 +79,13 @@ void IconRenderer::init() {
     //Initialize Shaders
     ShaderProgramSource source1 = ParseShader("res/shaders/Icon.shader");
     iconShader = CreateShader(source1.VertexSource, source1.FragmentSource);
+    glUseProgram(iconShader);
+
+    GLCall(shader_mvp = glGetUniformLocation(iconShader, "u_MVP"));
+    ASSERT(shader_mvp != -1);
+
+    GLCall(shader_atlasTexPos = glGetUniformLocation(iconShader, "mainTex"));
+    ASSERT(shader_atlasTexPos != -1);
 
     glBindTexture(GL_TEXTURE_2D, atlasTextureBuffer);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -110,17 +117,15 @@ void IconRenderer::render() {
             updateIcon(icons.at(i));
     }
 
+    if (isUpdateBuffer)
+        updateBuffer();
+
     glUseProgram(iconShader);
     glBindVertexArray(vao);
 
-    GLCall(int mvp = glGetUniformLocation(iconShader, "u_MVP"));
-    ASSERT(mvp != -1);
-    GLCall(glUniformMatrix4fv(mvp, 1, GL_FALSE, &Camera::GetInstance()->getMVP()[0][0]));
+    GLCall(glUniformMatrix4fv(shader_mvp, 1, GL_FALSE, &Camera::GetInstance()->getMVP()[0][0]));
 
-    GLCall(int tex = glGetUniformLocation(iconShader, "mainTex"));
-    ASSERT(tex != -1);
-    GLCall(glUniform1i(tex, 0));
-
+    GLCall(glUniform1i(shader_atlasTexPos, 0));
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, atlasTextureBuffer);
 
@@ -183,9 +188,7 @@ void IconRenderer::addIconToBuffer(Icon* _icon) {
     iconVertices.push_back(t4.x);
     iconVertices.push_back(t4.y);
 
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * iconVertices.size(), iconVertices.data(), GL_DYNAMIC_DRAW);
+    isUpdateBuffer = true;
 
     icon->added = true;
 }
@@ -294,6 +297,32 @@ IconInfo IconRenderer::getIconInfo(const std::string& iconName) {
     info.size.y = frameValue.get_frame().get_h();
 
     return info;
+}
+
+void IconRenderer::updateBuffer() {
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * iconVertices.size(), iconVertices.data(), GL_DYNAMIC_DRAW);
+
+    isUpdateBuffer = false;
+}
+
+void IconRenderer::removeIcon(Icon* icon) {
+    int index = icon->index;
+
+    int bufferOffset = 0;
+    for (int i = 0; i < index; i++) {
+        bufferOffset += 30;
+    }
+
+    iconVertices.erase(iconVertices.begin() + bufferOffset, iconVertices.begin() + bufferOffset + 30);
+    icons.erase(icons.begin() + index);
+
+    for (int i = index; i < icons.size(); i++) {
+        icons.at(i)->index--;
+    }
+
+    isUpdateBuffer = true;
 }
 
 Icon* IconRenderer::addIcon(const std::string& iconName, glm::vec2 pos, glm::vec2 size, Pivot pivot, float zDepth) {

@@ -438,6 +438,8 @@ void RectangleRenderer::updateBuffer() {
 	glBindVertexArray(vertexArrayObject);
 	glBindBuffer(GL_ARRAY_BUFFER, rectBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * rectData.size(), rectData.data(), GL_DYNAMIC_DRAW);
+
+	isUpdateBuffer = false;
 }
 
 Rectangle* RectangleRenderer::addRectangle(glm::vec2 pos, glm::vec2 size, float r1, float r2, float r3, float r4, glm::vec3 color, float zDepth) {

@@ -221,6 +221,8 @@ void BezierRenderer::updateBuffer() {
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, SSBO);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, bezierVertices.size() * sizeof(glm::vec4), bezierVertices.data(), GL_DYNAMIC_DRAW);
+
+	isUpdateBuffer = false;
 }
 
 Bezier* BezierRenderer::addBezierCurve(glm::vec2 v1, glm::vec2 v2, glm::vec2 v3, glm::vec2 v4, glm::vec3 col, int res) {

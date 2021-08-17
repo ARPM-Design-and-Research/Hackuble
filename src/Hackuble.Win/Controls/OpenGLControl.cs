@@ -83,6 +83,9 @@ namespace Hackuble.Win.Controls
             GUICLR.Bezier bezier = new GUICLR.Bezier(new Vector2(0, 0), new Vector2(50, 0), new Vector2(50, 50), new Vector2(100, 50), Color.Blue);
             bezier.setThickness(15);
 
+            GUICLR.Icon icon = new GUICLR.Icon("add.png", new Vector2(100, -100), new Vector2(50, 50));
+            icon.setPosition(new Vector2(200, -100));
+
             //rectangle.deleteRectangle();
 
         }

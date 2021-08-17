@@ -152,6 +152,7 @@
     <ClInclude Include="Component_CLR.h" />
     <ClInclude Include="GUICLR.h" />
     <ClInclude Include="GuiContext.h" />
+    <ClInclude Include="Icon_CLR.h" />
     <ClInclude Include="Rectangle_CLR.h" />
     <ClInclude Include="RenderElement_CLR.h" />
     <ClInclude Include="resource.h" />
@@ -163,6 +164,7 @@
     <ClCompile Include="Component_CLR.cpp" />
     <ClCompile Include="GUICLR.cpp" />
     <ClCompile Include="GuiContext.cpp" />
+    <ClCompile Include="Icon_CLR.cpp" />
     <ClCompile Include="Rectangle_CLR.cpp" />
     <ClCompile Include="RenderElement_CLR.cpp" />
     <ClCompile Include="Slider_CLR.cpp" />

@@ -153,6 +153,14 @@ void GuiBase::removeBezier(Bezier* bezier) {
 	BezierRenderer::GetInstance()->removeBezierCurve(bezier);
 }
 
+SynGUI::Icon* GuiBase::addIcon(const std::string& iconName, glm::vec2 pos, glm::vec2 size, Pivot pivot, float zDepth) {
+	return IconRenderer::GetInstance()->addIcon(iconName, pos, size, pivot, zDepth);
+}
+
+void GuiBase::removeIcon(Icon* icon) {
+	IconRenderer::GetInstance()->removeIcon(icon);
+}
+
 glm::vec2 GuiBase::screenToWorldSpace(glm::vec2 screenSpace) {
 	glm::vec4 worldSpace = glm::inverse(Camera::GetInstance()->getViewMatrix())* glm::vec4(screenSpace.x * 2.0f, screenSpace.y * 2.0f, 0.0f, 1.0f);
 	return glm::vec2(worldSpace.x, worldSpace.y);

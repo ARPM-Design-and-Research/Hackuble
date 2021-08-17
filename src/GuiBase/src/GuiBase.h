@@ -88,6 +88,9 @@ namespace SynGUI {
 		Bezier* addBezier(glm::vec2 v1, glm::vec2 v2, glm::vec2 v3, glm::vec2 v4, glm::vec3 col, int res);
 		void removeBezier(Bezier* bezier);
 
+		Icon* addIcon(const std::string& iconName, glm::vec2 pos, glm::vec2 size, Pivot pivot, float zDepth);
+		void removeIcon(Icon* icon);
+
 		glm::vec2 screenToWorldSpace(glm::vec2 screenSpace);
 	};
 }
