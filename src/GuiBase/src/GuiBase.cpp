@@ -234,7 +234,12 @@ int GuiBase::startGui()
 	IconRenderer::GetInstance()->addIcon("perlin.png", glm::vec2(30.0f, 0.0f));
 	IconRenderer::GetInstance()->addIcon("text.png", glm::vec2(45.0f, 0.0f));*/
 	//BezierRenderer::GetInstance()->addBezierCurve(glm::vec2(0.0f), glm::vec2(20.0f, 20.0f), glm::vec2(80.0f, 20.0f), glm::vec2(100.0f, 0.0f));
+	TextRenderer::GetInstance()->enableBoundingBox();
+	
 	fpsCounter = TextRenderer::GetInstance()->addText("10");
+	fpsCounter->setPosition(glm::vec2(0.0f, 100.0f));
+
+	TextLabel* helloText = TextRenderer::GetInstance()->addText("Hello");
 
 	int frame = 0;
 

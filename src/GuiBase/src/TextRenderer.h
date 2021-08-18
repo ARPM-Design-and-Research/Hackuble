@@ -43,8 +43,13 @@ namespace SynGUI {
 	private:
 		//TODO: figure out how to sequentially put vertices
 		std::vector<float> glyphVertices;
-
 		void addTextToBuffer(TextLabel* label);
+		void updateBuffer();
+
+		int shader_mvp;
+		int shader_texturePos;
+
+		bool isUpdateBuffer = false;
 
 	protected:
 
@@ -101,7 +106,8 @@ namespace SynGUI {
 		void deinit();
 		void render();
 
-		TextLabel* addText(const std::string& text, float fontSize = 1.0f, glm::vec2 pos = glm::vec2(0.0f, 0.0f), Pivot _pivot = Pivot::BOTTOM_LEFT, float zDepth = 0.0f, TextLabel* label = NULL);
+		TextLabel* addText(const std::string& text, float fontSize = 50.0f, glm::vec2 pos = glm::vec2(0.0f, 0.0f), Pivot _pivot = Pivot::TOP_LEFT, float zDepth = 0.0f, TextLabel* label = NULL);
+		void removeText(TextLabel* label);
 
 		void enableGlyphBox();
 		void enableBoundingBox();

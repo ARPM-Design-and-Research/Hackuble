@@ -241,12 +241,14 @@ Bezier* BezierRenderer::addBezierCurve(glm::vec2 v1, glm::vec2 v2, glm::vec2 v3,
 void BezierRenderer::removeBezierCurve(Bezier* bezier) {
 	int index = bezier->index;
 
-	int bufferOffset = 0;
-	for (int i = 0; i < index; i++) {
-		bufferOffset += bezierCurves.at(i)->resolution + 3;
-	}
+	if (bezier->added) {
+		int bufferOffset = 0;
+		for (int i = 0; i < index; i++) {
+			bufferOffset += bezierCurves.at(i)->resolution + 3;
+		}
 
-	bezierVertices.erase(bezierVertices.begin() + bufferOffset, bezierVertices.begin() + bufferOffset + bezier->resolution + 3);
+		bezierVertices.erase(bezierVertices.begin() + bufferOffset, bezierVertices.begin() + bufferOffset + bezier->resolution + 3);
+	}
 
 	bezierCurves.erase(bezierCurves.begin() + index);
 

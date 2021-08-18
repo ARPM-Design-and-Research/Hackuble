@@ -129,8 +129,25 @@ void IconRenderer::render() {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, atlasTextureBuffer);
 
-    //TODO: need to figure out right number of vertices to render
-    glDrawArrays(GL_TRIANGLES, 0, iconVertices.size()/5);
+    //glDrawArrays(GL_TRIANGLES, 0, iconVertices.size()/5);
+
+    int continousCount = 0;
+    int startIndex = 0;
+
+    for (int i = 0; i < icons.size(); i++) {
+        if (icons.at(i)->render) {
+            continousCount++;
+        }
+        else {
+            glDrawArrays(GL_TRIANGLES, startIndex * 6, continousCount * 6);
+            startIndex = i + 1;
+            continousCount = 0;
+        }
+
+        if (i == icons.size() - 1) {
+            glDrawArrays(GL_TRIANGLES, startIndex * 6, continousCount * 6);
+        }
+    }
 }
 
 /* Add a new icon/texture and update the iconVertices buffer
@@ -315,12 +332,15 @@ void IconRenderer::updateBuffer() {
 void IconRenderer::removeIcon(Icon* icon) {
     int index = icon->index;
 
-    int bufferOffset = 0;
-    for (int i = 0; i < index; i++) {
-        bufferOffset += 30;
+    if (icon->added) {
+        int bufferOffset = 0;
+        for (int i = 0; i < index; i++) {
+            bufferOffset += 30;
+        }
+
+        iconVertices.erase(iconVertices.begin() + bufferOffset, iconVertices.begin() + bufferOffset + 30);
     }
 
-    iconVertices.erase(iconVertices.begin() + bufferOffset, iconVertices.begin() + bufferOffset + 30);
     icons.erase(icons.begin() + index);
 
     for (int i = index; i < icons.size(); i++) {

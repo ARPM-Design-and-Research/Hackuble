@@ -418,12 +418,14 @@ void RectangleRenderer::updateRectangle(Rectangle* rectangle) {
 void RectangleRenderer::removeRectangle(Rectangle* rectangle) {
 	int index = rectangle->index;
 
-	int bufferOffset = 0;
-	for (int i = 0; i < index; i++) {
-		bufferOffset += 12;
-	}
+	if (rectangle->added) {
+		int bufferOffset = 0;
+		for (int i = 0; i < index; i++) {
+			bufferOffset += 12;
+		}
 
-	rectData.erase(rectData.begin() + bufferOffset, rectData.begin() + bufferOffset + 12);
+		rectData.erase(rectData.begin() + bufferOffset, rectData.begin() + bufferOffset + 12);
+	}
 
 	rectangles.erase(rectangles.begin() + index);
 

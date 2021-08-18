@@ -86,6 +86,8 @@ namespace Hackuble.Win.Controls
             GUICLR.Icon icon = new GUICLR.Icon("add.png", new Vector2(100, -100), new Vector2(50, 50));
             icon.setPosition(new Vector2(200, -100));
 
+            GUICLR.Icon icon1 = new GUICLR.Icon("add.png", new Vector2(100, -100), new Vector2(50, 50));
+
             //rectangle.deleteRectangle();
 
         }

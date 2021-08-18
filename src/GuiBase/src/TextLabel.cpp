@@ -12,13 +12,13 @@ TextLabel::TextLabel(const std::string& _text, float _fontSize, glm::vec2 _pos, 
     fontSize = _fontSize;
 
     //TODO: Add pivot functionality
-    box.x0 = pos.x;
-    box.y0 = pos.y;
+    box.x0 = _pos.x;
+    box.y0 = _pos.y;
 
     float totalWidth = getTotalWidth();
 
     box.x1 = box.x0 + totalWidth;
-    box.y1 = box.y0 + TextRenderer::GetInstance()->atlasInfo.fontSize * fontSize;
+    box.y1 = box.y0 + fontSize*0.75f;
 }
 
 //Adjusts the total width to fit inside bounding box
@@ -55,10 +55,10 @@ float TextLabel::getTotalWidth() {
         GlyphInfo g1 = TextRenderer::GetInstance()->getGlyphInfo(txt[i]);
 
         if ((int)txt[i] == 32) {
-            totalWidth += g1.advance * TextRenderer::GetInstance()->atlasInfo.fontSize * fontSize;
+            totalWidth += g1.advance * fontSize;
         }
         else if (g1.size.x != 0 && ((int)txt[i]) != 32) {
-            totalWidth += (g1.advance) * TextRenderer::GetInstance()->atlasInfo.fontSize * fontSize;
+            totalWidth += (g1.advance) * fontSize;
         }
     }
 

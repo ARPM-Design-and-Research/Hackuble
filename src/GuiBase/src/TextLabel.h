@@ -42,7 +42,6 @@ public:
 
 
 	glm::vec2 pos;
-	glm::vec2 size;
 	BoundingBox box;
 
 	//Calculates font size based on bounding box given
