@@ -18,7 +18,7 @@ namespace GUICLR {
 	public ref class Component : public IDisposable {
 	private:
 		//TODO: Fix having direct pointer to baseComponent
-		BaseWindow* _baseComponent;
+		SynGUI::BaseWindow* _baseComponent;
 		GUICLR::BoundingBox^ boundingBox;
 	public:
 		Component(System::String^ title);

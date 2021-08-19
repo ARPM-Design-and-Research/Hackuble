@@ -78,7 +78,7 @@ namespace Hackuble.Win.Controls
 
             rectangle1 = new GUICLR.Rectangle(new Vector2(0,0),new Vector2(100,100),2.0f,2.0f,2.0f,2.0f,Color.OrangeRed);
 
-            GUICLR.Rectangle rectangle2 = new GUICLR.Rectangle(new Vector2(100,100),new Vector2(100,50), 10.0f,10.0f,10.0f,10.0f, Color.Green);
+            //GUICLR.Rectangle rectangle2 = new GUICLR.Rectangle(new Vector2(100,100),new Vector2(100,50), 10.0f,10.0f,10.0f,10.0f, Color.Green);
 
             GUICLR.Bezier bezier = new GUICLR.Bezier(new Vector2(0, 0), new Vector2(50, 0), new Vector2(50, 50), new Vector2(100, 50), Color.Blue);
             bezier.setThickness(15);
@@ -87,6 +87,8 @@ namespace Hackuble.Win.Controls
             icon.setPosition(new Vector2(200, -100));
 
             GUICLR.Icon icon1 = new GUICLR.Icon("add.png", new Vector2(100, -100), new Vector2(50, 50));
+
+            GUICLR.Text text = new GUICLR.Text("Hello", new Vector2(0, 200), new Vector2(100, 10), 10, TextAlignment.RIGHT);
 
             //rectangle.deleteRectangle();
 

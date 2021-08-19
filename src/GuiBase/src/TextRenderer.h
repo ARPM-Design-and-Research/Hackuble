@@ -34,9 +34,9 @@
 * EnableGlyphBox and EnableBoundingBox can be used for debugging purposes.
 */
 
-class TextLabel;
-
 namespace SynGUI {
+
+	class TextLabel;
 
 	class TextRenderer {
 
@@ -45,6 +45,9 @@ namespace SynGUI {
 		std::vector<float> glyphVertices;
 		void addTextToBuffer(TextLabel* label);
 		void updateBuffer();
+
+		void bufferTextLeftAligned(TextLabel* label, glm::vec2 origin);
+		void bufferTextRightAligned(TextLabel* label, glm::vec2 origin);
 
 		int shader_mvp;
 		int shader_texturePos;
@@ -106,7 +109,8 @@ namespace SynGUI {
 		void deinit();
 		void render();
 
-		TextLabel* addText(const std::string& text, float fontSize = 50.0f, glm::vec2 pos = glm::vec2(0.0f, 0.0f), Pivot _pivot = Pivot::TOP_LEFT, float zDepth = 0.0f, TextLabel* label = NULL);
+		TextLabel* addText(const std::string& text, float fontSize = 50.0f, glm::vec2 pos = glm::vec2(0.0f, 0.0f), TextAlignment alignment = TextAlignment::LEFT, Pivot _pivot = Pivot::TOP_LEFT, float zDepth = 0.0f, TextLabel* label = NULL);
+		TextLabel* addText(const std::string& _text, glm::vec2 _pos, glm::vec2 _size, float _fontSize = 50.0f, TextAlignment alignment = TextAlignment::LEFT, float _zDepth = 0.0f, TextLabel* label = NULL);
 		void removeText(TextLabel* label);
 
 		void enableGlyphBox();

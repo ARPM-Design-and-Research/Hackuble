@@ -91,6 +91,9 @@ namespace SynGUI {
 		Icon* addIcon(const std::string& iconName, glm::vec2 pos, glm::vec2 size, Pivot pivot, float zDepth);
 		void removeIcon(Icon* icon);
 
+		TextLabel* addText(const std::string& _text, glm::vec2 _pos, glm::vec2 _size, float _fontSize = 50.0f, TextAlignment alignment = TextAlignment::LEFT, float _zDepth = 0.0f);
+		void removeText(TextLabel* label);
+
 		glm::vec2 screenToWorldSpace(glm::vec2 screenSpace);
 	};
 }

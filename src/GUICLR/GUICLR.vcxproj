@@ -157,6 +157,7 @@
     <ClInclude Include="RenderElement_CLR.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Slider_CLR.h" />
+    <ClInclude Include="Text_CLR.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bezier_CLR.cpp" />
@@ -168,6 +169,7 @@
     <ClCompile Include="Rectangle_CLR.cpp" />
     <ClCompile Include="RenderElement_CLR.cpp" />
     <ClCompile Include="Slider_CLR.cpp" />
+    <ClCompile Include="Text_CLR.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc" />

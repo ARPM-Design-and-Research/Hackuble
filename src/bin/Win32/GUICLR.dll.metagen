@@ -100,3 +100,20 @@ Class GUICLR.Slider: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     System.IDisposable
   Methods:
     Dispose(): PrivateScope, Public, Final, Virtual, HideBySig
+Class GUICLR.Text: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :GUICLR.RenderElement
+    Void .ctor(System.String, System.Numerics.Vector2, System.Numerics.Vector2, Single, GUICLR.TextAlignment): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    updateText(String): PrivateScope, Public, HideBySig
+    setFontSize(Single): PrivateScope, Public, HideBySig
+    setAlignment(TextAlignment): PrivateScope, Public, HideBySig
+    setPosition(Vector2): PrivateScope, Public, HideBySig
+    translate(Vector2): PrivateScope, Public, HideBySig
+    setSize(Vector2): PrivateScope, Public, HideBySig
+Struct GUICLR.TextAlignment: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    GUICLR.TextAlignment LEFT = 0 : Public, Static, Literal, HasDefault
+    GUICLR.TextAlignment RIGHT = 1 : Public, Static, Literal, HasDefault
+    GUICLR.TextAlignment CENTER = 2 : Public, Static, Literal, HasDefault

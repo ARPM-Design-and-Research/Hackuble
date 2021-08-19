@@ -48,6 +48,9 @@
     <ClInclude Include="Icon_CLR.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="Text_CLR.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUICLR.cpp">
@@ -75,6 +78,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Icon_CLR.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Text_CLR.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

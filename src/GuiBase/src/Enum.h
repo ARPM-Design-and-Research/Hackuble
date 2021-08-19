@@ -7,6 +7,12 @@
 
 namespace SynGUI {
 
+	enum class TextAlignment {
+		LEFT,
+		RIGHT,
+		CENTER
+	};
+
 	enum class SliderState {
 		INPUT,
 		OUTPUT,

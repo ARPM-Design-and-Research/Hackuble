@@ -80,25 +80,25 @@ void GuiContext::resize(int newWidth, int newHeight) {
 	SetWindowPos(windowHandle, NULL, 0, 0, r.right - r.left, r.bottom - r.top, NULL);
 
 	//gui->resize(newWidth, newHeight);
-	gui->addEventToQueue(std::make_shared<SynGUI::ResizeEvent>(EventType::RESIZE, newWidth, newHeight));
+	gui->addEventToQueue(std::make_shared<SynGUI::ResizeEvent>(SynGUI::EventType::RESIZE, newWidth, newHeight));
 }
 
 
-static MouseButton convertMouseButton(int button) {
-	MouseButton buttonClicked;
+static SynGUI::MouseButton convertMouseButton(int button) {
+	SynGUI::MouseButton buttonClicked;
 
 	switch (button) {
 	case 0:
-		buttonClicked = MouseButton::NONE;
+		buttonClicked = SynGUI::MouseButton::NONE;
 		break;
 	case 1048576:
-		buttonClicked = MouseButton::LEFT;
+		buttonClicked = SynGUI::MouseButton::LEFT;
 		break;
 	case 2097152:
-		buttonClicked = MouseButton::RIGHT;
+		buttonClicked = SynGUI::MouseButton::RIGHT;
 		break;
 	case 4194304:
-		buttonClicked = MouseButton::MIDDLE;
+		buttonClicked = SynGUI::MouseButton::MIDDLE;
 		break;
 	}
 
@@ -108,25 +108,25 @@ static MouseButton convertMouseButton(int button) {
 void GuiContext::onMouseMove(float x, float y, int mouseButton) {
 
 	if (initialized)
-		gui->addEventToQueue(std::make_shared<SynGUI::MouseEvent>(EventType::MOUSEMOVE, x, y, convertMouseButton(mouseButton)));
+		gui->addEventToQueue(std::make_shared<SynGUI::MouseEvent>(SynGUI::EventType::MOUSEMOVE, x, y, convertMouseButton(mouseButton)));
 }
 
 void GuiContext::onMouseDown(float x, float y, int mouseButton) {
 
 	if (initialized)
-		gui->addEventToQueue(std::make_shared<SynGUI::MouseEvent>(EventType::MOUSEDOWN, x, y, convertMouseButton(mouseButton)));
+		gui->addEventToQueue(std::make_shared<SynGUI::MouseEvent>(SynGUI::EventType::MOUSEDOWN, x, y, convertMouseButton(mouseButton)));
 }
 
 void GuiContext::onMouseUp(float x, float y, int mouseButton) {
 
 	if (initialized)
-		gui->addEventToQueue(std::make_shared<SynGUI::MouseEvent>(EventType::MOUSEUP, x, y, convertMouseButton(mouseButton)));
+		gui->addEventToQueue(std::make_shared<SynGUI::MouseEvent>(SynGUI::EventType::MOUSEUP, x, y, convertMouseButton(mouseButton)));
 }
 
 void GuiContext::onMouseWheel(float x, float y, int delta) {
 
 	if (initialized)
-		gui->addEventToQueue(std::make_shared<SynGUI::MouseEvent>(EventType::MOUSEWHEEL, x, y, delta));
+		gui->addEventToQueue(std::make_shared<SynGUI::MouseEvent>(SynGUI::EventType::MOUSEWHEEL, x, y, delta));
 }
 
 void GuiContext::onPaint() {
@@ -134,7 +134,7 @@ void GuiContext::onPaint() {
 	onPaintEvent = true;
 }
 
-std::shared_ptr<BaseWindow> GuiContext::addWindow(std::string title) {
+std::shared_ptr<SynGUI::BaseWindow> GuiContext::addWindow(std::string title) {
 	return gui->addWindow(title);
 }
 

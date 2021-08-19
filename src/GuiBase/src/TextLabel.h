@@ -21,39 +21,45 @@ namespace SynGUI {
 	class TextRenderer;
 }
 
-using namespace SynGUI;
+namespace SynGUI {
+	class TextLabel : public RenderElement {
+		friend class SynGUI::TextRenderer;
 
-class TextLabel : public RenderElement {
-	friend class SynGUI::TextRenderer;
+	private:
 
-private:
+		int index;
+		int bufferOffset;
 
-	int index;
+		std::string text;
+		std::string updatedText;
+		float fontSize;
 
-	std::string text;
-	std::string updatedText;
-	float fontSize;
+		bool added = false;
 
-	bool added = false;
+	public:
 
-public:
-
-	TextLabel(const std::string& _text, float fontSize, glm::vec2 pos = glm::vec2(0.0f,0.0f), Pivot pivot = Pivot::BOTTOM_LEFT, float zDepth = 0.0f);
+		TextLabel(const std::string& _text, float fontSize, glm::vec2 pos = glm::vec2(0.0f, 0.0f), TextAlignment alignment = TextAlignment::LEFT, Pivot pivot = Pivot::TOP_LEFT, float zDepth = 0.0f);
+		TextLabel(const std::string& _text, float _fontSize, glm::vec2 _pos, glm::vec2 _size, TextAlignment alignment = TextAlignment::LEFT, float _zDepth = 0.0f);
 
 
-	glm::vec2 pos;
-	BoundingBox box;
+		glm::vec2 pos;
+		BoundingBox box;
 
-	//Calculates font size based on bounding box given
-	void wrapHorizontalInBoundingBox();
-	void setHorizontalWidth(float width);
-	float getTotalWidth();
+		TextAlignment textAlignment;
 
-	void updateText(const std::string& text);
-	void setFontSize(float fontSize);
+		//Calculates font size based on bounding box given
+		void wrapHorizontalInBoundingBox();
+		void setHorizontalWidth(float width);
+		float getTotalWidth();
 
-	void setPosition(glm::vec2 _pos);
-	void translate(glm::vec2 translate);
+		void updateText(const std::string& text);
+		void setFontSize(float fontSize);
+		void setAlignment(TextAlignment textAlignment);
 
-	std::string getCurrentText();
-};
+		void setPosition(glm::vec2 _pos);
+		void translate(glm::vec2 translate);
+		void setSize(glm::vec2 _size);
+
+		std::string getCurrentText();
+	};
+}

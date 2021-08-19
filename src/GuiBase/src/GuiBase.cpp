@@ -161,6 +161,14 @@ void GuiBase::removeIcon(Icon* icon) {
 	IconRenderer::GetInstance()->removeIcon(icon);
 }
 
+SynGUI::TextLabel* GuiBase::addText(const std::string& _text, glm::vec2 _pos, glm::vec2 _size, float _fontSize, TextAlignment alignment, float _zDepth) {
+	return TextRenderer::GetInstance()->addText(_text, _pos, _size, _fontSize, alignment, _zDepth);
+}
+
+void GuiBase::removeText(TextLabel* label) {
+	TextRenderer::GetInstance()->removeText(label);
+}
+
 glm::vec2 GuiBase::screenToWorldSpace(glm::vec2 screenSpace) {
 	glm::vec4 worldSpace = glm::inverse(Camera::GetInstance()->getViewMatrix())* glm::vec4(screenSpace.x * 2.0f, screenSpace.y * 2.0f, 0.0f, 1.0f);
 	return glm::vec2(worldSpace.x, worldSpace.y);
@@ -236,10 +244,14 @@ int GuiBase::startGui()
 	//BezierRenderer::GetInstance()->addBezierCurve(glm::vec2(0.0f), glm::vec2(20.0f, 20.0f), glm::vec2(80.0f, 20.0f), glm::vec2(100.0f, 0.0f));
 	TextRenderer::GetInstance()->enableBoundingBox();
 	
-	fpsCounter = TextRenderer::GetInstance()->addText("10");
-	fpsCounter->setPosition(glm::vec2(0.0f, 100.0f));
+	fpsCounter = TextRenderer::GetInstance()->addText("100.00", glm::vec2(200.0f,50.0f), glm::vec2(100.0f,50.0f),25.0f);
+	//fpsCounter->setPosition(glm::vec2(0.0f, 100.0f));
 
-	TextLabel* helloText = TextRenderer::GetInstance()->addText("Hello");
+	/*TextLabel* helloText = TextRenderer::GetInstance()->addText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore"
+	 "magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate"
+	 "velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia"
+     "deserunt mollit anim id est laborum.", glm::vec2(0.0f), glm::vec2(200.0f,500.0f), 15.0f, TextAlignment::RIGHT);
+	helloText->setPosition(glm::vec2(200.0f,100.0f));*/
 
 	int frame = 0;
 
