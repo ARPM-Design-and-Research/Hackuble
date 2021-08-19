@@ -48,11 +48,14 @@ namespace SynGUI {
 
 		void bufferTextLeftAligned(TextLabel* label, glm::vec2 origin);
 		void bufferTextRightAligned(TextLabel* label, glm::vec2 origin);
+		void bufferTextCenterAligned(TextLabel* label, glm::vec2 origin);
 
 		int shader_mvp;
 		int shader_texturePos;
 
 		bool isUpdateBuffer = false;
+
+		void checkGlyph(char c);
 
 	protected:
 
@@ -92,8 +95,8 @@ namespace SynGUI {
 		unsigned int vbo;
 
 		bool glyphDebug = false;
-
 		bool bbDebug = false;
+
 		unsigned int bbVAO;
 		unsigned int bbVBO;
 		std::vector<glm::vec4> bbVertices;
@@ -113,8 +116,8 @@ namespace SynGUI {
 		TextLabel* addText(const std::string& _text, glm::vec2 _pos, glm::vec2 _size, float _fontSize = 50.0f, TextAlignment alignment = TextAlignment::LEFT, float _zDepth = 0.0f, TextLabel* label = NULL);
 		void removeText(TextLabel* label);
 
-		void enableGlyphBox();
-		void enableBoundingBox();
+		void enableGlyphBox(bool visible);
+		void enableBoundingBox(bool visible);
 
 		GlyphInfo getGlyphInfo(char c);
 		AtlasInfo getAtlasInfo();

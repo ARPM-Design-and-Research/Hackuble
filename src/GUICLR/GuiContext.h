@@ -75,7 +75,9 @@ public:
 	int windowHeight;
 
 	std::shared_ptr<SynGUI::GuiBase> getGUI();
-
 	std::shared_ptr<SynGUI::BaseWindow> addWindow(std::string title);
+
+	void displayTextBoundingBox(bool visible);
+	void displayTextGlyphBox(bool visible);
 	//SynGUI::Rectangle* addRectangle(glm::vec2 pos, glm::vec2 size, float r1, float r2, float r3, float r4, glm::vec3 col, float zDepth);
 };

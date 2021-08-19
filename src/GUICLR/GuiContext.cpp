@@ -376,3 +376,15 @@ LRESULT CALLBACK window_procedure(HWND window_handle, UINT message, WPARAM param
 
 	return DefWindowProc(window_handle, message, param_w, param_l);
 }
+
+void GuiContext::displayTextBoundingBox(bool visible) {
+
+	if(initialized)
+		gui->enableTextBoundingBoxDisplay(visible);
+}
+
+void GuiContext::displayTextGlyphBox(bool visible) {
+
+	if(initialized)
+		gui->enableTextGlyphBoxDisplay(visible);
+}

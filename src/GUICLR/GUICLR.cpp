@@ -59,6 +59,14 @@ void GUICLR::ManagedContext::closeContext() {
 	GuiContext::GetInstance()->closeContext();
 }
 
+void GUICLR::ManagedContext::displayTextBoundingBox(bool visible) {
+	GuiContext::GetInstance()->displayTextBoundingBox(visible);
+}
+
+void GUICLR::ManagedContext::displayTextGlyphBox(bool visible) {
+	GuiContext::GetInstance()->displayTextGlyphBox(visible);
+}
+
 Vector2 GUICLR::ManagedContext::screenToWorldSpace(Vector2 screenSpace) {
 	glm::vec2 worldSpace = GuiContext::GetInstance()->getGUI()->screenToWorldSpace(glm::vec2(screenSpace.X, screenSpace.Y));
 	return Vector2(worldSpace.x, worldSpace.y);

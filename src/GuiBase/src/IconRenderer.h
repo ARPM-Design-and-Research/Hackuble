@@ -49,6 +49,8 @@ namespace SynGUI {
 
 		std::map<std::string, quicktype::FrameValue> iconMetadata;
 
+		void checkIconSet(const std::string& icon);
+
 	protected:
 		static IconRenderer* iconRenderer_;
 		IconRenderer();

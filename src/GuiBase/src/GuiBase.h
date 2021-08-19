@@ -94,6 +94,9 @@ namespace SynGUI {
 		TextLabel* addText(const std::string& _text, glm::vec2 _pos, glm::vec2 _size, float _fontSize = 50.0f, TextAlignment alignment = TextAlignment::LEFT, float _zDepth = 0.0f);
 		void removeText(TextLabel* label);
 
+		void enableTextBoundingBoxDisplay(bool visible);
+		void enableTextGlyphBoxDisplay(bool visible);
+
 		glm::vec2 screenToWorldSpace(glm::vec2 screenSpace);
 	};
 }

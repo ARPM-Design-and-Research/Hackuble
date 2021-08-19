@@ -169,6 +169,14 @@ void GuiBase::removeText(TextLabel* label) {
 	TextRenderer::GetInstance()->removeText(label);
 }
 
+void GuiBase::enableTextBoundingBoxDisplay(bool visible) {
+	TextRenderer::GetInstance()->enableBoundingBox(visible);
+}
+
+void GuiBase::enableTextGlyphBoxDisplay(bool visible) {
+	TextRenderer::GetInstance()->enableGlyphBox(visible);
+}
+
 glm::vec2 GuiBase::screenToWorldSpace(glm::vec2 screenSpace) {
 	glm::vec4 worldSpace = glm::inverse(Camera::GetInstance()->getViewMatrix())* glm::vec4(screenSpace.x * 2.0f, screenSpace.y * 2.0f, 0.0f, 1.0f);
 	return glm::vec2(worldSpace.x, worldSpace.y);
@@ -242,16 +250,8 @@ int GuiBase::startGui()
 	IconRenderer::GetInstance()->addIcon("perlin.png", glm::vec2(30.0f, 0.0f));
 	IconRenderer::GetInstance()->addIcon("text.png", glm::vec2(45.0f, 0.0f));*/
 	//BezierRenderer::GetInstance()->addBezierCurve(glm::vec2(0.0f), glm::vec2(20.0f, 20.0f), glm::vec2(80.0f, 20.0f), glm::vec2(100.0f, 0.0f));
-	TextRenderer::GetInstance()->enableBoundingBox();
 	
 	fpsCounter = TextRenderer::GetInstance()->addText("100.00", glm::vec2(200.0f,50.0f), glm::vec2(100.0f,50.0f),25.0f);
-	//fpsCounter->setPosition(glm::vec2(0.0f, 100.0f));
-
-	/*TextLabel* helloText = TextRenderer::GetInstance()->addText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore"
-	 "magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate"
-	 "velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia"
-     "deserunt mollit anim id est laborum.", glm::vec2(0.0f), glm::vec2(200.0f,500.0f), 15.0f, TextAlignment::RIGHT);
-	helloText->setPosition(glm::vec2(200.0f,100.0f));*/
 
 	int frame = 0;
 

@@ -301,24 +301,33 @@ void IconRenderer::deinit() {
 IconInfo IconRenderer::getIconInfo(const std::string& iconName) {
     IconInfo info;
 
-    quicktype::FrameValue frameValue = iconMetadata.at(iconName);
-
     //TODO: When an iconName is supplied which doesn't exist, it is not throwing an error as expected
-    try
-    {
-        frameValue = iconMetadata.at(iconName);
-    }
-    catch (std::out_of_range& const e)
-    {
+    try {
+        checkIconSet(iconName);
+        quicktype::FrameValue frameValue = iconMetadata.at(iconName);
+
+        info.pos.x = frameValue.get_frame().get_x();
+        info.pos.y = frameValue.get_frame().get_y();
+        info.size.x = frameValue.get_frame().get_w();
+        info.size.y = frameValue.get_frame().get_h();
+
+        return info;
+    } catch (std::out_of_range& const e) {
         std::cerr << e.what() << std::endl;
     }
 
-    info.pos.x = frameValue.get_frame().get_x();
-    info.pos.y = frameValue.get_frame().get_y();
-    info.size.x = frameValue.get_frame().get_w();
-    info.size.y = frameValue.get_frame().get_h();
+    info.pos.x = 0;
+    info.pos.y = 0;
+    info.size.x = 0;
+    info.size.y = 0;
 
     return info;
+}
+
+void IconRenderer::checkIconSet(const std::string& icon) {
+    if (iconMetadata.count(icon) == 0) {
+        throw "Loaded icon set doesn't contain icon for: " + icon;
+    }
 }
 
 void IconRenderer::updateBuffer() {
