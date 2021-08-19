@@ -139,15 +139,14 @@ namespace SynGUI {
     /* Used for adding new text to the buffer. Each glyph has its own width, height and spacing.
     * Those are appropriately calculated as per the metadata
     */
-    void TextRenderer::addTextToBuffer(TextLabel* _label) {
+    void TextRenderer::addTextToBuffer(TextLabel* label) {
 
-        TextLabel* label = _label;
+        int index = label->index;
 
-        const char* txt = label->text.c_str();
+        //Calculate how far off in the buffer we are, to accomodate for label's text size
+        int bufferOffset = label->bufferOffset;
 
         float totalWidth = label->getTotalWidth();
-
-        float offsetX = 0;
 
         float posOffsetX = 0.0f;
         float posOffsetY = 0.0f;
@@ -162,73 +161,492 @@ namespace SynGUI {
         }
         else if (label->pivot == Pivot::TOP_LEFT) {
             posOffsetX = label->box.x0;
-            posOffsetY = label->box.y0 + label->fontSize * 0.75f;
+            posOffsetY = label->box.y0 + label->fontSize * 1.0f;
         }
         else if (label->pivot == Pivot::TOP_RIGHT) {
             posOffsetX = label->box.x1 - totalWidth;
-            posOffsetY = label->box.y0 + atlasInfo.fontSize * label->fontSize * 0.75f;
+            posOffsetY = label->box.y0 + atlasInfo.fontSize * label->fontSize * 1.0f;
         }
         else if (label->pivot == Pivot::BOTTOM_RIGHT) {
             posOffsetX = label->box.x1 - totalWidth;
             posOffsetY = label->box.y1;
         }
 
-        glm::vec2 pos = label->pos;
+        label->text = label->updatedText;
 
-        for (int i = 0; i < label->text.length(); i++) {
 
-            GlyphInfo g1 = TextRenderer::GetInstance()->getGlyphInfo(txt[i]);
-
-            if (g1.size.x != 0 && g1.size.y != 0 ((int)txt[i]) != 32) {
-
-                float scale = label->fontSize;
-                float originX = posOffsetX + pos.x;
-                float originY = posOffsetY + pos.y;
-
-                glyphVertices.push_back((g1.pos.x + offsetX) * scale + originX); //x
-                glyphVertices.push_back(-g1.pos.y * scale + originY); //y
-                glyphVertices.push_back(label->zDepth); //z
-                glyphVertices.push_back(g1.uv.x / atlasInfo.size.x); // UVx
-                glyphVertices.push_back(g1.uv.y / atlasInfo.size.y); //UVy
-
-                glyphVertices.push_back((g1.pos.x + g1.size.x + offsetX) * scale + originX);//X
-                glyphVertices.push_back(-(g1.pos.y + g1.size.y) * scale + originY); //Y
-                glyphVertices.push_back(label->zDepth);//z
-                glyphVertices.push_back(g1.uv.z / atlasInfo.size.x); //UVx
-                glyphVertices.push_back(g1.uv.w / atlasInfo.size.y); //UVy
-
-                glyphVertices.push_back(((g1.pos.x + offsetX) * scale + originX)); //x
-                glyphVertices.push_back((-(g1.pos.y + g1.size.y) * scale + originY)); //y
-                glyphVertices.push_back((label->zDepth));//z
-                glyphVertices.push_back((g1.uv.x / atlasInfo.size.x)); //UVx
-                glyphVertices.push_back((g1.uv.w / atlasInfo.size.y)); //UVy
-
-                glyphVertices.push_back(((g1.pos.x + g1.size.x + offsetX) * scale + originX));//X
-                glyphVertices.push_back((-(g1.pos.y + g1.size.y) * scale + originY)); //Y
-                glyphVertices.push_back((label->zDepth));//z
-                glyphVertices.push_back((g1.uv.z / atlasInfo.size.x)); //UVx
-                glyphVertices.push_back((g1.uv.w / atlasInfo.size.y)); //UVy
-
-                glyphVertices.push_back(((g1.pos.x + offsetX) * scale + originX)); //x
-                glyphVertices.push_back((-g1.pos.y * scale + originY)); //y
-                glyphVertices.push_back((label->zDepth));//z
-                glyphVertices.push_back((g1.uv.x / atlasInfo.size.x)); // UVx
-                glyphVertices.push_back((g1.uv.y / atlasInfo.size.y)); //UVy
-
-                glyphVertices.push_back(((g1.pos.x + g1.size.x + offsetX) * scale + originX)); //x
-                glyphVertices.push_back((-g1.pos.y * scale + originY)); //y
-                glyphVertices.push_back((label->zDepth));//z
-                glyphVertices.push_back((g1.uv.z / atlasInfo.size.x)); //UVx
-                glyphVertices.push_back((g1.uv.y / atlasInfo.size.y)); //UVy
-
-            }
-
-            offsetX += g1.advance;
+        switch (label->textAlignment) {
+        case TextAlignment::LEFT:
+            bufferTextLeftAlignedAdd(label, glm::vec2(posOffsetX, posOffsetY));
+            break;
+        case TextAlignment::RIGHT:
+            bufferTextRightAlignedAdd(label, glm::vec2(posOffsetX, posOffsetY));
+            break;
+        case TextAlignment::CENTER:
+            bufferTextCenterAlignedAdd(label, glm::vec2(posOffsetX, posOffsetY));
+            break;
+        default:
+            bufferTextLeftAlignedAdd(label, glm::vec2(posOffsetX, posOffsetY));
+            break;
         }
 
         isUpdateBuffer = true;
 
         label->added = true;
+    }
+
+    void TextRenderer::bufferTextLeftAlignedAdd(TextLabel* label, glm::vec2 origin) {
+        int bufferOffset = label->bufferOffset;
+        float offsetX = 0;
+        float offsetY = 0;
+        float scale = label->fontSize;
+        std::string text = label->text;
+        const char* txt = text.c_str();
+
+        for (int i = 0; i < text.length(); i++) {
+
+            GlyphInfo g1 = TextRenderer::GetInstance()->getGlyphInfo(txt[i]);
+
+            if (g1.size.x != 0 && g1.size.y != 0 ((int)txt[i]) != 32) {
+
+                float spaceNeededX = (g1.pos.x + offsetX + g1.size.x) * scale + origin.x;
+
+                //Text will overflow to right
+                if (spaceNeededX > label->box.x1) {
+                    offsetX = 0;
+                    offsetY += scale;
+                }
+
+                float spaceNeededY = origin.y + offsetY;
+
+                //Text will overflow bottom
+                if (spaceNeededY > label->box.y1) {
+
+                    for (int j = 0; j < 30; j++) {
+                        glyphVertices.push_back(0.0f);
+                    }
+                }
+                else {
+
+                    glyphVertices.push_back((g1.pos.x + offsetX) * scale + origin.x); //x
+                    glyphVertices.push_back(-g1.pos.y * scale + origin.y + offsetY); //y
+                    glyphVertices.push_back(label->zDepth); //z
+                    glyphVertices.push_back(g1.uv.x / atlasInfo.size.x); // UVx
+                    glyphVertices.push_back(g1.uv.y / atlasInfo.size.y); //UVy
+   
+                    glyphVertices.push_back((g1.pos.x + g1.size.x + offsetX) * scale + origin.x);//X
+                    glyphVertices.push_back(-(g1.pos.y + g1.size.y) * scale + origin.y + offsetY); //Y
+                    glyphVertices.push_back(label->zDepth);//z
+                    glyphVertices.push_back(g1.uv.z / atlasInfo.size.x); //UVx
+                    glyphVertices.push_back(g1.uv.w / atlasInfo.size.y); //UVy
+                                  
+                    glyphVertices.push_back ((g1.pos.x + offsetX) * scale + origin.x); //x
+                    glyphVertices.push_back (-(g1.pos.y + g1.size.y) * scale + origin.y + offsetY); //y
+                    glyphVertices.push_back (label->zDepth);//z
+                    glyphVertices.push_back (g1.uv.x / atlasInfo.size.x); //UVx
+                    glyphVertices.push_back (g1.uv.w / atlasInfo.size.y); //UVy
+                                 
+                    glyphVertices.push_back ((g1.pos.x + g1.size.x + offsetX) * scale + origin.x);//X
+                    glyphVertices.push_back (-(g1.pos.y + g1.size.y) * scale + origin.y + offsetY); //Y
+                    glyphVertices.push_back (label->zDepth);//z
+                    glyphVertices.push_back (g1.uv.z / atlasInfo.size.x); //UVx
+                    glyphVertices.push_back (g1.uv.w / atlasInfo.size.y); //UVy
+                                 
+                    glyphVertices.push_back ((g1.pos.x + offsetX) * scale + origin.x); //x
+                    glyphVertices.push_back (-g1.pos.y * scale + origin.y + offsetY); //y
+                    glyphVertices.push_back (label->zDepth);//z
+                    glyphVertices.push_back (g1.uv.x / atlasInfo.size.x); // UVx
+                    glyphVertices.push_back (g1.uv.y / atlasInfo.size.y); //UVy
+                                  
+                    glyphVertices.push_back ((g1.pos.x + g1.size.x + offsetX) * scale + origin.x); //x
+                    glyphVertices.push_back (-g1.pos.y * scale + origin.y + offsetY); //y
+                    glyphVertices.push_back (label->zDepth);//z
+                    glyphVertices.push_back (g1.uv.z / atlasInfo.size.x); //UVx
+                    glyphVertices.push_back (g1.uv.y / atlasInfo.size.y); //UVy
+                }
+
+            }
+
+            offsetX += g1.advance;
+        }
+    }
+
+    void TextRenderer::bufferTextRightAlignedAdd(TextLabel* label, glm::vec2 origin) {
+        int bufferOffset = label->bufferOffset;
+        float offsetX = 0;
+        float offsetY = 0;
+        float scale = label->fontSize;
+        std::string text = label->text;
+        const char* txt = text.c_str();
+
+        int lineStartCount = 0;
+        int leftToUpdate = 0;
+
+        for (int i = 0; i < text.size(); i++) {
+
+            GlyphInfo g1 = TextRenderer::GetInstance()->getGlyphInfo(txt[i]);
+
+            if (g1.size.x != 0 && g1.size.y != 0 ((int)txt[i]) != 32) {
+
+                float spaceNeeded = (g1.pos.x + offsetX + g1.size.x) * scale + origin.x;
+                leftToUpdate++;
+
+                if (spaceNeeded > label->box.x1) {
+                    float gap = 0;
+
+                    if (i > 0) {
+                        if ((int)txt[i - 1] == 32) {
+                            gap = label->box.x1 - ((offsetX - getGlyphInfo(32).advance) * scale + origin.x);
+                        }
+                        else {
+                            gap = label->box.x1 - (offsetX * scale + origin.x);
+                        }
+                    }
+                    //gap = 0;
+                    offsetX = 0;
+                    float offsetXInternal = 0;
+
+                    for (int j = lineStartCount; j < i; j++) {
+
+                        GlyphInfo g2 = TextRenderer::GetInstance()->getGlyphInfo(txt[j]);
+
+                        //Add first line to buffer
+                        if (g2.size.x != 0 && g2.size.y != 0 ((int)txt[j]) != 32) {
+
+                            float spaceNeededY = origin.y + offsetY;
+
+                            //Text will overflow bottom
+                            if (spaceNeededY > label->box.y1) {
+
+                                for (int k = 0; k < 30; k++) {
+                                    glyphVertices.push_back(0.0f);
+                                }
+                            }
+                            else {
+
+                                glyphVertices.push_back((g2.pos.x + offsetXInternal) * scale + origin.x + gap); //x
+                                glyphVertices.push_back(-g2.pos.y * scale + origin.y + offsetY); //y
+                                glyphVertices.push_back(label->zDepth); //z
+                                glyphVertices.push_back(g2.uv.x / atlasInfo.size.x); // UVx
+                                glyphVertices.push_back(g2.uv.y / atlasInfo.size.y); //UVy
+                                              
+                                glyphVertices.push_back((g2.pos.x + g2.size.x + offsetXInternal) * scale + origin.x + gap);//X
+                                glyphVertices.push_back(-(g2.pos.y + g2.size.y) * scale + origin.y + offsetY); //Y
+                                glyphVertices.push_back(label->zDepth);//z
+                                glyphVertices.push_back(g2.uv.z / atlasInfo.size.x); //UVx
+                                glyphVertices.push_back(g2.uv.w / atlasInfo.size.y); //UVy
+                                              
+                                glyphVertices.push_back ((g2.pos.x + offsetXInternal) * scale + origin.x + gap); //x
+                                glyphVertices.push_back (-(g2.pos.y + g2.size.y) * scale + origin.y + offsetY); //y
+                                glyphVertices.push_back (label->zDepth);//z
+                                glyphVertices.push_back (g2.uv.x / atlasInfo.size.x); //UVx
+                                glyphVertices.push_back (g2.uv.w / atlasInfo.size.y); //UVy
+                                              
+                                glyphVertices.push_back ((g2.pos.x + g2.size.x + offsetXInternal) * scale + origin.x + gap);//X
+                                glyphVertices.push_back (-(g2.pos.y + g2.size.y) * scale + origin.y + offsetY); //Y
+                                glyphVertices.push_back (label->zDepth);//z
+                                glyphVertices.push_back (g2.uv.z / atlasInfo.size.x); //UVx
+                                glyphVertices.push_back (g2.uv.w / atlasInfo.size.y); //UVy
+                                              
+                                glyphVertices.push_back ((g2.pos.x + offsetXInternal) * scale + origin.x + gap); //x
+                                glyphVertices.push_back (-g2.pos.y * scale + origin.y + offsetY); //y
+                                glyphVertices.push_back (label->zDepth);//z
+                                glyphVertices.push_back (g2.uv.x / atlasInfo.size.x); // UVx
+                                glyphVertices.push_back (g2.uv.y / atlasInfo.size.y); //UVy
+                                              
+                                glyphVertices.push_back ((g2.pos.x + g2.size.x + offsetXInternal) * scale + origin.x + gap); //x
+                                glyphVertices.push_back (-g2.pos.y * scale + origin.y + offsetY); //y
+                                glyphVertices.push_back (label->zDepth);//z
+                                glyphVertices.push_back (g2.uv.z / atlasInfo.size.x); //UVx
+                                glyphVertices.push_back (g2.uv.y / atlasInfo.size.y); //UVy
+                            }
+
+                        }
+
+                        offsetXInternal += g2.advance;
+                    }
+
+                    lineStartCount = i;
+                    offsetY += scale;
+                    leftToUpdate = 0;
+                }
+            }
+
+            offsetX += g1.advance;
+
+            //Update the ones left
+            if (i == text.size() - 1) {
+                offsetX = 0;
+                float spaceNeeded = 0;
+                float gap = 0;
+
+                for (int j = lineStartCount; j < text.size(); j++) {
+                    GlyphInfo g2 = TextRenderer::GetInstance()->getGlyphInfo(txt[j]);
+                    offsetX += g2.advance;
+
+                    if (j == text.size() - 1) {
+                        if ((int)txt[j] == 32) {
+                            offsetX -= g2.advance;
+                        }
+                    }
+                }
+
+                gap = label->box.x1 - (offsetX * scale + origin.x);
+
+                float offsetXInternal = 0;
+
+                for (int j = lineStartCount; j < text.size(); j++) {
+
+                    GlyphInfo g2 = TextRenderer::GetInstance()->getGlyphInfo(txt[j]);
+
+                    //Add first line to buffer
+                    if (g2.size.x != 0 && g2.size.y != 0 ((int)txt[j]) != 32) {
+
+                        float spaceNeededY = origin.y + offsetY;
+
+                        //Text will overflow bottom
+                        if (spaceNeededY > label->box.y1) {
+
+                            for (int k = 0; k < 30; k++) {
+                                glyphVertices.at(j * 30 + k + bufferOffset) = 0.0f;
+                            }
+                        }
+                        else {
+
+                            glyphVertices.push_back((g2.pos.x + offsetXInternal) * scale + origin.x + gap); //x
+                            glyphVertices.push_back(-g2.pos.y * scale + origin.y + offsetY); //y
+                            glyphVertices.push_back(label->zDepth); //z
+                            glyphVertices.push_back(g2.uv.x / atlasInfo.size.x); // UVx
+                            glyphVertices.push_back(g2.uv.y / atlasInfo.size.y); //UVy
+                                          
+                            glyphVertices.push_back((g2.pos.x + g2.size.x + offsetXInternal) * scale + origin.x + gap);//X
+                            glyphVertices.push_back(-(g2.pos.y + g2.size.y) * scale + origin.y + offsetY); //Y
+                            glyphVertices.push_back(label->zDepth);//z
+                            glyphVertices.push_back(g2.uv.z / atlasInfo.size.x); //UVx
+                            glyphVertices.push_back(g2.uv.w / atlasInfo.size.y); //UVy
+                                          
+                            glyphVertices.push_back ((g2.pos.x + offsetXInternal) * scale + origin.x + gap); //x
+                            glyphVertices.push_back (-(g2.pos.y + g2.size.y) * scale + origin.y + offsetY); //y
+                            glyphVertices.push_back (label->zDepth);//z
+                            glyphVertices.push_back (g2.uv.x / atlasInfo.size.x); //UVx
+                            glyphVertices.push_back (g2.uv.w / atlasInfo.size.y); //UVy
+                                          
+                            glyphVertices.push_back ((g2.pos.x + g2.size.x + offsetXInternal) * scale + origin.x + gap);//X
+                            glyphVertices.push_back (-(g2.pos.y + g2.size.y) * scale + origin.y + offsetY); //Y
+                            glyphVertices.push_back (label->zDepth);//z
+                            glyphVertices.push_back (g2.uv.z / atlasInfo.size.x); //UVx
+                            glyphVertices.push_back (g2.uv.w / atlasInfo.size.y); //UVy
+                                          
+                            glyphVertices.push_back ((g2.pos.x + offsetXInternal) * scale + origin.x + gap); //x
+                            glyphVertices.push_back (-g2.pos.y * scale + origin.y + offsetY); //y
+                            glyphVertices.push_back (label->zDepth);//z
+                            glyphVertices.push_back (g2.uv.x / atlasInfo.size.x); // UVx
+                            glyphVertices.push_back (g2.uv.y / atlasInfo.size.y); //UVy
+                                          
+                            glyphVertices.push_back ((g2.pos.x + g2.size.x + offsetXInternal) * scale + origin.x + gap); //x
+                            glyphVertices.push_back (-g2.pos.y * scale + origin.y + offsetY); //y
+                            glyphVertices.push_back (label->zDepth);//z
+                            glyphVertices.push_back (g2.uv.z / atlasInfo.size.x); //UVx
+                            glyphVertices.push_back (g2.uv.y / atlasInfo.size.y); //UVy
+                        }
+
+                    }
+
+                    offsetXInternal += g2.advance;
+                }
+            }
+        }
+    }
+
+    void TextRenderer::bufferTextCenterAlignedAdd(TextLabel* label, glm::vec2 origin) {
+        int bufferOffset = label->bufferOffset;
+        float offsetX = 0;
+        float offsetY = 0;
+        float scale = label->fontSize;
+        std::string text = label->text;
+        const char* txt = text.c_str();
+
+        int lineStartCount = 0;
+        int leftToUpdate = 0;
+
+        for (int i = 0; i < text.size(); i++) {
+
+            GlyphInfo g1 = TextRenderer::GetInstance()->getGlyphInfo(txt[i]);
+
+            if (g1.size.x != 0 && g1.size.y != 0 ((int)txt[i]) != 32) {
+
+                float spaceNeeded = (g1.pos.x + offsetX + g1.size.x) * scale + origin.x;
+                leftToUpdate++;
+
+                if (spaceNeeded > label->box.x1) {
+                    float gap = 0;
+
+                    if (i > 0) {
+                        if ((int)txt[i - 1] == 32) {
+                            gap = label->box.x1 - ((offsetX - getGlyphInfo(32).advance) * scale + origin.x);
+                        }
+                        else {
+                            gap = label->box.x1 - (offsetX * scale + origin.x);
+                        }
+                    }
+
+                    gap /= 2.0f;
+                    //gap = 0;
+                    offsetX = 0;
+                    float offsetXInternal = 0;
+
+                    for (int j = lineStartCount; j < i; j++) {
+
+                        GlyphInfo g2 = TextRenderer::GetInstance()->getGlyphInfo(txt[j]);
+
+                        //Add first line to buffer
+                        if (g2.size.x != 0 && g2.size.y != 0 ((int)txt[j]) != 32) {
+
+                            float spaceNeededY = origin.y + offsetY;
+
+                            //Text will overflow bottom
+                            if (spaceNeededY > label->box.y1) {
+
+                                for (int k = 0; k < 30; k++) {
+                                    glyphVertices.push_back(0.0f);
+                                }
+                            }
+                            else {
+
+                                glyphVertices.push_back((g2.pos.x + offsetXInternal) * scale + origin.x + gap); //x
+                                glyphVertices.push_back(-g2.pos.y * scale + origin.y + offsetY); //y
+                                glyphVertices.push_back(label->zDepth); //z
+                                glyphVertices.push_back(g2.uv.x / atlasInfo.size.x); // UVx
+                                glyphVertices.push_back(g2.uv.y / atlasInfo.size.y); //UVy
+                                              
+                                glyphVertices.push_back((g2.pos.x + g2.size.x + offsetXInternal) * scale + origin.x + gap);//X
+                                glyphVertices.push_back(-(g2.pos.y + g2.size.y) * scale + origin.y + offsetY); //Y
+                                glyphVertices.push_back(label->zDepth);//z
+                                glyphVertices.push_back(g2.uv.z / atlasInfo.size.x); //UVx
+                                glyphVertices.push_back(g2.uv.w / atlasInfo.size.y); //UVy
+                                              
+                                glyphVertices.push_back ((g2.pos.x + offsetXInternal) * scale + origin.x + gap); //x
+                                glyphVertices.push_back (-(g2.pos.y + g2.size.y) * scale + origin.y + offsetY); //y
+                                glyphVertices.push_back (label->zDepth);//z
+                                glyphVertices.push_back (g2.uv.x / atlasInfo.size.x); //UVx
+                                glyphVertices.push_back (g2.uv.w / atlasInfo.size.y); //UVy
+                                              
+                                glyphVertices.push_back ((g2.pos.x + g2.size.x + offsetXInternal) * scale + origin.x + gap);//X
+                                glyphVertices.push_back (-(g2.pos.y + g2.size.y) * scale + origin.y + offsetY); //Y
+                                glyphVertices.push_back (label->zDepth);//z
+                                glyphVertices.push_back (g2.uv.z / atlasInfo.size.x); //UVx
+                                glyphVertices.push_back (g2.uv.w / atlasInfo.size.y); //UVy
+                                              
+                                glyphVertices.push_back ((g2.pos.x + offsetXInternal) * scale + origin.x + gap); //x
+                                glyphVertices.push_back (-g2.pos.y * scale + origin.y + offsetY); //y
+                                glyphVertices.push_back (label->zDepth);//z
+                                glyphVertices.push_back (g2.uv.x / atlasInfo.size.x); // UVx
+                                glyphVertices.push_back (g2.uv.y / atlasInfo.size.y); //UVy
+                                              
+                                glyphVertices.push_back ((g2.pos.x + g2.size.x + offsetXInternal) * scale + origin.x + gap); //x
+                                glyphVertices.push_back (-g2.pos.y * scale + origin.y + offsetY); //y
+                                glyphVertices.push_back (label->zDepth);//z
+                                glyphVertices.push_back (g2.uv.z / atlasInfo.size.x); //UVx
+                                glyphVertices.push_back (g2.uv.y / atlasInfo.size.y); //UVy
+                            }
+
+                        }
+
+                        offsetXInternal += g2.advance;
+                    }
+
+                    lineStartCount = i;
+                    offsetY += scale;
+                    leftToUpdate = 0;
+                }
+            }
+
+            offsetX += g1.advance;
+
+            //Update the ones left
+            if (i == text.size() - 1) {
+                offsetX = 0;
+                float spaceNeeded = 0;
+                float gap = 0;
+
+                for (int j = lineStartCount; j < text.size(); j++) {
+                    GlyphInfo g2 = TextRenderer::GetInstance()->getGlyphInfo(txt[j]);
+                    offsetX += g2.advance;
+
+                    if (j == text.size() - 1) {
+                        if ((int)txt[j] == 32) {
+                            offsetX -= g2.advance;
+                        }
+                    }
+                }
+
+                gap = label->box.x1 - (offsetX * scale + origin.x);
+
+                gap /= 2.0f;
+
+                float offsetXInternal = 0;
+
+                for (int j = lineStartCount; j < text.size(); j++) {
+
+                    GlyphInfo g2 = TextRenderer::GetInstance()->getGlyphInfo(txt[j]);
+
+                    //Add first line to buffer
+                    if (g2.size.x != 0 && g2.size.y != 0 ((int)txt[j]) != 32) {
+
+                        float spaceNeededY = origin.y + offsetY;
+
+                        //Text will overflow bottom
+                        if (spaceNeededY > label->box.y1) {
+
+                            for (int k = 0; k < 30; k++) {
+                                glyphVertices.at(j * 30 + k + bufferOffset) = 0.0f;
+                            }
+                        }
+                        else {
+
+                            glyphVertices.push_back((g2.pos.x + offsetXInternal) * scale + origin.x + gap); //x
+                            glyphVertices.push_back(-g2.pos.y * scale + origin.y + offsetY); //y
+                            glyphVertices.push_back(label->zDepth); //z
+                            glyphVertices.push_back(g2.uv.x / atlasInfo.size.x); // UVx
+                            glyphVertices.push_back(g2.uv.y / atlasInfo.size.y); //UVy
+                                          
+                            glyphVertices.push_back((g2.pos.x + g2.size.x + offsetXInternal) * scale + origin.x + gap);//X
+                            glyphVertices.push_back(-(g2.pos.y + g2.size.y) * scale + origin.y + offsetY); //Y
+                            glyphVertices.push_back(label->zDepth);//z
+                            glyphVertices.push_back(g2.uv.z / atlasInfo.size.x); //UVx
+                            glyphVertices.push_back(g2.uv.w / atlasInfo.size.y); //UVy
+                                          
+                            glyphVertices.push_back ((g2.pos.x + offsetXInternal) * scale + origin.x + gap); //x
+                            glyphVertices.push_back (-(g2.pos.y + g2.size.y) * scale + origin.y + offsetY); //y
+                            glyphVertices.push_back (label->zDepth);//z
+                            glyphVertices.push_back (g2.uv.x / atlasInfo.size.x); //UVx
+                            glyphVertices.push_back (g2.uv.w / atlasInfo.size.y); //UVy
+                                          
+                            glyphVertices.push_back ((g2.pos.x + g2.size.x + offsetXInternal) * scale + origin.x + gap);//X
+                            glyphVertices.push_back (-(g2.pos.y + g2.size.y) * scale + origin.y + offsetY); //Y
+                            glyphVertices.push_back (label->zDepth);//z
+                            glyphVertices.push_back (g2.uv.z / atlasInfo.size.x); //UVx
+                            glyphVertices.push_back (g2.uv.w / atlasInfo.size.y); //UVy
+                                          
+                            glyphVertices.push_back ((g2.pos.x + offsetXInternal) * scale + origin.x + gap); //x
+                            glyphVertices.push_back (-g2.pos.y * scale + origin.y + offsetY); //y
+                            glyphVertices.push_back (label->zDepth);//z
+                            glyphVertices.push_back (g2.uv.x / atlasInfo.size.x); // UVx
+                            glyphVertices.push_back (g2.uv.y / atlasInfo.size.y); //UVy
+                                          
+                            glyphVertices.push_back ((g2.pos.x + g2.size.x + offsetXInternal) * scale + origin.x + gap); //x
+                            glyphVertices.push_back (-g2.pos.y * scale + origin.y + offsetY); //y
+                            glyphVertices.push_back (label->zDepth);//z
+                            glyphVertices.push_back (g2.uv.z / atlasInfo.size.x); //UVx
+                            glyphVertices.push_back (g2.uv.y / atlasInfo.size.y); //UVy
+                        }
+
+                    }
+
+                    offsetXInternal += g2.advance;
+                }
+            }
+        }
     }
 
     /* The render function sets up the appropriate render states
@@ -241,7 +659,7 @@ namespace SynGUI {
 
             if (labels.at(i)->added == false) {
                 addTextToBuffer(labels.at(i));
-            }
+            } 
             else if (labels.at(i)->update) {
                 updateLabel(labels.at(i));
             }
@@ -324,6 +742,36 @@ namespace SynGUI {
                 glDrawArrays(GL_LINES, 0, 8);
             }
         }
+
+
+        for (int i = 0; i < labelsToDelete.size(); i++) {
+
+            TextLabel* label = labelsToDelete.at(i);
+            int index = label->index;
+
+            //Calculate how far off in the buffer we are, to accomodate for label's text size
+            int bufferOffset = 0;
+
+            if (label->added) {
+                bufferOffset = label->bufferOffset;
+
+                glyphVertices.erase(glyphVertices.begin() + bufferOffset, glyphVertices.begin() + bufferOffset + label->text.size() * 30);
+            }
+            //Remove label from labels vector
+            labels.erase(labels.begin() + index);
+
+            //Change index variable for all labels
+            for (int i = index; i < labels.size(); i++) {
+                labels.at(i)->index--;
+                labels.at(i)->bufferOffset -= bufferOffset + label->text.size() * 30;
+            }
+
+            isUpdateBuffer = true;
+
+            delete labelsToDelete.at(i);
+        }
+
+        labelsToDelete.clear();
     }
 
     void TextRenderer::updateLabel(TextLabel* label) {
@@ -385,16 +833,16 @@ namespace SynGUI {
 
             switch (label->textAlignment) {
             case TextAlignment::LEFT:
-                bufferTextLeftAligned(label, glm::vec2(posOffsetX, posOffsetY));
+                bufferTextLeftAlignedUpdate(label, glm::vec2(posOffsetX, posOffsetY));
                 break;
             case TextAlignment::RIGHT:
-                bufferTextRightAligned(label, glm::vec2(posOffsetX, posOffsetY));
+                bufferTextRightAlignedUpdate(label, glm::vec2(posOffsetX, posOffsetY));
                 break;
             case TextAlignment::CENTER:
-                bufferTextCenterAligned(label, glm::vec2(posOffsetX, posOffsetY));
+                bufferTextCenterAlignedUpdate(label, glm::vec2(posOffsetX, posOffsetY));
                 break;
             default:
-                bufferTextLeftAligned(label, glm::vec2(posOffsetX, posOffsetY));
+                bufferTextLeftAlignedUpdate(label, glm::vec2(posOffsetX, posOffsetY));
                 break;
             }
 
@@ -407,7 +855,7 @@ namespace SynGUI {
         label->update = false;
     }
 
-    void TextRenderer::bufferTextRightAligned(TextLabel* label, glm::vec2 origin) {
+    void TextRenderer::bufferTextRightAlignedUpdate(TextLabel* label, glm::vec2 origin) {
         int bufferOffset = label->bufferOffset;
         float offsetX = 0;
         float offsetY = 0;
@@ -594,7 +1042,7 @@ namespace SynGUI {
         }
     }
 
-    void TextRenderer::bufferTextCenterAligned(TextLabel* label, glm::vec2 origin) {
+    void TextRenderer::bufferTextCenterAlignedUpdate(TextLabel* label, glm::vec2 origin) {
         int bufferOffset = label->bufferOffset;
         float offsetX = 0;
         float offsetY = 0;
@@ -785,7 +1233,7 @@ namespace SynGUI {
         }
     }
 
-    void TextRenderer::bufferTextLeftAligned(TextLabel* label, glm::vec2 origin) {
+    void TextRenderer::bufferTextLeftAlignedUpdate(TextLabel* label, glm::vec2 origin) {
 
         int bufferOffset = label->bufferOffset;
         float offsetX = 0;
@@ -920,7 +1368,7 @@ namespace SynGUI {
     }
 
     void TextRenderer::removeText(TextLabel* label) {
-        int index = label->index;
+        /*int index = label->index;
 
         //Calculate how far off in the buffer we are, to accomodate for label's text size
         int bufferOffset = 0;
@@ -939,7 +1387,9 @@ namespace SynGUI {
             labels.at(i)->bufferOffset -= bufferOffset + label->text.size() * 30;
         }
 
-        isUpdateBuffer = true;
+        isUpdateBuffer = true;*/
+
+        labelsToDelete.push_back(label);
     }
 
     void TextRenderer::updateBuffer() {

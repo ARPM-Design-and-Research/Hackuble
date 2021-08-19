@@ -356,6 +356,8 @@ void IconRenderer::removeIcon(Icon* icon) {
     }
 
     isUpdateBuffer = true;
+
+    delete icon;
 }
 
 Icon* IconRenderer::addIcon(const std::string& iconName, glm::vec2 pos, glm::vec2 size, Pivot pivot, float zDepth) {

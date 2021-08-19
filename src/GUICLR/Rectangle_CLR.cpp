@@ -11,7 +11,6 @@ GUICLR::Rectangle::Rectangle(Vector2 pos, Vector2 size, float r1, float r2, floa
 //TODO: Check if this works
 GUICLR::Rectangle::~Rectangle() {
 	GuiContext::GetInstance()->getGUI()->removeRectangle(_rectangle);
-	delete _rectangle;
 	_rectangle = nullptr;
 }
 

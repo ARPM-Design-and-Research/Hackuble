@@ -9,7 +9,8 @@ GUICLR::Bezier::Bezier(Vector2 v1, Vector2 v2, Vector2 v3, Vector2 v4, Color col
 }
 
 GUICLR::Bezier::~Bezier() {
-
+	GuiContext::GetInstance()->getGUI()->removeBezier(_bezier);
+	_bezier = nullptr;
 }
 
 void GUICLR::Bezier::setColor(Color _color) {

@@ -250,7 +250,7 @@ int GuiBase::startGui()
 	IconRenderer::GetInstance()->addIcon("text.png", glm::vec2(45.0f, 0.0f));*/
 	//BezierRenderer::GetInstance()->addBezierCurve(glm::vec2(0.0f), glm::vec2(20.0f, 20.0f), glm::vec2(80.0f, 20.0f), glm::vec2(100.0f, 0.0f));
 	
-	fpsCounter = TextRenderer::GetInstance()->addText("100.00", glm::vec2(200.0f,50.0f), glm::vec2(100.0f,50.0f),25.0f);
+	fpsCounter = TextRenderer::GetInstance()->addText("1000.0000", glm::vec2(200.0f,50.0f), glm::vec2(100.0f,50.0f),25.0f, TextAlignment::LEFT);
 
 	int frame = 0;
 

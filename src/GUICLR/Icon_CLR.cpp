@@ -15,7 +15,6 @@ GUICLR::Icon::Icon(String^ iconName, Vector2 pos, Vector2 size) {
 
 GUICLR::Icon::~Icon() {
 	GuiContext::GetInstance()->getGUI()->removeIcon(_icon);
-	delete _icon;
 	_icon = nullptr;
 }
 

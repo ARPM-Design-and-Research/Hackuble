@@ -254,6 +254,8 @@ void BezierRenderer::removeBezierCurve(Bezier* bezier) {
 	}
 
 	isUpdateBuffer = true;
+
+	delete bezier;
 }
 
 //Cleanup - this is called automatically by GUIRenderer

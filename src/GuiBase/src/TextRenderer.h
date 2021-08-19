@@ -48,9 +48,13 @@ namespace SynGUI {
 		//TODO: Glitching on rapid updates
 		void updateBuffer();
 
-		void bufferTextLeftAligned(TextLabel* label, glm::vec2 origin);
-		void bufferTextRightAligned(TextLabel* label, glm::vec2 origin);
-		void bufferTextCenterAligned(TextLabel* label, glm::vec2 origin);
+		void bufferTextLeftAlignedUpdate(TextLabel* label, glm::vec2 origin);
+		void bufferTextRightAlignedUpdate(TextLabel* label, glm::vec2 origin);
+		void bufferTextCenterAlignedUpdate(TextLabel* label, glm::vec2 origin);
+
+		void bufferTextLeftAlignedAdd(TextLabel* label, glm::vec2 origin);
+		void bufferTextRightAlignedAdd(TextLabel* label, glm::vec2 origin);
+		void bufferTextCenterAlignedAdd(TextLabel* label, glm::vec2 origin);
 
 		int shader_mvp;
 		int shader_texturePos;
@@ -58,6 +62,8 @@ namespace SynGUI {
 		bool isUpdateBuffer = false;
 
 		void checkGlyph(char c);
+
+		std::vector<TextLabel*> labelsToDelete;
 
 	protected:
 

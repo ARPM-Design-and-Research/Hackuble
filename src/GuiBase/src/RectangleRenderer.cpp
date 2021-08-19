@@ -434,6 +434,8 @@ void RectangleRenderer::removeRectangle(Rectangle* rectangle) {
 	}
 
 	isUpdateBuffer = true;
+
+	delete rectangle;
 }
 
 void RectangleRenderer::updateBuffer() {

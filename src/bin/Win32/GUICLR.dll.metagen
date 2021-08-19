@@ -86,6 +86,7 @@ Class GUICLR.Icon: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   Methods:
     setPosition(Vector2): PrivateScope, Public, HideBySig
     translate(Vector2): PrivateScope, Public, HideBySig
+    setSize(Vector2): PrivateScope, Public, HideBySig
 Class GUICLR.Rectangle: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :GUICLR.RenderElement
     Void .ctor(System.Numerics.Vector2, System.Numerics.Vector2, Single, Single, Single, Single, System.Drawing.Color): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName

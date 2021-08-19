@@ -14,6 +14,7 @@ namespace GUICLR {
 
 	Text::~Text() {
 		GuiContext::GetInstance()->getGUI()->removeText(_text);
+		_text = nullptr;
 	}
 
 	void Text::updateText(String^ text) {

@@ -42,7 +42,7 @@ namespace Hackuble.Win.Controls
         int pivotY;
         System.Drawing.Rectangle area;
         Bitmap drawingBitmap;
-        GUICLR.Rectangle rectangle1;
+        GUICLR.Text text;
 
         public static bool InVisualStudio()
         {
@@ -76,7 +76,7 @@ namespace Hackuble.Win.Controls
 
             GUICLR.Rectangle rectangle = new GUICLR.Rectangle(new Vector2(-100,-100),new Vector2(100,50),5.0f,5.0f,5.0f,5.0f,Color.Aqua);
 
-            rectangle1 = new GUICLR.Rectangle(new Vector2(0,0),new Vector2(100,100),2.0f,2.0f,2.0f,2.0f,Color.OrangeRed);
+            GUICLR.Rectangle rectangle1 = new GUICLR.Rectangle(new Vector2(0,0),new Vector2(100,100),2.0f,2.0f,2.0f,2.0f,Color.OrangeRed);
 
             //GUICLR.Rectangle rectangle2 = new GUICLR.Rectangle(new Vector2(100,100),new Vector2(100,50), 10.0f,10.0f,10.0f,10.0f, Color.Green);
 
@@ -88,14 +88,17 @@ namespace Hackuble.Win.Controls
 
             GUICLR.Icon icon1 = new GUICLR.Icon("add.png", new Vector2(100, -100), new Vector2(50, 50));
 
-            context.displayTextBoundingBox(true);
+            context.displayTextBoundingBox(false);
 
-            GUICLR.Text text = new GUICLR.Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore"+
+           text = new GUICLR.Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore"+
      "magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate"+
      "velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia"+
-     "deserunt mollit anim id est laborum.", new Vector2(0, 200), new Vector2(200, 100), 10, TextAlignment.RIGHT);
+     "deserunt mollit anim id est laborum.", new Vector2(0, 200), new Vector2(200, 100), 10, TextAlignment.LEFT);
 
-            //rectangle.deleteRectangle();
+            //text.Dispose();
+            rectangle.Dispose();
+            icon1.Dispose();
+            bezier.Dispose();
 
         }
 
@@ -153,7 +156,7 @@ namespace Hackuble.Win.Controls
                 context.onMouseMove(e.X, e.Y, (int)e.Button);
 
                 Vector2 worldMouse = context.screenToWorldSpace(new Vector2(e.X, e.Y));
-                rectangle1.setPosition(worldMouse);
+                text.setPosition(worldMouse);
 
                 this.Refresh();
             }
