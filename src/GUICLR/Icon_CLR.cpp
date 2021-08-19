@@ -32,3 +32,10 @@ void GUICLR::Icon::translate(Vector2 trans) {
 
 	_icon->translate(glm::vec2(trans.X, trans.Y));
 }
+
+void GUICLR::Icon::setSize(Vector2 size) {
+	if (_icon == nullptr)
+		throw gcnew NullReferenceException("Icon is not initialized or has been deleted");
+
+	_icon->setSize(glm::vec2(size.X, size.Y));
+}

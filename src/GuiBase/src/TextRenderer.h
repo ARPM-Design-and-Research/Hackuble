@@ -44,6 +44,8 @@ namespace SynGUI {
 		//TODO: figure out how to sequentially put vertices
 		std::vector<float> glyphVertices;
 		void addTextToBuffer(TextLabel* label);
+
+		//TODO: Glitching on rapid updates
 		void updateBuffer();
 
 		void bufferTextLeftAligned(TextLabel* label, glm::vec2 origin);

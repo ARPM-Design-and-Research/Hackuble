@@ -141,8 +141,6 @@ namespace SynGUI {
     */
     void TextRenderer::addTextToBuffer(TextLabel* _label) {
 
-        //TODO: Text- Bounding Box Logic and Wrapping
-        //TODO: Text- Left and Right Align
         TextLabel* label = _label;
 
         const char* txt = label->text.c_str();
@@ -283,9 +281,6 @@ namespace SynGUI {
             }
         }
 
-        //TODO: need to figure out right number of vertices to render
-        //glDrawArrays(GL_TRIANGLES, 0, glyphVertices.size()/5);
-
 
         //Draw Glyph Rects
         if (glyphDebug) {
@@ -331,8 +326,6 @@ namespace SynGUI {
         }
     }
 
-    //TODO: need to combine into one function call (addText)
-    //TODO: need to think about what happens when update has text which is shorter
     void TextRenderer::updateLabel(TextLabel* label) {
         int index = label->index;
 
@@ -360,9 +353,6 @@ namespace SynGUI {
         }
         else {
             //Or else just update the values in the buffer
-
-            //TODO: Text- Bounding Box Logic and Wrapping
-           //TODO: Text- Left and Right Align
 
             float totalWidth = label->getTotalWidth();
 
@@ -392,8 +382,6 @@ namespace SynGUI {
 
             label->text = label->updatedText;
 
-
-            //TODO: Center Alignment
 
             switch (label->textAlignment) {
             case TextAlignment::LEFT:

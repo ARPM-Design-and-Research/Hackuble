@@ -31,13 +31,7 @@ namespace SynGUI {
 	public:
 		RenderElement();
 
-		//void setPosition(glm::vec2 pos);
-		//void translate(glm::vec2 translate);
 		void setZDepth(float depth);
 		void setVisible(bool visible);
-
-		//void setBox(glm::vec2 c1, glm::vec2 c2);
-		//BoundingBox box;
-		//TODO: Add set Size
 	};
 }

@@ -122,7 +122,6 @@ void GuiBase::OnMouseWheel(std::shared_ptr<MouseEvent> eventArgs) {
 std::shared_ptr<BaseWindow> GuiBase::addWindow(std::string title) {
 
 	maxWindow++;
-	//TODO: Fix Memory leaks for BaseWindow
 	std::shared_ptr<BaseWindow> windowComp = std::make_shared<BaseWindow>(title, "add.png", glm::vec2(120.0f, 70.0f), glm::vec2(0,0), glm::vec3(1.0f), 0.001f * (float)(maxWindow + 1));
 	windows.push_back(windowComp);
 

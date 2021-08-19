@@ -41,7 +41,6 @@ namespace GUICLR {
 
 		void displayTextBoundingBox(bool visible);
 		void displayTextGlyphBox(bool visible);
-		// TODO: Add your methods for this class here.
 	};
 }
 

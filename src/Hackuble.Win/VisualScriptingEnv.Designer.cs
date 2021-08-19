@@ -114,7 +114,7 @@ namespace Hackuble.Win
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.VisualScriptingEnv_FormClosed);
             this.Load += new System.EventHandler(this.VisualScriptingEnv_Load);
             this.ResizeEnd += new System.EventHandler(this.VisualScriptingEnv_ResizeEnd);
-            this.SizeChanged += new System.EventHandler(this.VisualScriptingEnv_ResizeEnd);
+            //this.SizeChanged += new System.EventHandler(this.VisualScriptingEnv_ResizeEnd);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.VisualScriptingEnv_Paint);
             this.Resize += new System.EventHandler(this.VisualScriptingEnv_Resize);
             this.statusStrip1.ResumeLayout(false);

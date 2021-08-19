@@ -18,6 +18,11 @@ void Icon::setPosition(glm::vec2 _pos) {
 	update = true;
 }
 
+void Icon::setSize(glm::vec2 _size) {
+	size = _size;
+	update = true;
+}
+
 void Icon::translate(glm::vec2 translate) {
 	pos += translate;
 

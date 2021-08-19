@@ -29,7 +29,6 @@ void BezierRenderer::init() {
 	GLCall(shader_mvp = glGetUniformLocation(BezierShader, "u_mvp"));
 	ASSERT(shader_mvp != -1);
 
-	//TODO: set resolution automatically
 	GLCall(shader_res = glGetUniformLocation(BezierShader, "u_resolution"));
 	ASSERT(shader_res != -1);
 
@@ -202,8 +201,6 @@ void BezierRenderer::updateBezierCurve(Bezier* bezier) {
 
 		counter++;
 	}
-
-	//TODO: Algorithm causes a problem with point V0 being at (0,0) or multiple of 30
 
 	//Push last point in twice
 	//So that GL_LINES_STRIP doesnt extend to next line

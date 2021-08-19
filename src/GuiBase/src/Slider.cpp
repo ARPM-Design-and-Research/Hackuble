@@ -6,7 +6,6 @@
 
 using namespace SynGUI;
 
-//TODO: Figure out a JSON format for describing graphic elements. It is mostly offsets and size relative to the slider position and size
 Slider::Slider(const std::string& _label, SliderState _sliderState, glm::vec2 _pos, glm::vec2 _size, float _currentValue, float _startValue, float _endValue, float layer) {
 
 	label = _label;

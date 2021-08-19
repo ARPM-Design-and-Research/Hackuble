@@ -12,7 +12,6 @@ std::shared_ptr<Camera> Camera::camera_ = nullptr;
 //Called when window is resized to recalculate the matrices
 void Camera::setWindowSize(glm::vec2 size) {
 
-	//TODO: Need to fix camera position when window is resized
 	//position.x += (-size.x + windowSize.x)/zoom.x;
 	//position.y += (-size.y + windowSize.y )/ zoom.x;
 

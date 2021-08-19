@@ -311,7 +311,7 @@ void GuiContext::createContext() {
 	OutputDebugString(out);
 
 	//SetWindowText(WND, reinterpret_cast<LPCSTR>(glGetString(GL_VERSION)));
-	ShowWindow(WND, SW_SHOW);
+	//ShowWindow(WND, SW_SHOW);
 
 
 	MSG msg;

@@ -17,6 +17,7 @@ namespace GUICLR {
 
 		void setPosition(Vector2 pos);
 		void translate(Vector2 translate);
+		void setSize(Vector2 size);
 
 	};
 }

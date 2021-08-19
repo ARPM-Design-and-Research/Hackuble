@@ -301,7 +301,6 @@ void IconRenderer::deinit() {
 IconInfo IconRenderer::getIconInfo(const std::string& iconName) {
     IconInfo info;
 
-    //TODO: When an iconName is supplied which doesn't exist, it is not throwing an error as expected
     try {
         checkIconSet(iconName);
         quicktype::FrameValue frameValue = iconMetadata.at(iconName);

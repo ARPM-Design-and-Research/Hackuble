@@ -26,6 +26,7 @@ namespace SynGUI {
 
 	public:
 		void setPosition(glm::vec2 pos);
+		void setSize(glm::vec2 size);
 		void translate(glm::vec2 translate);
 	};
 }
