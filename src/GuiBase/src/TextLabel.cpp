@@ -9,11 +9,10 @@ namespace SynGUI {
         updatedText = _text;
         pos = _pos;
         pivot = _pivot;
-        zDepth = _zDepth;
+        setZDepth(_zDepth);
         fontSize = _fontSize;
         textAlignment = _alignment;
 
-        //TODO: Add pivot functionality
         box.x0 = _pos.x;
         box.y0 = _pos.y;
 
@@ -30,7 +29,7 @@ namespace SynGUI {
         updatedText = _text;
         pos = _pos;
         pivot = _pivot;
-        zDepth = _zDepth;
+        setZDepth(_zDepth);
         fontSize = _fontSize;
         textAlignment = _alignment;
 

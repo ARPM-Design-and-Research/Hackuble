@@ -148,18 +148,20 @@ std::shared_ptr<SynGUI::GuiBase> GuiContext::getGUI() {
 
 void GuiContext::createContext() {
 
+	quit = false;
+
 	HINSTANCE hInstance = GetModuleHandle(NULL);
 
-	WNDCLASSEX wcex;
+	WNDCLASS wcex;
 	ZeroMemory(&wcex, sizeof(wcex));
-	wcex.cbSize = sizeof(wcex);
+	//wcex.cbSize = sizeof(wcex);
 	wcex.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
 	wcex.lpfnWndProc = window_procedure;
 	wcex.hInstance = hInstance;
 	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wcex.lpszClassName = L"Core";
 
-	LPTSTR windowClass = MAKEINTATOM(RegisterClassEx(&wcex));
+	LPTSTR windowClass = MAKEINTATOM(RegisterClass(&wcex));
 
 	if (windowClass == 0) {
 		OutputDebugString(L"registerClass() failed.");
@@ -353,6 +355,15 @@ void GuiContext::createContext() {
 	initialized = false;
 
 	gui->stopGui();
+
+	wglMakeCurrent(NULL, NULL);
+	wglDeleteContext(RC);
+	ReleaseDC(WND, DC);
+	DestroyWindow(WND);
+
+	UnregisterClass(windowClass, hInstance);
+
+	guiContext_ = nullptr;
 	/* ********** */
 }
 

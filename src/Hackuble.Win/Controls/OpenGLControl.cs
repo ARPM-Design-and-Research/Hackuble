@@ -76,7 +76,7 @@ namespace Hackuble.Win.Controls
                 this.DoubleBuffered = true;
             }
 
-            rectangle = new GUICLR.Rectangle(new Vector2(-100,-100),new Vector2(100,50),5.0f,5.0f,5.0f,5.0f,Pivot.CENTER, Color.Aqua);
+            /*rectangle = new GUICLR.Rectangle(new Vector2(0,0),new Vector2(100,50),25.0f,25.0f,25.0f,25.0f,Pivot.TOP_LEFT, Color.Aqua);
 
             GUICLR.Rectangle rectangle1 = new GUICLR.Rectangle(new Vector2(0,0),new Vector2(100,100),2.0f,2.0f,2.0f,2.0f,Pivot.TOP_LEFT,Color.OrangeRed);
 
@@ -100,7 +100,7 @@ namespace Hackuble.Win.Controls
             //text.Dispose();
             //rectangle.Dispose();
             icon1.Dispose();
-            bezier.Dispose();
+            bezier.Dispose();*/
 
         }
 
@@ -158,7 +158,7 @@ namespace Hackuble.Win.Controls
                 context.onMouseMove(e.X, e.Y, (int)e.Button);
 
                 Vector2 worldMouse = context.screenToWorldSpace(new Vector2(e.X, e.Y));
-                text.setPosition(worldMouse);
+                //text.setPosition(worldMouse);
 
                 this.Refresh();
             }

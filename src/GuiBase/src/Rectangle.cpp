@@ -13,7 +13,8 @@ Rectangle::Rectangle(glm::vec2 pos_, glm::vec2 size_, float r0_, float r1_, floa
 	r2 = r2_;
 	r3 = r3_;
 	color = color_;
-	zDepth = zDepth_;
+	//zDepth = zDepth_;
+	setZDepth(zDepth_);
 	pivot = _pivot;
 }
 
@@ -66,7 +67,6 @@ void Rectangle::translate(glm::vec2 translate) {
 }
 
 void Rectangle::setSize(glm::vec2 _size) {
-	//TODO: Add pivot functionality
 	size = _size;
 
 	setWithPivot(pos, size);

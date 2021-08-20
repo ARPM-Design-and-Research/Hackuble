@@ -72,6 +72,10 @@ glm::mat4 Camera::getZoomMatrix() {
 	return zoomMat;
 }
 
+float Camera::getZoom() {
+	return zoom.x;
+}
+
 glm::mat4 Camera::getProjectionMatrix() {
 	return proj;
 }
@@ -122,6 +126,7 @@ void Camera::OnMouseWheel(std::shared_ptr<MouseEvent>  eventArgs) {
 
 	if (!panning) {
 		zoom += eventArgs->wheelDelta / 480.0f;
+		zoom.z = 1.0f;
 
 		zoom = glm::clamp(zoom, 0.5f, 5.0f);
 

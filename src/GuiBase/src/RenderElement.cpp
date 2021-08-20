@@ -2,6 +2,7 @@
 
 #include "RenderElement.h"
 #include <iostream>
+#include "Camera.h"
 
 using namespace SynGUI;
 
@@ -10,7 +11,6 @@ RenderElement::RenderElement() {
 }
 
 /*void RenderElement::setPosition(glm::vec2 _pos) {
-	//TODO: Add pivot functionality
 	/*pos = _pos;
 	
 	float width = box.x1 - box.x0;

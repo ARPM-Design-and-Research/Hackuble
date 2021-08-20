@@ -66,6 +66,7 @@ namespace SynGUI {
 		glm::mat4 getMVP();
 		glm::mat4 getViewMatrix();
 		glm::mat4 getZoomMatrix();
+		float getZoom();
 
 		glm::vec3 getPosition();
 

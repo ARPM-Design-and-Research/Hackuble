@@ -14,7 +14,8 @@ Bezier::Bezier(glm::vec2 v1, glm::vec2 v2, glm::vec2 v3, glm::vec2 v4, glm::vec3
 
 	resolution = res;
 
-	zDepth = 0.0f;
+	//zDepth = 0.0f;
+	setZDepth(0.0f);
 
 	color = col;
 }

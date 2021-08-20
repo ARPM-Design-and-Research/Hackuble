@@ -173,7 +173,6 @@ void IconRenderer::addIconToBuffer(Icon* _icon) {
     glm::vec2 t4 = glm::vec2((iconInfo.pos.x + iconInfo.size.x) / atlasSize.x, -iconInfo.pos.y / atlasSize.y);
 
 
-    //TODO: Add Pivot Functionality
     iconVertices.push_back(p1.x);
     iconVertices.push_back(p1.y);
     iconVertices.push_back(_icon->zDepth);

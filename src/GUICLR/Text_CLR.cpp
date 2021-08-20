@@ -8,7 +8,7 @@ using namespace msclr::interop;
 namespace GUICLR {
 
 	Text::Text(String^ _textStr, Vector2 _pos, Vector2 _size, float _fontSize, TextAlignment alignment, GUICLR::Pivot pivot) {
-		_text = GuiContext::GetInstance()->getGUI()->addText(marshal_as<std::string>(_textStr), glm::vec2(_pos.X, _pos.Y), glm::vec2(_size.X, _size.Y), _fontSize, (SynGUI::TextAlignment)alignment, (SynGUI::Pivot) pivot);
+		_text = GuiContext::GetInstance()->getGUI()->addText(marshal_as<std::string>(_textStr), glm::vec2(_pos.X, _pos.Y), glm::vec2(_size.X, _size.Y), _fontSize, (SynGUI::TextAlignment)alignment, (SynGUI::Pivot) pivot, 0.1f);
 		_renderElement = _text;
 	}
 

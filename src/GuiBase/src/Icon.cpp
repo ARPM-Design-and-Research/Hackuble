@@ -7,7 +7,8 @@ using namespace SynGUI;
 Icon::Icon(const std::string& name, glm::vec2 _pos, glm::vec2 _size, Pivot _pivot, float _zDepth) {
 	pos = _pos;
 	pivot = _pivot;
-	zDepth = _zDepth;
+	//zDepth = _zDepth;
+	setZDepth(_zDepth);
 	iconName = name;
 	size = _size;
 }

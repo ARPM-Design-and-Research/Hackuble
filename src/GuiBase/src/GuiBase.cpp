@@ -215,7 +215,7 @@ void GuiBase::render() {
 
 	lastTime = t;
 
-	fpsCounter->updateText(std::to_string(1000/delta));
+	//fpsCounter->updateText(std::to_string(1000/delta));
 	//fpsCounter->updateText(std::to_string(Camera::GetInstance()->zoom.x));
 
 }
@@ -250,7 +250,9 @@ int GuiBase::startGui()
 	IconRenderer::GetInstance()->addIcon("text.png", glm::vec2(45.0f, 0.0f));*/
 	//BezierRenderer::GetInstance()->addBezierCurve(glm::vec2(0.0f), glm::vec2(20.0f, 20.0f), glm::vec2(80.0f, 20.0f), glm::vec2(100.0f, 0.0f));
 	
-	fpsCounter = TextRenderer::GetInstance()->addText("1000.0000", glm::vec2(200.0f,50.0f), glm::vec2(100.0f,50.0f),25.0f, TextAlignment::LEFT);
+	fpsCounter = TextRenderer::GetInstance()->addText("1000.0000", glm::vec2(0.0f,10.0f), glm::vec2(100.0f,50.0f),25.0f, TextAlignment::LEFT,Pivot::TOP_LEFT,0.9f);
+
+	RectangleRenderer::GetInstance()->addRectangle(glm::vec2(0.0f), glm::vec2(100.0f), 0.0f, 0.0f, 0.0f, 0.0f, glm::vec3(1.0f, 0.0f, 0.0f), Pivot::TOP_LEFT, 0.1f);
 
 	int frame = 0;
 
