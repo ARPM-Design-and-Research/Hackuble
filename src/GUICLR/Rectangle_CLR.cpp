@@ -3,8 +3,8 @@
 #include "Rectangle_CLR.h"
 #include "GuiContext.h"
 
-GUICLR::Rectangle::Rectangle(Vector2 pos, Vector2 size, float r1, float r2, float r3, float r4, Color color) {
-	_rectangle = GuiContext::GetInstance()->getGUI()->addRectangle(glm::vec2(pos.X,pos.Y), glm::vec2(size.X,size.Y), r1, r2, r3, r4, glm::vec3(color.R/255.0f,color.G/255.0f,color.B/255.0f), 0.001f);
+GUICLR::Rectangle::Rectangle(Vector2 pos, Vector2 size, float r1, float r2, float r3, float r4, GUICLR::Pivot pivot, Color color) {
+	_rectangle = GuiContext::GetInstance()->getGUI()->addRectangle(glm::vec2(pos.X,pos.Y), glm::vec2(size.X,size.Y), r1, r2, r3, r4, glm::vec3(color.R/255.0f,color.G/255.0f,color.B/255.0f), (SynGUI::Pivot)pivot, 0.001f);
 	_renderElement = _rectangle;
 }
 
@@ -53,4 +53,11 @@ void GUICLR::Rectangle::setRadius(float r0, float r1, float r2, float r3) {
 		throw gcnew NullReferenceException("Rectangle is not initialized or has been deleted");
 
 	_rectangle->setRadius(r0, r1, r2, r3);
+}
+
+void GUICLR::Rectangle::setPivot(GUICLR::Pivot pivot) {
+	if (_rectangle == nullptr)
+		throw gcnew NullReferenceException("Rectangle is not initialized or has been deleted");
+
+	_rectangle->setPivot((SynGUI::Pivot)pivot);
 }

@@ -136,8 +136,8 @@ std::shared_ptr<BaseWindow> GuiBase::addWindow(std::string title) {
 	return windowComp;
 }
 
-SynGUI::Rectangle* GuiBase::addRectangle(glm::vec2 pos, glm::vec2 size, float r1, float r2, float r3, float r4, glm::vec3 col, float zDepth) {
-	return RectangleRenderer::GetInstance()->addRectangle(pos, size, r1, r2, r3, r4, col, zDepth);
+SynGUI::Rectangle* GuiBase::addRectangle(glm::vec2 pos, glm::vec2 size, float r1, float r2, float r3, float r4, glm::vec3 col, Pivot pivot, float zDepth) {
+	return RectangleRenderer::GetInstance()->addRectangle(pos, size, r1, r2, r3, r4, col, pivot, zDepth);
 }
 
 void GuiBase::removeRectangle(Rectangle* rectangle) {
@@ -160,8 +160,8 @@ void GuiBase::removeIcon(Icon* icon) {
 	IconRenderer::GetInstance()->removeIcon(icon);
 }
 
-SynGUI::TextLabel* GuiBase::addText(const std::string& _text, glm::vec2 _pos, glm::vec2 _size, float _fontSize, TextAlignment alignment, float _zDepth) {
-	return TextRenderer::GetInstance()->addText(_text, _pos, _size, _fontSize, alignment, _zDepth);
+SynGUI::TextLabel* GuiBase::addText(const std::string& _text, glm::vec2 _pos, glm::vec2 _size, float _fontSize, TextAlignment alignment, Pivot pivot, float _zDepth) {
+	return TextRenderer::GetInstance()->addText(_text, _pos, _size, _fontSize, alignment, pivot,_zDepth);
 }
 
 void GuiBase::removeText(TextLabel* label) {

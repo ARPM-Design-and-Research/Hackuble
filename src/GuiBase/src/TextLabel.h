@@ -34,16 +34,20 @@ namespace SynGUI {
 		std::string updatedText;
 		float fontSize;
 
+		Pivot pivot;
 		bool added = false;
+
+		void setWithPivot(glm::vec2 _pos, glm::vec2 _size);
 
 	public:
 
 		TextLabel(const std::string& _text, float fontSize, glm::vec2 pos = glm::vec2(0.0f, 0.0f), TextAlignment alignment = TextAlignment::LEFT, Pivot pivot = Pivot::TOP_LEFT, float zDepth = 0.0f);
-		TextLabel(const std::string& _text, float _fontSize, glm::vec2 _pos, glm::vec2 _size, TextAlignment alignment = TextAlignment::LEFT, float _zDepth = 0.0f);
+		TextLabel(const std::string& _text, float _fontSize, glm::vec2 _pos, glm::vec2 _size, TextAlignment alignment = TextAlignment::LEFT, Pivot pivot = Pivot::TOP_LEFT, float _zDepth = 0.0f);
 
 
 		glm::vec2 pos;
 		BoundingBox box;
+		glm::vec2 size;
 
 		TextAlignment textAlignment;
 
@@ -59,6 +63,7 @@ namespace SynGUI {
 		void setPosition(glm::vec2 _pos);
 		void translate(glm::vec2 translate);
 		void setSize(glm::vec2 _size);
+		void setPivot(Pivot pivot);
 
 		std::string getCurrentText();
 	};

@@ -13,7 +13,7 @@ namespace GUICLR {
 	private:
 		SynGUI::Rectangle* _rectangle = nullptr;
 	public:
-		Rectangle(Vector2 pos, Vector2 size, float r1, float r2, float r3, float r4, Color color);
+		Rectangle(Vector2 pos, Vector2 size, float r1, float r2, float r3, float r4, GUICLR::Pivot pivot, Color color);
 		~Rectangle();
 
 		void setColor(Color color_);
@@ -23,5 +23,6 @@ namespace GUICLR {
 
 		void setPosition(Vector2 pos);
 		void translate(Vector2 translate);
+		void setPivot(GUICLR::Pivot pivot);
 	};
 }

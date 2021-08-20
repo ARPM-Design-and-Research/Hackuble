@@ -21,13 +21,15 @@ namespace SynGUI {
 
         box.x1 = box.x0 + totalWidth;
         box.y1 = box.y0 + fontSize * 1.00f;
+
+        size = glm::vec2(box.x1 - box.x0, box.y1 - box.y0);
     }
 
-    TextLabel::TextLabel(const std::string& _text, float _fontSize, glm::vec2 _pos, glm::vec2 _size, TextAlignment _alignment, float _zDepth) {
+    TextLabel::TextLabel(const std::string& _text, float _fontSize, glm::vec2 _pos, glm::vec2 _size, TextAlignment _alignment, Pivot _pivot, float _zDepth) {
         text = _text;
         updatedText = _text;
         pos = _pos;
-        pivot = Pivot::TOP_LEFT;
+        pivot = _pivot;
         zDepth = _zDepth;
         fontSize = _fontSize;
         textAlignment = _alignment;
@@ -37,6 +39,8 @@ namespace SynGUI {
 
         box.x1 = box.x0 + _size.x;
         box.y1 = box.y0 + _size.y;
+        
+        size = _size;
     }
 
     void TextLabel::setAlignment(TextAlignment alignment) {
@@ -101,36 +105,45 @@ namespace SynGUI {
     }
 
     void TextLabel::setPosition(glm::vec2 _pos) {
-        //pos = _pos;
+        pos = _pos;
 
-        float width = box.x1 - box.x0;
+        setWithPivot(pos, size);
+
+        /*float width = box.x1 - box.x0;
         float height = box.y1 - box.y0;
 
         box.x0 = _pos.x;
         box.y0 = _pos.y;
         box.x1 = _pos.x + width;
-        box.y1 = _pos.y + height;
+        box.y1 = _pos.y + height;*/
 
         update = true;
     }
 
     void TextLabel::setSize(glm::vec2 _size) {
-        box.x1 = box.x0 + _size.x;
-        box.y1 = box.y0 + _size.y;
+
+        size = _size;
+
+        setWithPivot(pos, size);
+
+        /*box.x1 = box.x0 + _size.x;
+        box.y1 = box.y0 + _size.y;*/
 
         update = true;
     }
 
     void TextLabel::translate(glm::vec2 translate) {
-        //pos += translate;
+        pos += translate;
 
-        float width = box.x1 - box.x0;
+        setWithPivot(pos, size);
+
+        /*float width = box.x1 - box.x0;
         float height = box.y1 - box.y0;
 
         box.x0 = box.x0 + translate.x;
         box.y0 = box.y0 + translate.y;
         box.x1 = box.x1 + translate.x;
-        box.y1 = box.y1 + translate.y;
+        box.y1 = box.y1 + translate.y;*/
 
 
         update = true;
@@ -138,5 +151,36 @@ namespace SynGUI {
 
     std::string TextLabel::getCurrentText() {
         return updatedText;
+    }
+
+    void TextLabel::setWithPivot(glm::vec2 _pos, glm::vec2 _size) {
+        switch (pivot) {
+        case Pivot::TOP_LEFT:
+            pos = _pos;
+            break;
+        case Pivot::TOP_RIGHT:
+            pos = glm::vec2(_pos.x - _size.x, _pos.y);
+            break;
+        case Pivot::BOTTOM_LEFT:
+            pos = glm::vec2(_pos.x, _pos.y - _size.y);
+            break;
+        case Pivot::BOTTOM_RIGHT:
+            pos = glm::vec2(_pos.x - _size.x, _pos.y - _size.y);
+            break;
+        case Pivot::CENTER:
+            pos = glm::vec2(_pos.x - _size.x / 2.0f, _pos.y - _size.y / 2.0f);
+            break;
+        }
+
+        box.x0 = pos.x;
+        box.y0 = pos.y;
+        box.x1 = pos.x + size.x;
+        box.y1 = pos.y + size.y;
+    }
+
+    void TextLabel::setPivot(Pivot _pivot) {
+        pivot = _pivot;
+        setWithPivot(pos, size);
+        update = true;
     }
 }

@@ -7,8 +7,8 @@
 using namespace GUICLR;
 using namespace msclr::interop;
 
-GUICLR::Icon::Icon(String^ iconName, Vector2 pos, Vector2 size) {
-	_icon = GuiContext::GetInstance()->getGUI()->addIcon(marshal_as<std::string>(iconName), glm::vec2(pos.X, pos.Y), glm::vec2(size.X, size.Y), SynGUI::Pivot::TOP_LEFT, 0.001f);
+GUICLR::Icon::Icon(String^ iconName, Vector2 pos, Vector2 size, GUICLR::Pivot pivot) {
+	_icon = GuiContext::GetInstance()->getGUI()->addIcon(marshal_as<std::string>(iconName), glm::vec2(pos.X, pos.Y), glm::vec2(size.X, size.Y), (SynGUI::Pivot)pivot, 0.001f);
 	_renderElement = _icon;
 }
 
@@ -37,4 +37,11 @@ void GUICLR::Icon::setSize(Vector2 size) {
 		throw gcnew NullReferenceException("Icon is not initialized or has been deleted");
 
 	_icon->setSize(glm::vec2(size.X, size.Y));
+}
+
+void GUICLR::Icon::setPivot(GUICLR::Pivot pivot) {
+	if (_icon == nullptr)
+		throw gcnew NullReferenceException("Icon is not initialized or has been deleted");
+	
+	_icon->setPivot((SynGUI::Pivot)pivot);
 }

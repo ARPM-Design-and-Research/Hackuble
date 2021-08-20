@@ -24,8 +24,6 @@ namespace SynGUI {
 		bool update = false;
 		bool render = true;
 		//glm::vec2 pos;
-		Pivot pivot;
-
 		float zDepth;
 
 	public:

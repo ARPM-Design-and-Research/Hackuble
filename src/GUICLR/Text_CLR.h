@@ -19,7 +19,7 @@ namespace GUICLR {
 	private:
 		SynGUI::TextLabel* _text;
 	public:
-		Text(String^ _text, Vector2 _pos, Vector2 _size, float _fontSize, TextAlignment alignment);
+		Text(String^ _text, Vector2 _pos, Vector2 _size, float _fontSize, TextAlignment alignment, GUICLR::Pivot pivot);
 		~Text();
 		
 		void updateText(String^ text);
@@ -29,5 +29,6 @@ namespace GUICLR {
 		void setPosition(Vector2 _pos);
 		void translate(Vector2 translate);
 		void setSize(Vector2 _size);
+		void setPivot(GUICLR::Pivot pivot);
 	};
 }

@@ -121,7 +121,7 @@ namespace SynGUI {
 		void render();
 
 		TextLabel* addText(const std::string& text, float fontSize = 50.0f, glm::vec2 pos = glm::vec2(0.0f, 0.0f), TextAlignment alignment = TextAlignment::LEFT, Pivot _pivot = Pivot::TOP_LEFT, float zDepth = 0.0f, TextLabel* label = NULL);
-		TextLabel* addText(const std::string& _text, glm::vec2 _pos, glm::vec2 _size, float _fontSize = 50.0f, TextAlignment alignment = TextAlignment::LEFT, float _zDepth = 0.0f, TextLabel* label = NULL);
+		TextLabel* addText(const std::string& _text, glm::vec2 _pos, glm::vec2 _size, float _fontSize = 50.0f, TextAlignment alignment = TextAlignment::LEFT, Pivot _pivot = Pivot::TOP_LEFT, float _zDepth = 0.0f, TextLabel* label = NULL);
 		void removeText(TextLabel* label);
 
 		void enableGlyphBox(bool visible);

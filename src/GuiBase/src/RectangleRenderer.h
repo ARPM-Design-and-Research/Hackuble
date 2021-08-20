@@ -70,7 +70,7 @@ namespace SynGUI {
 		void render();
 		void deinit();
 
-		Rectangle* addRectangle(glm::vec2 pos, glm::vec2 size, float r1, float r2, float r3, float r4, glm::vec3 color, float zDepth);
+		Rectangle* addRectangle(glm::vec2 pos, glm::vec2 size, float r1, float r2, float r3, float r4, glm::vec3 color, Pivot pivot, float zDepth);
 		void removeRectangle(Rectangle* rectangle);
 
 		void updateRectangle(Rectangle* rect);

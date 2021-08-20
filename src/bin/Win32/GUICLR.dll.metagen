@@ -32,6 +32,15 @@ Class GUICLR.Bezier: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     setColor(Color): PrivateScope, Public, HideBySig
     setControlPoints(Vector2, Vector2, Vector2, Vector2): PrivateScope, Public, HideBySig
     setThickness(Single): PrivateScope, Public, HideBySig
+Struct GUICLR.Pivot: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    GUICLR.Pivot CENTER = 0 : Public, Static, Literal, HasDefault
+    GUICLR.Pivot TOP_LEFT = 1 : Public, Static, Literal, HasDefault
+    GUICLR.Pivot BOTTOM_LEFT = 2 : Public, Static, Literal, HasDefault
+    GUICLR.Pivot TOP_RIGHT = 3 : Public, Static, Literal, HasDefault
+    GUICLR.Pivot BOTTOM_RIGHT = 4 : Public, Static, Literal, HasDefault
 Class GUICLR.BoundingBox: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(SynGUI.BoundingBox*): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Interfaces:
@@ -82,14 +91,15 @@ Class GUICLR.ManagedContext: AutoLayout, AnsiClass, Class, Public, BeforeFieldIn
     Dispose(): PrivateScope, Public, Final, Virtual, HideBySig
 Class GUICLR.Icon: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :GUICLR.RenderElement
-    Void .ctor(System.String, System.Numerics.Vector2, System.Numerics.Vector2): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+    Void .ctor(System.String, System.Numerics.Vector2, System.Numerics.Vector2, GUICLR.Pivot): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Methods:
     setPosition(Vector2): PrivateScope, Public, HideBySig
     translate(Vector2): PrivateScope, Public, HideBySig
     setSize(Vector2): PrivateScope, Public, HideBySig
+    setPivot(Pivot): PrivateScope, Public, HideBySig
 Class GUICLR.Rectangle: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :GUICLR.RenderElement
-    Void .ctor(System.Numerics.Vector2, System.Numerics.Vector2, Single, Single, Single, Single, System.Drawing.Color): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+    Void .ctor(System.Numerics.Vector2, System.Numerics.Vector2, Single, Single, Single, Single, GUICLR.Pivot, System.Drawing.Color): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Methods:
     setColor(Color): PrivateScope, Public, HideBySig
     setSize(Vector2): PrivateScope, Public, HideBySig
@@ -97,6 +107,7 @@ Class GUICLR.Rectangle: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     deleteRectangle(): PrivateScope, Public, HideBySig
     setPosition(Vector2): PrivateScope, Public, HideBySig
     translate(Vector2): PrivateScope, Public, HideBySig
+    setPivot(Pivot): PrivateScope, Public, HideBySig
 Class GUICLR.Slider: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Interfaces:
@@ -105,7 +116,7 @@ Class GUICLR.Slider: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Dispose(): PrivateScope, Public, Final, Virtual, HideBySig
 Class GUICLR.Text: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :GUICLR.RenderElement
-    Void .ctor(System.String, System.Numerics.Vector2, System.Numerics.Vector2, Single, GUICLR.TextAlignment): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+    Void .ctor(System.String, System.Numerics.Vector2, System.Numerics.Vector2, Single, GUICLR.TextAlignment, GUICLR.Pivot): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Methods:
     updateText(String): PrivateScope, Public, HideBySig
     setFontSize(Single): PrivateScope, Public, HideBySig
@@ -113,6 +124,7 @@ Class GUICLR.Text: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     setPosition(Vector2): PrivateScope, Public, HideBySig
     translate(Vector2): PrivateScope, Public, HideBySig
     setSize(Vector2): PrivateScope, Public, HideBySig
+    setPivot(Pivot): PrivateScope, Public, HideBySig
 Struct GUICLR.TextAlignment: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
   :System.Enum
   Fields:

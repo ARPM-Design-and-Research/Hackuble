@@ -20,7 +20,7 @@ namespace SynGUI {
 
 	private:
 		int index;
-		Rectangle(glm::vec2 pos_, glm::vec2 size_, float r0_, float r1_, float r2_, float r3_, glm::vec3 color_, float _zDepth);
+		Rectangle(glm::vec2 pos_, glm::vec2 size_, float r0_, float r1_, float r2_, float r3_, glm::vec3 color_, Pivot pivot, float _zDepth);
 		
 		glm::vec2 pos;
 		glm::vec2 size;
@@ -28,6 +28,9 @@ namespace SynGUI {
 		glm::vec3 color;
 
 		bool added = false;
+
+		Pivot pivot;
+		void setWithPivot(glm::vec2 _pos, glm::vec2 _size);
 
 	public:
 		~Rectangle();
@@ -37,5 +40,6 @@ namespace SynGUI {
 		void setColor(glm::vec3 color_);
 		void setSize(glm::vec2 size_);
 		void setRadius(float r0, float r1, float r2, float r3);
+		void setPivot(Pivot pivot);
 	};
 }

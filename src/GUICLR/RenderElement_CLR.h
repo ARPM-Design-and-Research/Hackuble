@@ -7,6 +7,14 @@ using namespace System::Numerics;
 
 namespace GUICLR {
 
+	public enum class Pivot {
+		CENTER,
+		TOP_LEFT,
+		BOTTOM_LEFT,
+		TOP_RIGHT,
+		BOTTOM_RIGHT
+	};
+
 	public ref class RenderElement {
 	protected:
 		SynGUI::RenderElement* _renderElement = nullptr;

@@ -446,8 +446,8 @@ void RectangleRenderer::updateBuffer() {
 	isUpdateBuffer = false;
 }
 
-Rectangle* RectangleRenderer::addRectangle(glm::vec2 pos, glm::vec2 size, float r1, float r2, float r3, float r4, glm::vec3 color, float zDepth) {
-	Rectangle* rect = new Rectangle(pos, size, r1, r2, r3, r4, color, zDepth);
+Rectangle* RectangleRenderer::addRectangle(glm::vec2 pos, glm::vec2 size, float r1, float r2, float r3, float r4, glm::vec3 color, Pivot pivot, float zDepth) {
+	Rectangle* rect = new Rectangle(pos, size, r1, r2, r3, r4, color, pivot, zDepth);
 	rect->index = rectangles.size();
 	rect->added = false;
 

@@ -82,7 +82,7 @@ namespace SynGUI {
 
 		bool resized = false;
 
-		Rectangle* addRectangle(glm::vec2 pos, glm::vec2 size, float r1, float r2, float r3, float r4, glm::vec3 col, float zDepth);
+		Rectangle* addRectangle(glm::vec2 pos, glm::vec2 size, float r1, float r2, float r3, float r4, glm::vec3 col, Pivot pivot, float zDepth);
 		void removeRectangle(Rectangle* rectangle);
 
 		Bezier* addBezier(glm::vec2 v1, glm::vec2 v2, glm::vec2 v3, glm::vec2 v4, glm::vec3 col, int res);
@@ -91,7 +91,7 @@ namespace SynGUI {
 		Icon* addIcon(const std::string& iconName, glm::vec2 pos, glm::vec2 size, Pivot pivot, float zDepth);
 		void removeIcon(Icon* icon);
 
-		TextLabel* addText(const std::string& _text, glm::vec2 _pos, glm::vec2 _size, float _fontSize = 50.0f, TextAlignment alignment = TextAlignment::LEFT, float _zDepth = 0.0f);
+		TextLabel* addText(const std::string& _text, glm::vec2 _pos, glm::vec2 _size, float _fontSize = 50.0f, TextAlignment alignment = TextAlignment::LEFT, Pivot pivot = Pivot::TOP_LEFT, float _zDepth = 0.0f);
 		void removeText(TextLabel* label);
 
 		void enableTextBoundingBoxDisplay(bool visible);

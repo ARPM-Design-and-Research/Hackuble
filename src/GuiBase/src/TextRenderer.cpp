@@ -148,7 +148,7 @@ namespace SynGUI {
 
         float totalWidth = label->getTotalWidth();
 
-        float posOffsetX = 0.0f;
+        /*float posOffsetX = 0.0f;
         float posOffsetY = 0.0f;
 
         if (label->pivot == Pivot::BOTTOM_LEFT) {
@@ -170,23 +170,23 @@ namespace SynGUI {
         else if (label->pivot == Pivot::BOTTOM_RIGHT) {
             posOffsetX = label->box.x1 - totalWidth;
             posOffsetY = label->box.y1;
-        }
+        }*/
 
         label->text = label->updatedText;
 
 
         switch (label->textAlignment) {
         case TextAlignment::LEFT:
-            bufferTextLeftAlignedAdd(label, glm::vec2(posOffsetX, posOffsetY));
+            bufferTextLeftAlignedAdd(label, label->pos);
             break;
         case TextAlignment::RIGHT:
-            bufferTextRightAlignedAdd(label, glm::vec2(posOffsetX, posOffsetY));
+            bufferTextRightAlignedAdd(label, label->pos);
             break;
         case TextAlignment::CENTER:
-            bufferTextCenterAlignedAdd(label, glm::vec2(posOffsetX, posOffsetY));
+            bufferTextCenterAlignedAdd(label, label->pos);
             break;
         default:
-            bufferTextLeftAlignedAdd(label, glm::vec2(posOffsetX, posOffsetY));
+            bufferTextLeftAlignedAdd(label, label->pos);
             break;
         }
 
@@ -804,7 +804,7 @@ namespace SynGUI {
 
             float totalWidth = label->getTotalWidth();
 
-            float posOffsetX = 0.0f;
+            /*float posOffsetX = 0.0f;
             float posOffsetY = 0.0f;
 
             if (label->pivot == Pivot::BOTTOM_LEFT) {
@@ -826,23 +826,23 @@ namespace SynGUI {
             else if (label->pivot == Pivot::BOTTOM_RIGHT) {
                 posOffsetX = label->box.x1 - totalWidth;
                 posOffsetY = label->box.y1;
-            }
+            }*/
 
             label->text = label->updatedText;
 
 
             switch (label->textAlignment) {
             case TextAlignment::LEFT:
-                bufferTextLeftAlignedUpdate(label, glm::vec2(posOffsetX, posOffsetY));
+                bufferTextLeftAlignedUpdate(label, label->pos);
                 break;
             case TextAlignment::RIGHT:
-                bufferTextRightAlignedUpdate(label, glm::vec2(posOffsetX, posOffsetY));
+                bufferTextRightAlignedUpdate(label, label->pos);
                 break;
             case TextAlignment::CENTER:
-                bufferTextCenterAlignedUpdate(label, glm::vec2(posOffsetX, posOffsetY));
+                bufferTextCenterAlignedUpdate(label, label->pos);
                 break;
             default:
-                bufferTextLeftAlignedUpdate(label, glm::vec2(posOffsetX, posOffsetY));
+                bufferTextLeftAlignedUpdate(label, label->pos);
                 break;
             }
 
@@ -1339,11 +1339,11 @@ namespace SynGUI {
         return label;
     }
 
-    TextLabel* TextRenderer::addText(const std::string& _text, glm::vec2 _pos, glm::vec2 _size, float _fontSize, TextAlignment alignment, float _zDepth, TextLabel* _label) {
+    TextLabel* TextRenderer::addText(const std::string& _text, glm::vec2 _pos, glm::vec2 _size, float _fontSize, TextAlignment alignment, Pivot _pivot, float _zDepth, TextLabel* _label) {
         TextLabel* label;
 
         if (_label == NULL) {
-            label = new TextLabel(_text, _fontSize, _pos, _size, alignment, _zDepth);
+            label = new TextLabel(_text, _fontSize, _pos, _size, alignment, _pivot,_zDepth);
         }
         else {
             label = _label;

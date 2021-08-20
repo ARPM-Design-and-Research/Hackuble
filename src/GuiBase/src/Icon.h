@@ -22,11 +22,16 @@ namespace SynGUI {
 		glm::vec2 pos;
 		glm::vec2 size;
 
+		Pivot pivot;
+
 		Icon(const std::string& iconName, glm::vec2 pos, glm::vec2 size, Pivot pivot, float zDepth);
+
+		void setWithPivot(glm::vec2 _pos, glm::vec2 _size);
 
 	public:
 		void setPosition(glm::vec2 pos);
 		void setSize(glm::vec2 size);
 		void translate(glm::vec2 translate);
+		void setPivot(Pivot pivot);
 	};
 }
