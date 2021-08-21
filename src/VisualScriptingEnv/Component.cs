@@ -30,12 +30,17 @@ namespace VisualScripting
         private GUICLR.Rectangle slideRectangle;
         private GUICLR.Text title;
         private GUICLR.Text valueText;
+
+        private string _title;
+        private float _currentValue;
+        private float _maxValue;
+        private float _minValue;
         public Slider(string title, float currentValue, float maxValue, float minValue) : base(new CanvasPoint(0, 0), new CanvasSize(100, 100))
         {
-            Title = title;
-            CurrentValue = currentValue;
-            MaxValue = maxValue;
-            MinValue = minValue;
+            _title = title;
+            _currentValue = currentValue;
+            _maxValue = maxValue;
+            _minValue = minValue;
 
             setupBaseRendering();
         }
@@ -45,21 +50,72 @@ namespace VisualScripting
             baseRectangle = new GUICLR.Rectangle(Position.ToVector(), Size.ToVector(), 0.0f, 2.0f, 2.0f, 0.0f, Pivot.TOP_LEFT, Color.FromArgb(60, 60, 60));
             baseRectangle.setZDepth(0.0001f);
 
-            float width = (float)Size.Width * (CurrentValue - MinValue) / (MaxValue - MinValue);
+            float width = (float)Size.Width * (_currentValue - _minValue) / (_maxValue - _minValue);
             slideRectangle = new GUICLR.Rectangle(Position.ToVector(), new CanvasSize(width, Size.Height).ToVector(), 0.0f, 2.0f, 2.0f, 0.0f, Pivot.TOP_LEFT, Color.FromArgb(52, 186, 235));
             slideRectangle.setZDepth(0.0002f);
 
-            title = new GUICLR.Text(Title + " :", Position.ToVector(), Size.ToVector(), (float)Size.Height, TextAlignment.LEFT, Pivot.TOP_LEFT);
+            title = new GUICLR.Text(_title + " :", Position.ToVector(), Size.ToVector(), (float)Size.Height, TextAlignment.LEFT, Pivot.TOP_LEFT);
             title.setZDepth(0.0003f);
 
             valueText = new GUICLR.Text(CurrentValue.ToString(), Position.ToVector(), Size.ToVector(), (float)Size.Height, TextAlignment.RIGHT, Pivot.TOP_LEFT);
             valueText.setZDepth(0.0003f);
         }
 
-        public string Title { get; set; }
-        public float CurrentValue { get; set; }
-        public float MaxValue { get; set; }
-        public float MinValue { get; set; }
+        public string Title
+        {
+            get
+            {
+                return _title;
+            }   
+            
+            set
+            {
+                _title = value;
+                title.updateText(_title);
+            }
+        }
+        public float CurrentValue
+        {
+            get
+            {
+                return _currentValue;
+            }
+
+            set
+            {
+                _currentValue = value;
+                float width = (float)Size.Width * (_currentValue - _minValue) / (_maxValue - _minValue);
+                slideRectangle.setSize(new CanvasSize(width, base.Size.Height).ToVector());
+            }
+        }
+        public float MaxValue
+        {
+            get
+            {
+                return _maxValue;
+            }
+
+            set
+            {
+                _maxValue = value;
+                float width = (float)Size.Width * (_currentValue - _minValue) / (_maxValue - _minValue);
+                slideRectangle.setSize(new CanvasSize(width, base.Size.Height).ToVector());
+            }
+        }
+        public float MinValue
+        {
+            get
+            {
+                return _minValue;
+            }
+
+            set
+            {
+                _minValue = value;
+                float width = (float)Size.Width * (_currentValue - _minValue) / (_maxValue - _minValue);
+                slideRectangle.setSize(new CanvasSize(width, base.Size.Height).ToVector());
+            }
+        }
 
         public override CanvasSize Size
         {
