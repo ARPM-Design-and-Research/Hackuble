@@ -169,6 +169,7 @@
     <ClInclude Include="src\Icon.h" />
     <ClInclude Include="src\IconRenderer.h" />
     <ClInclude Include="src\JsonParserAtlas.h" />
+    <ClInclude Include="src\Layer.h" />
     <ClInclude Include="src\Rectangle.h" />
     <ClInclude Include="src\RectangleRenderer.h" />
     <ClInclude Include="src\RenderElement.h" />

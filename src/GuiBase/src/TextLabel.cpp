@@ -3,6 +3,8 @@
 #include "TextLabel.h"
 #include "TextRenderer.h"
 
+//TODO: Fix Label Pivot point
+
 namespace SynGUI {
     TextLabel::TextLabel(const std::string& _text, float _fontSize, glm::vec2 _pos, TextAlignment _alignment, Pivot _pivot, float _zDepth) {
         text = _text;

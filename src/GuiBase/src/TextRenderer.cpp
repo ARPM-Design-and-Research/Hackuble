@@ -177,16 +177,16 @@ namespace SynGUI {
 
         switch (label->textAlignment) {
         case TextAlignment::LEFT:
-            bufferTextLeftAlignedAdd(label, label->pos);
+            bufferTextLeftAlignedAdd(label, label->pos + glm::vec2(0.0f,label->fontSize));
             break;
         case TextAlignment::RIGHT:
-            bufferTextRightAlignedAdd(label, label->pos);
+            bufferTextRightAlignedAdd(label, label->pos + glm::vec2(0.0f, label->fontSize));
             break;
         case TextAlignment::CENTER:
-            bufferTextCenterAlignedAdd(label, label->pos);
+            bufferTextCenterAlignedAdd(label, label->pos + glm::vec2(0.0f, label->fontSize));
             break;
         default:
-            bufferTextLeftAlignedAdd(label, label->pos);
+            bufferTextLeftAlignedAdd(label, label->pos + glm::vec2(0.0f, label->fontSize));
             break;
         }
 
@@ -833,16 +833,16 @@ namespace SynGUI {
 
             switch (label->textAlignment) {
             case TextAlignment::LEFT:
-                bufferTextLeftAlignedUpdate(label, label->pos);
+                bufferTextLeftAlignedUpdate(label, label->pos + glm::vec2(0.0f, label->fontSize));
                 break;
             case TextAlignment::RIGHT:
-                bufferTextRightAlignedUpdate(label, label->pos);
+                bufferTextRightAlignedUpdate(label, label->pos + glm::vec2(0.0f, label->fontSize));
                 break;
             case TextAlignment::CENTER:
-                bufferTextCenterAlignedUpdate(label, label->pos);
+                bufferTextCenterAlignedUpdate(label, label->pos + glm::vec2(0.0f, label->fontSize));
                 break;
             default:
-                bufferTextLeftAlignedUpdate(label, label->pos);
+                bufferTextLeftAlignedUpdate(label, label->pos + glm::vec2(0.0f, label->fontSize));
                 break;
             }
 

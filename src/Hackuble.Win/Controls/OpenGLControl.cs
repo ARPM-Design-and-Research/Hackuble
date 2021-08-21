@@ -88,16 +88,15 @@ namespace Hackuble.Win.Controls
             icon = new GUICLR.Icon("add.png", new Vector2(100, -100), new Vector2(50, 50), Pivot.CENTER);
             icon.setPosition(new Vector2(200, -100));
 
-            GUICLR.Icon icon1 = new GUICLR.Icon("add.png", new Vector2(100, -100), new Vector2(50, 50), Pivot.BOTTOM_RIGHT);
+            GUICLR.Icon icon1 = new GUICLR.Icon("add.png", new Vector2(100, -100), new Vector2(50, 50), Pivot.BOTTOM_RIGHT);*/
 
             context.displayTextBoundingBox(false);
 
-           text = new GUICLR.Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore"+
-     "magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate"+
-     "velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia"+
-     "deserunt mollit anim id est laborum.", new Vector2(0, 200), new Vector2(200, 100), 10, TextAlignment.LEFT, Pivot.CENTER);
-
-            //text.Dispose();
+            text = new GUICLR.Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore" +
+      "magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate" +
+      "velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia" +
+      "deserunt mollit anim id est laborum.", new Vector2(0, 200), new Vector2(200, 100), 10, TextAlignment.LEFT, Pivot.TOP_LEFT);
+            /*//text.Dispose();
             //rectangle.Dispose();
             icon1.Dispose();
             bezier.Dispose();*/
@@ -158,7 +157,7 @@ namespace Hackuble.Win.Controls
                 context.onMouseMove(e.X, e.Y, (int)e.Button);
 
                 Vector2 worldMouse = context.screenToWorldSpace(new Vector2(e.X, e.Y));
-                //text.setPosition(worldMouse);
+                text.setPosition(worldMouse);
 
                 this.Refresh();
             }

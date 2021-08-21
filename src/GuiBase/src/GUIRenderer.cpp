@@ -111,7 +111,7 @@ void GUIRenderer::render() {
 	IconRenderer::GetInstance()->render();
 
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-	//GLCall(glDisable(GL_DEPTH_TEST));
+	GLCall(glDisable(GL_DEPTH_TEST));
 	GLCall(glViewport(0, 0, frameWidth, frameHeight));
 	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 	GLCall(glUseProgram(screenShader));
