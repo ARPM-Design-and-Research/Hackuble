@@ -12,99 +12,281 @@ namespace VisualScripting
 {
     public class TestComp : Component
     {
+
+        
         public TestComp() : base("Test Component")
         {
+            AddSlider("Slider 1", 0.5f, 0.0f, 1.0f);
+            AddSlider("Slider 2", 0.2f, 0.0f, 1.0f);
         }
 
         public override Guid ElementGuid => new Guid("733d497c-d74e-4b86-adde-86b61c45b87a");
     }
 
+    public class Slider : Element
+    {
+
+        private GUICLR.Rectangle baseRectangle;
+        private GUICLR.Rectangle slideRectangle;
+        private GUICLR.Text title;
+        private GUICLR.Text valueText;
+        public Slider(string title, float currentValue, float maxValue, float minValue) : base(new CanvasPoint(0, 0), new CanvasSize(100, 100))
+        {
+            Title = title;
+            CurrentValue = currentValue;
+            MaxValue = maxValue;
+            MinValue = minValue;
+
+            setupBaseRendering();
+        }
+
+        private void setupBaseRendering()
+        {
+            baseRectangle = new GUICLR.Rectangle(Position.ToVector(), Size.ToVector(), 0.0f, 2.0f, 2.0f, 0.0f, Pivot.TOP_LEFT, Color.FromArgb(60, 60, 60));
+            baseRectangle.setZDepth(0.0001f);
+
+            float width = (float)Size.Width * (CurrentValue - MinValue) / (MaxValue - MinValue);
+            slideRectangle = new GUICLR.Rectangle(Position.ToVector(), new CanvasSize(width, Size.Height).ToVector(), 0.0f, 2.0f, 2.0f, 0.0f, Pivot.TOP_LEFT, Color.FromArgb(52, 186, 235));
+            slideRectangle.setZDepth(0.0002f);
+
+            title = new GUICLR.Text(Title + " :", Position.ToVector(), Size.ToVector(), (float)Size.Height, TextAlignment.LEFT, Pivot.TOP_LEFT);
+            title.setZDepth(0.0003f);
+
+            valueText = new GUICLR.Text(CurrentValue.ToString(), Position.ToVector(), Size.ToVector(), (float)Size.Height, TextAlignment.RIGHT, Pivot.TOP_LEFT);
+            valueText.setZDepth(0.0003f);
+        }
+
+        public string Title { get; set; }
+        public float CurrentValue { get; set; }
+        public float MaxValue { get; set; }
+        public float MinValue { get; set; }
+
+        public override CanvasSize Size
+        {
+            get
+            {
+                return base.Size;
+            }
+
+            set
+            {
+                base.Size = value;
+
+                baseRectangle.setSize(base.Size.ToVector());
+
+                float width = (float)Size.Width * (CurrentValue - MinValue) / (MaxValue - MinValue);
+                slideRectangle.setSize(new CanvasSize(width, base.Size.Height).ToVector());
+
+                title.setSize(new CanvasSize(base.Size.Width, base.Size.Height - 3.0f).ToVector());
+                title.setFontSize((float)base.Size.Height - 3.0f);
+
+                valueText.setSize(new CanvasSize(base.Size.Width - 2.0f, base.Size.Height - 3.0f).ToVector());
+                valueText.setFontSize((float)base.Size.Height - 3.0f);
+            }
+        }
+
+        public override CanvasPoint Position
+        {
+            get
+            {
+                return base.Position;
+            }
+
+            set
+            {
+                base.Position = value;
+
+                baseRectangle.setPosition(base.Position.ToVector());
+
+                slideRectangle.setPosition(base.Position.ToVector());
+
+                title.setPosition(new CanvasPoint(base.Position.X + 2.0f, base.Position.Y).ToVector());
+
+                valueText.setPosition(base.Position.ToVector());
+            }
+        }
+
+        public override Guid ElementGuid => new Guid("733d497c-d73e-4b86-adde-86b61c45b87a");
+    }
+    
+
     public abstract class Component : Element
     {
-        private Color _color;
+        private string title;
+        private GUICLR.Rectangle backPlane;
+        private GUICLR.Rectangle accentColor;
+        private GUICLR.Text titleText;
+        private Color color;
 
-        public Component(string title)
+        private float nextHeight;
+
+        private List<Element> childComponents = new List<Element>();
+
+        public Component(string _title) : base(new CanvasPoint(0, 0), new CanvasSize(100, 100))
         {
-            _component = new GUICLR.Component(title);
-            _color = Color.FromArgb(255, 103, 0);
-            int r, g, b;
-            r = ((int)_color.R);
-            g = ((int)_color.G);
-            b = ((int)_color.B);
-            _component.setColor(r, g, b);
+            color = Color.FromArgb(255, 103, 0);
+            title = _title;
+
             this._instanceGuid = Guid.NewGuid();
+
+            setupBaseRendering();
         }
-        public Component(string title, Color color)
+
+        public Component(string _title, Color _color) : base(new CanvasPoint(0,0), new CanvasSize(100,100))
         {
-            _component = new GUICLR.Component(title);
-            _color = color;
-            int r, g, b;
-            r = ((int)_color.R);
-            g = ((int)_color.G);
-            b = ((int)_color.B);
-            _component.setColor(r, g, b);
+            color = _color;
+            title = _title;
+
             this._instanceGuid = Guid.NewGuid();
+
+            setupBaseRendering();
+        }
+
+        public override void Translate(CanvasPoint translate)
+        {
+            Position += translate;
+
+            foreach(Element elem in childComponents)
+            {
+                elem.Translate(translate);
+            }
+        }
+
+        private void setupBaseRendering()
+        {
+            backPlane = new GUICLR.Rectangle(Position.ToVector(), Size.ToVector(), 2.0f, 2.0f, 2.0f, 2.0f, Pivot.TOP_LEFT, Color.Gray);
+            backPlane.setZDepth(0.0000f);
+
+            accentColor = new GUICLR.Rectangle(Position.ToVector(), new CanvasSize(Size.Width, 5.0f).ToVector(), 2.0f, 2.0f, 0.0f, 0.0f, Pivot.TOP_LEFT, Color);
+            accentColor.setZDepth(0.0001f);
+
+            titleText = new GUICLR.Text(title, new CanvasPoint(Position.X, Position.Y + 7.0f).ToVector(), new CanvasSize(Size.Width, 10.0f).ToVector(), 10.0f, TextAlignment.CENTER, Pivot.TOP_LEFT);
+            titleText.setZDepth(0.0001f);
+
+            nextHeight = 30.0f;
+
+        }
+
+        public void AddSlider(string _title, float currentValue, float maxValue, float minValue)
+        {
+            Slider slider = new Slider(_title, currentValue, maxValue, minValue);
+            slider.Position = new CanvasPoint(0, nextHeight);
+            slider.Size = new CanvasSize(Size.Width - 5.0f, 12.0f);
+
+            childComponents.Add(slider);
+
+            nextHeight += 12.0f + 4.0f;
         }
 
         public Color Color
         {
             get
             {
-                return _color;
+                return color;
             }
             set
             {
-                _color = value;
-                int r, g, b;
-                r = ((int)_color.R);
-                g = ((int)_color.G);
-                b = ((int)_color.B);
-                _component.setColor(r, g, b);
+                color = value;
+                accentColor.setColor(color);
+            }
+        }
+
+        public override CanvasSize Size
+        {
+            get
+            {
+                return base.Size;
+            }
+            set
+            {
+                base.Size = value;
+
+                backPlane.setSize(base.Size.ToVector());
+
+                accentColor.setSize(new CanvasSize(base.Size.Width, 5.0f).ToVector());
+
+                titleText.setSize(new CanvasSize(base.Size.Width, 10.0f).ToVector());
+            }
+        }
+
+        public override CanvasPoint Position
+        {
+            get
+            {
+                return base.Position;
+            }
+            set
+            {
+                base.Position = value;
+
+                backPlane.setPosition(base.Position.ToVector());
+
+                accentColor.setPosition(base.Position.ToVector());
+
+                titleText.setPosition(new CanvasPoint(base.Position.X, base.Position.Y + 7.0f).ToVector());
             }
         }
 
         public abstract override Guid ElementGuid { get; }
-
-        public void AddSlider(SliderState sliderState, string title, float currentValue, float startValue, float endValue) //!!!!!!!!!!!!!!!!!!!!!!!
-        {
-            _component.addSlider(title, sliderState, currentValue, startValue, endValue);
-        }
     }
 
     public abstract class Element : IDisposable
     {
-        protected GUICLR.Component _component; //!!!!!!!!!!!!!!!!!!!!!!!
-        protected GUICLR.BoundingBox _boundingBox; //!!!!!!!!!!!!!!!!!!!!!!!
         protected Guid _instanceGuid;
+        protected VisualScripting.BoundingBox boundingBox;
 
-        public Element()
+        public virtual CanvasSize Size
+        {
+            get
+            {
+                return boundingBox.Size;
+            }
+
+            set
+            {
+                boundingBox.Size = value;
+            }
+        }
+
+        public virtual CanvasPoint Position
+        {
+            get
+            {
+                return boundingBox.Location;
+            }
+
+            set
+            {
+                boundingBox.Location = value;
+            }
+        }
+
+        public virtual void Translate(CanvasPoint translate)
+        {
+            Position += translate;
+        }
+
+        public Element(CanvasPoint position, CanvasSize size)
         {
             //_component = new GUICLR.Component("Element"); //!!!!!!!!!!!!!!!!!!!!!!!
             //_boundingBox = _component.getBoundingBox(); //!!!!!!!!!!!!!!!!!!!!!!!
             this._instanceGuid = Guid.NewGuid();
+            boundingBox = new BoundingBox(position, size);
+
+            Children = new ComponentCollection(this);
         }        
 
-        public VisualScriptingEnv.BoundingBox Bounds //!!!!!!!!!!!!!!!!!!!!!!!
+        public VisualScripting.BoundingBox Bounds //!!!!!!!!!!!!!!!!!!!!!!!
         {
             get
             {
-                //return this._boundingBox;
-                return VisualScriptingEnv.BoundingBox.FromLTRB((double)this._boundingBox.getX(), (double)this._boundingBox.getY(), (double)this._boundingBox.getWidth(), (double)this._boundingBox.getHeight());
+                return this.boundingBox;
+                //return VisualScripting.BoundingBox.FromLTRB((double)this._boundingBox.getX(), (double)this._boundingBox.getY(), (double)this._boundingBox.getWidth(), (double)this._boundingBox.getHeight());
             }
         }
         public Guid InstanceGuid { get => _instanceGuid; }
         public ComponentCollection Children { get; }
-        public string Name //!!!!!!!!!!!!!!!!!!!!!!!
-        {
-            get
-            {
-                return _component.getTitle();
-            }
-            set
-            {
-                _component.setTitle(value);
-            }
-        }
+        public string Name { get; set; }
         public string ElementType { get; set; }
         public abstract Guid ElementGuid { get; }
 
@@ -136,7 +318,7 @@ namespace VisualScripting
         }
         public void Dispose()
         {
-            _component.Dispose();
+            //_component.Dispose();
         }
         ~Element()
         {
@@ -144,9 +326,10 @@ namespace VisualScripting
         }
     }
 
+    //TODO: Fix enumerator implementation
     public class ComponentCollection : IList<Element>, ICollection<Element>, IEnumerable<Element>
     {
-        private Element[] _components;
+        private Element[] _components = new Element[1];
         private Element _parent;
         private bool _readOnly;
 
@@ -207,7 +390,10 @@ namespace VisualScripting
         }
         public IEnumerator<Element> GetEnumerator()
         {
-            return (IEnumerator<Element>)this._components.GetEnumerator();
+            foreach (Element element in _components)
+            {
+                yield return element;
+            }
         }
         public int IndexOf(Element item)
         {
@@ -264,12 +450,12 @@ namespace VisualScripting
         {
             return _components.GetEnumerator();
         }
-        public VisualScriptingEnv.BoundingBox GetUnionBounds()
+        public VisualScripting.BoundingBox GetUnionBounds()
         {
-            VisualScriptingEnv.BoundingBox[] bbArray;
-            bbArray = new VisualScriptingEnv.BoundingBox[this._components.Length];
+            VisualScripting.BoundingBox[] bbArray;
+            bbArray = new VisualScripting.BoundingBox[this._components.Length];
             for (int i = 0; i < this._components.Length; i++) bbArray[i] = this._components[i].Bounds;
-            return VisualScriptingEnv.BoundingBox.MassUnion(bbArray);
+            return VisualScripting.BoundingBox.MassUnion(bbArray);
         }
     }
 

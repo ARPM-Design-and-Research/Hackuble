@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Numerics;
 
-namespace VisualScriptingEnv
+namespace VisualScripting
 {
     public class BoundingBox : IEquatable<BoundingBox>
     {
@@ -304,6 +305,11 @@ namespace VisualScriptingEnv
         public double X { get; set; }
         public double Y { get; set; }
 
+        public Vector2 ToVector()
+        {
+            return new Vector2((float)X, (float)Y);
+        }
+
         public override string ToString()
         {
             return ($"CanvasPoint({this.X.ToString()}, {this.Y.ToString()})");
@@ -361,6 +367,10 @@ namespace VisualScriptingEnv
         public double Width { get; set; }
         public double Height { get; set; }
 
+        public Vector2 ToVector()
+        {
+            return new Vector2((float)Width, (float)Height);
+        }
         public override string ToString()
         {
             return ($"CanvasSize({this.Width.ToString()}, {this.Height.ToString()})");

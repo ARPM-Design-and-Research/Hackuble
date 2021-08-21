@@ -83,10 +83,8 @@ namespace Hackuble.Win
             VisualScripting.TestComp comp = new VisualScripting.TestComp();
             comp.Name = $"Comp {count}";
             comp.Color = Color.Green;
-            comp.AddSlider(GUICLR.SliderState.INPUT, "Slider 1", 0.5f, 0.0f, 1.0f);
-            comp.AddSlider(GUICLR.SliderState.INPUT, "Slider 2", 0.2f, 0.0f, 1.0f);
-            comp.AddSlider(GUICLR.SliderState.INPUT, "Slider 3", 10.5f, 0.0f, 100.0f);
-            comp.AddSlider(GUICLR.SliderState.OUTPUT, "Slider 4", 10.5f, 0.0f, 100.0f);
+
+            openGLControl1.sceneComponents.Add(comp);
         }
 
         private void toolStripButton2_Click(object sender, EventArgs e)
@@ -95,17 +93,8 @@ namespace Hackuble.Win
             VisualScripting.TestComp comp = new VisualScripting.TestComp();
             comp.Name = $"Comp {count}";
             comp.Color = Color.OrangeRed;
-            comp.AddSlider(GUICLR.SliderState.INPUT, "Slider 1", 0.5f, 0.0f, 1.0f);
-            comp.AddSlider(GUICLR.SliderState.INPUT, "Slider 2", 0.2f, 0.0f, 1.0f);
-            comp.AddSlider(GUICLR.SliderState.INPUT, "Slider 3", 10.5f, 0.0f, 100.0f);
-            comp.AddSlider(GUICLR.SliderState.INPUT, "Slider 4", 10.5f, 0.0f, 100.0f);
-            comp.AddSlider(GUICLR.SliderState.INPUT, "Slider 5", 10.5f, 0.0f, 100.0f);
-            comp.AddSlider(GUICLR.SliderState.INPUT, "Slider 6", 10.5f, 0.0f, 100.0f);
-            comp.AddSlider(GUICLR.SliderState.OUTPUT, "Slider 7", 10.5f, 0.0f, 100.0f);
-            comp.AddSlider(GUICLR.SliderState.OUTPUT, "Slider 8", 10.5f, 0.0f, 100.0f);
-            comp.AddSlider(GUICLR.SliderState.OUTPUT, "Slider 9", 10.5f, 0.0f, 100.0f);
-            comp.AddSlider(GUICLR.SliderState.OUTPUT, "Slider 10", 10.5f, 0.0f, 100.0f);
-            comp.AddSlider(GUICLR.SliderState.OUTPUT, "Slider 11", 10.5f, 0.0f, 100.0f);
+
+            openGLControl1.sceneComponents.Add(comp);
         }
     }
 }

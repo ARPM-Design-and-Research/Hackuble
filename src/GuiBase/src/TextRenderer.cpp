@@ -408,7 +408,7 @@ namespace SynGUI {
                         if (spaceNeededY > label->box.y1) {
 
                             for (int k = 0; k < 30; k++) {
-                                glyphVertices.at(j * 30 + k + bufferOffset) = 0.0f;
+                                glyphVertices.push_back(0.0f);
                             }
                         }
                         else {
@@ -599,7 +599,7 @@ namespace SynGUI {
                         if (spaceNeededY > label->box.y1) {
 
                             for (int k = 0; k < 30; k++) {
-                                glyphVertices.at(j * 30 + k + bufferOffset) = 0.0f;
+                                glyphVertices.push_back(0.0f);
                             }
                         }
                         else {
