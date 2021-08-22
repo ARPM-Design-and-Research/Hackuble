@@ -39,7 +39,7 @@ namespace VisualScripting
         {
             get
             {
-                return (this.Location.X + this.Size.Height);
+                return (this.Location.X + this.Size.Width);
             }
         }
         public double Top
@@ -53,7 +53,7 @@ namespace VisualScripting
         {
             get
             {
-                return (this.Location.Y + this.Size.Width);
+                return (this.Location.Y + this.Size.Height);
             }
         }
 

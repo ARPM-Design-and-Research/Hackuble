@@ -13,6 +13,7 @@ namespace Hackuble.Win
     public partial class VisualScriptingEnv : Form
     {
         private int count = 0;
+        private float topZOrder = 0.00f;
         private Controls.OpenGLControl openGLControl1;
         public VisualScriptingEnv()
         {
@@ -83,6 +84,8 @@ namespace Hackuble.Win
             VisualScripting.TestComp comp = new VisualScripting.TestComp();
             comp.Name = $"Comp {count}";
             comp.Color = Color.Green;
+            comp.ZOrder = topZOrder + 0.00001f;
+            topZOrder += comp.ZDepth + 0.00001f;
 
             openGLControl1.sceneComponents.Add(comp);
         }
@@ -93,6 +96,8 @@ namespace Hackuble.Win
             VisualScripting.TestComp comp = new VisualScripting.TestComp();
             comp.Name = $"Comp {count}";
             comp.Color = Color.OrangeRed;
+            comp.ZOrder = topZOrder + 0.00001f;
+            topZOrder += comp.ZDepth + 0.00001f;
 
             openGLControl1.sceneComponents.Add(comp);
         }

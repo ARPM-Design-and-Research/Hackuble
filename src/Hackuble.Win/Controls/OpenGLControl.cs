@@ -171,13 +171,48 @@ namespace Hackuble.Win.Controls
                 {
                     Vector2 worldMouse = context.screenToWorldSpace(new Vector2(e.X, e.Y));
 
+                    List<VisualScripting.Component> boundComp = new List<VisualScripting.Component>();
+
                     foreach (VisualScripting.Component comp in sceneComponents)
-                    {
-                        if(comp.Bounds.Contains(new CanvasPoint(worldMouse.X, worldMouse.Y)))
+                    { 
+                        if (comp.Bounds.Contains(new CanvasPoint(worldMouse.X, worldMouse.Y)))
                         {
-                            selectedComponent = comp;
-                            selected = true;
+                            boundComp.Add(comp);
                         }
+                    }
+
+                    if (boundComp.Count > 0)
+                    {
+                        selectedComponent = boundComp[0];
+
+                        foreach (VisualScripting.Component possibleSelect in boundComp)
+                        {
+                            if (possibleSelect.ZOrder > selectedComponent.ZOrder)
+                                selectedComponent = possibleSelect;
+                        }
+
+                        selected = true;
+
+                        float topZOrder = 0.0f;
+
+                        foreach (VisualScripting.Component topComp in sceneComponents)
+                        {
+                            if (topComp.ZOrder > topZOrder)
+                                topZOrder = topComp.ZOrder;
+                        }
+
+                        for (int i = 0; i < sceneComponents.Count; i++)
+                        {
+                            VisualScripting.Component otherComp = sceneComponents[i];
+
+                            if (selectedComponent != otherComp && otherComp.ZOrder > selectedComponent.ZOrder)
+                            {
+                                otherComp.ZOrder -= selectedComponent.ZDepth;
+                            }
+                        }
+
+                        selectedComponent.ZOrder = topZOrder;
+
                     }
                 }
 

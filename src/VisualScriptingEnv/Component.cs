@@ -28,19 +28,21 @@ namespace VisualScripting
 
         private GUICLR.Rectangle baseRectangle;
         private GUICLR.Rectangle slideRectangle;
+        private GUICLR.Rectangle nodeRectangle;
         private GUICLR.Text title;
         private GUICLR.Text valueText;
 
-        private string _title;
-        private float _currentValue;
-        private float _maxValue;
-        private float _minValue;
-        public Slider(string title, float currentValue, float maxValue, float minValue) : base(new CanvasPoint(0, 0), new CanvasSize(100, 100))
+        private string titleStr;
+        private float currentValue;
+        private float maxValue;
+        private float minValue;
+        public Slider(string _title, float _currentValue, float _maxValue, float _minValue, float _zOrder = 0.00001f) : base(new CanvasPoint(0, 0), new CanvasSize(100, 100), _zOrder)
         {
-            _title = title;
-            _currentValue = currentValue;
-            _maxValue = maxValue;
-            _minValue = minValue;
+            titleStr = _title;
+            currentValue = _currentValue;
+            maxValue = _maxValue;
+            minValue = _minValue;
+            zOrder = _zOrder;
 
             setupBaseRendering();
         }
@@ -48,43 +50,48 @@ namespace VisualScripting
         private void setupBaseRendering()
         {
             baseRectangle = new GUICLR.Rectangle(Position.ToVector(), Size.ToVector(), 0.0f, 2.0f, 2.0f, 0.0f, Pivot.TOP_LEFT, Color.FromArgb(60, 60, 60));
-            baseRectangle.setZDepth(0.0001f);
+            baseRectangle.setZDepth(ZOrder);
 
-            float width = (float)Size.Width * (_currentValue - _minValue) / (_maxValue - _minValue);
-            slideRectangle = new GUICLR.Rectangle(Position.ToVector(), new CanvasSize(width, Size.Height).ToVector(), 0.0f, 2.0f, 2.0f, 0.0f, Pivot.TOP_LEFT, Color.FromArgb(52, 186, 235));
-            slideRectangle.setZDepth(0.0002f);
+            float width = (float)Size.Width * (currentValue - minValue) / (maxValue - minValue);
+            slideRectangle = new GUICLR.Rectangle(Position.ToVector(), new CanvasSize(width, Size.Height).ToVector(), 0.0f, 0.0f, 0.0f, 0.0f, Pivot.TOP_LEFT, Color.FromArgb(52, 186, 235));
+            slideRectangle.setZDepth(ZOrder + 0.00001f);
 
-            title = new GUICLR.Text(_title + " :", Position.ToVector(), Size.ToVector(), (float)Size.Height, TextAlignment.LEFT, Pivot.TOP_LEFT);
-            title.setZDepth(0.0003f);
+            nodeRectangle = new GUICLR.Rectangle(new CanvasPoint(Position.X - Size.Height / 2.0f, Position.Y).ToVector(), new CanvasSize(Size.Height / 2.0f, Size.Height).ToVector(), (float)Size.Height / 2.0f, 0.0f, 0.0f, (float)Size.Height / 2.0f, Pivot.TOP_LEFT, Color.FromArgb(52, 186, 235));
+            nodeRectangle.setZDepth(ZOrder + 0.00001f);
+
+            title = new GUICLR.Text(titleStr + " :", Position.ToVector(), Size.ToVector(), (float)Size.Height, TextAlignment.LEFT, Pivot.TOP_LEFT);
+            title.setZDepth(ZOrder + 0.00002f);
 
             valueText = new GUICLR.Text(CurrentValue.ToString(), Position.ToVector(), Size.ToVector(), (float)Size.Height, TextAlignment.RIGHT, Pivot.TOP_LEFT);
-            valueText.setZDepth(0.0003f);
+            valueText.setZDepth(ZOrder + 0.00002f);
+
+            ZDepth = 0.00004f;
         }
 
         public string Title
         {
             get
             {
-                return _title;
+                return titleStr;
             }   
             
             set
             {
-                _title = value;
-                title.updateText(_title);
+                titleStr = value;
+                title.updateText(titleStr);
             }
         }
         public float CurrentValue
         {
             get
             {
-                return _currentValue;
+                return currentValue;
             }
 
             set
             {
-                _currentValue = value;
-                float width = (float)Size.Width * (_currentValue - _minValue) / (_maxValue - _minValue);
+                currentValue = value;
+                float width = (float)Size.Width * (currentValue - minValue) / (maxValue - minValue);
                 slideRectangle.setSize(new CanvasSize(width, base.Size.Height).ToVector());
             }
         }
@@ -92,13 +99,13 @@ namespace VisualScripting
         {
             get
             {
-                return _maxValue;
+                return maxValue;
             }
 
             set
             {
-                _maxValue = value;
-                float width = (float)Size.Width * (_currentValue - _minValue) / (_maxValue - _minValue);
+                maxValue = value;
+                float width = (float)Size.Width * (currentValue - minValue) / (maxValue - minValue);
                 slideRectangle.setSize(new CanvasSize(width, base.Size.Height).ToVector());
             }
         }
@@ -106,13 +113,13 @@ namespace VisualScripting
         {
             get
             {
-                return _minValue;
+                return minValue;
             }
 
             set
             {
-                _minValue = value;
-                float width = (float)Size.Width * (_currentValue - _minValue) / (_maxValue - _minValue);
+                minValue = value;
+                float width = (float)Size.Width * (currentValue - minValue) / (maxValue - minValue);
                 slideRectangle.setSize(new CanvasSize(width, base.Size.Height).ToVector());
             }
         }
@@ -132,6 +139,10 @@ namespace VisualScripting
 
                 float width = (float)Size.Width * (CurrentValue - MinValue) / (MaxValue - MinValue);
                 slideRectangle.setSize(new CanvasSize(width, base.Size.Height).ToVector());
+
+                nodeRectangle.setSize(new CanvasSize(Size.Height / 2.0f, Size.Height).ToVector());
+                nodeRectangle.setRadius((float)Size.Height / 2.0f, 0.0f, 0.0f, (float)Size.Height / 2.0f);
+                nodeRectangle.setPosition(new CanvasPoint(Position.X - Size.Height / 2.0f, Position.Y).ToVector());
 
                 title.setSize(new CanvasSize(base.Size.Width, base.Size.Height - 3.0f).ToVector());
                 title.setFontSize((float)base.Size.Height - 3.0f);
@@ -156,9 +167,28 @@ namespace VisualScripting
 
                 slideRectangle.setPosition(base.Position.ToVector());
 
+                nodeRectangle.setPosition(new CanvasPoint(Position.X - Size.Height / 2.0f, Position.Y).ToVector());
+
                 title.setPosition(new CanvasPoint(base.Position.X + 2.0f, base.Position.Y).ToVector());
 
                 valueText.setPosition(base.Position.ToVector());
+            }
+        }
+
+        public override float ZOrder 
+        { get
+            {
+                return base.ZOrder;
+            }
+
+            set
+            {
+                base.ZOrder = value;
+                baseRectangle.setZDepth(ZOrder);
+                slideRectangle.setZDepth(ZOrder + 0.00001f);
+                nodeRectangle.setZDepth(ZOrder + 0.00001f);
+                title.setZDepth(ZOrder + 0.00002f);
+                valueText.setZDepth(ZOrder + 0.00002f);
             }
         }
 
@@ -172,52 +202,48 @@ namespace VisualScripting
         private GUICLR.Rectangle backPlane;
         private GUICLR.Rectangle accentColor;
         private GUICLR.Text titleText;
+        private GUICLR.Icon icon;
         private Color color;
 
         private float nextHeight;
 
-        private List<Element> childComponents = new List<Element>();
-
-        public Component(string _title) : base(new CanvasPoint(0, 0), new CanvasSize(100, 100))
+        public Component(string _title, float _zOrder = 0.00001f) : base(new CanvasPoint(0, 0), new CanvasSize(120, 100), _zOrder)
         {
             color = Color.FromArgb(255, 103, 0);
             title = _title;
+            zOrder = _zOrder;
 
             this._instanceGuid = Guid.NewGuid();
 
             setupBaseRendering();
         }
 
-        public Component(string _title, Color _color) : base(new CanvasPoint(0,0), new CanvasSize(100,100))
+        public Component(string _title, Color _color, float _zOrder = 0.00001f) : base(new CanvasPoint(0,0), new CanvasSize(120,100), _zOrder)
         {
             color = _color;
             title = _title;
+            zOrder = _zOrder;
 
             this._instanceGuid = Guid.NewGuid();
 
             setupBaseRendering();
-        }
-
-        public override void Translate(CanvasPoint translate)
-        {
-            Position += translate;
-
-            foreach(Element elem in childComponents)
-            {
-                elem.Translate(translate);
-            }
         }
 
         private void setupBaseRendering()
         {
             backPlane = new GUICLR.Rectangle(Position.ToVector(), Size.ToVector(), 2.0f, 2.0f, 2.0f, 2.0f, Pivot.TOP_LEFT, Color.Gray);
-            backPlane.setZDepth(0.0000f);
+            backPlane.setZDepth(ZOrder);
 
             accentColor = new GUICLR.Rectangle(Position.ToVector(), new CanvasSize(Size.Width, 5.0f).ToVector(), 2.0f, 2.0f, 0.0f, 0.0f, Pivot.TOP_LEFT, Color);
-            accentColor.setZDepth(0.0001f);
+            accentColor.setZDepth(ZOrder + 0.00001f);
 
-            titleText = new GUICLR.Text(title, new CanvasPoint(Position.X, Position.Y + 7.0f).ToVector(), new CanvasSize(Size.Width, 10.0f).ToVector(), 10.0f, TextAlignment.CENTER, Pivot.TOP_LEFT);
-            titleText.setZDepth(0.0001f);
+            titleText = new GUICLR.Text(title, new CanvasPoint(Position.X + 17.0f, Position.Y + 7.0f).ToVector(), new CanvasSize(Size.Width - 20.0f, 10.0f).ToVector(), 10.0f, TextAlignment.CENTER, Pivot.TOP_LEFT);
+            titleText.setZDepth(ZOrder + 0.00001f);
+
+            icon = new GUICLR.Icon("add.png", new CanvasPoint(Position.X + 2.0f, Position.Y + 7.0f).ToVector(), new CanvasSize(12.0f, 12.0f).ToVector(), Pivot.TOP_LEFT);
+            icon.setZDepth(ZOrder + 0.00001f);
+
+            ZDepth = 0.00003f;
 
             nextHeight = 30.0f;
 
@@ -228,6 +254,7 @@ namespace VisualScripting
             Slider slider = new Slider(_title, currentValue, maxValue, minValue);
             slider.Position = new CanvasPoint(0, nextHeight);
             slider.Size = new CanvasSize(Size.Width - 5.0f, 12.0f);
+            slider.ZOrder = ZOrder + 0.00001f;
 
             childComponents.Add(slider);
 
@@ -261,7 +288,7 @@ namespace VisualScripting
 
                 accentColor.setSize(new CanvasSize(base.Size.Width, 5.0f).ToVector());
 
-                titleText.setSize(new CanvasSize(base.Size.Width, 10.0f).ToVector());
+                titleText.setSize(new CanvasSize(Size.Width - 20.0f, 10.0f).ToVector());
             }
         }
 
@@ -279,7 +306,25 @@ namespace VisualScripting
 
                 accentColor.setPosition(base.Position.ToVector());
 
-                titleText.setPosition(new CanvasPoint(base.Position.X, base.Position.Y + 7.0f).ToVector());
+                titleText.setPosition(new CanvasPoint(Position.X + 17.0f, Position.Y + 7.0f).ToVector());
+
+                icon.setPosition(new CanvasPoint(Position.X + 2.0f, Position.Y + 7.0f).ToVector());
+            }
+        }
+
+        public override float ZOrder
+        {
+            get
+            {
+                return base.ZOrder;
+            }
+            set
+            {
+                base.ZOrder = value;
+                backPlane.setZDepth(ZOrder);
+                accentColor.setZDepth(ZOrder + 0.00001f);
+                titleText.setZDepth(ZOrder + 0.00001f);
+                icon.setZDepth(ZOrder + 0.00001f);
             }
         }
 
@@ -290,6 +335,10 @@ namespace VisualScripting
     {
         protected Guid _instanceGuid;
         protected VisualScripting.BoundingBox boundingBox;
+        protected float zOrder;
+        private float zDepth = 0.0f;
+
+        protected List<Element> childComponents = new List<Element>();
 
         public virtual CanvasSize Size
         {
@@ -317,12 +366,54 @@ namespace VisualScripting
             }
         }
 
+        public virtual float ZOrder
+        {
+            get
+            {
+                return zOrder;
+            }
+            set
+            {
+                zOrder = value;
+
+                foreach (Element elem in childComponents)
+                {
+                    elem.ZOrder = zOrder + 0.00001f;
+                }
+            }
+        }
+
+        public float ZDepth
+        {
+            get
+            {
+                float temp = zDepth;
+
+                foreach (Element elem in childComponents)
+                {
+                    temp += elem.ZDepth;
+                }
+
+                return temp;
+            }
+
+            set
+            {
+                zDepth = value;
+            }
+        }
+
         public virtual void Translate(CanvasPoint translate)
         {
             Position += translate;
+
+            foreach (Element elem in childComponents)
+            {
+                elem.Translate(translate);
+            }
         }
 
-        public Element(CanvasPoint position, CanvasSize size)
+        public Element(CanvasPoint position, CanvasSize size, float _zOrder = 0.00001f)
         {
             //_component = new GUICLR.Component("Element"); //!!!!!!!!!!!!!!!!!!!!!!!
             //_boundingBox = _component.getBoundingBox(); //!!!!!!!!!!!!!!!!!!!!!!!
@@ -330,6 +421,8 @@ namespace VisualScripting
             boundingBox = new BoundingBox(position, size);
 
             Children = new ComponentCollection(this);
+
+            zOrder = 0.00001f;
         }        
 
         public VisualScripting.BoundingBox Bounds //!!!!!!!!!!!!!!!!!!!!!!!
