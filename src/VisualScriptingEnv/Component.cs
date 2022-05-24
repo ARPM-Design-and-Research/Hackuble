@@ -25,7 +25,6 @@ namespace VisualScripting
 
     public class Slider : Element
     {
-
         private GUICLR.Rectangle baseRectangle;
         private GUICLR.Rectangle slideRectangle;
         private GUICLR.Rectangle nodeRectangle;
@@ -42,7 +41,6 @@ namespace VisualScripting
             currentValue = _currentValue;
             maxValue = _maxValue;
             minValue = _minValue;
-            zOrder = _zOrder;
 
             setupBaseRendering();
         }
@@ -211,25 +209,23 @@ namespace VisualScripting
         {
             color = Color.FromArgb(255, 103, 0);
             title = _title;
-            zOrder = _zOrder;
 
-            this._instanceGuid = Guid.NewGuid();
+            //this._instanceGuid = Guid.NewGuid();
 
-            setupBaseRendering();
+            SetupBaseRendering();
         }
 
         public Component(string _title, Color _color, float _zOrder = 0.00001f) : base(new CanvasPoint(0,0), new CanvasSize(120,100), _zOrder)
         {
             color = _color;
             title = _title;
-            zOrder = _zOrder;
 
-            this._instanceGuid = Guid.NewGuid();
+            //this._instanceGuid = Guid.NewGuid();
 
-            setupBaseRendering();
+            SetupBaseRendering();
         }
 
-        private void setupBaseRendering()
+        private void SetupBaseRendering()
         {
             backPlane = new GUICLR.Rectangle(Position.ToVector(), Size.ToVector(), 2.0f, 2.0f, 2.0f, 2.0f, Pivot.TOP_LEFT, Color.Gray);
             backPlane.setZDepth(ZOrder);
@@ -251,12 +247,12 @@ namespace VisualScripting
 
         public void AddSlider(string _title, float currentValue, float maxValue, float minValue)
         {
-            Slider slider = new Slider(_title, currentValue, maxValue, minValue);
+            Slider slider = new Slider(_title, currentValue, maxValue, minValue, ZOrder + 0.00001f);
             slider.Position = new CanvasPoint(0, nextHeight);
             slider.Size = new CanvasSize(Size.Width - 5.0f, 12.0f);
             slider.ZOrder = ZOrder + 0.00001f;
 
-            childComponents.Add(slider);
+            this.Children.Add(slider);
 
             nextHeight += 12.0f + 4.0f;
         }
@@ -333,12 +329,14 @@ namespace VisualScripting
 
     public abstract class Element : IDisposable
     {
+        public event EventHandler OnMouseDown;
+
         protected Guid _instanceGuid;
         protected VisualScripting.BoundingBox boundingBox;
-        protected float zOrder;
+        //protected float zOrder;
         private float zDepth = 0.0f;
 
-        protected List<Element> childComponents = new List<Element>();
+        protected List<Element> childElements = new List<Element>();
 
         public virtual CanvasSize Size
         {
@@ -370,15 +368,15 @@ namespace VisualScripting
         {
             get
             {
-                return zOrder;
+                return ZOrderManager.ZPositions[this.InstanceGuid];
             }
             set
             {
-                zOrder = value;
+                ZOrderManager.ZPositions[this.InstanceGuid] = value;
 
-                foreach (Element elem in childComponents)
+                foreach (Element elem in childElements)
                 {
-                    elem.ZOrder = zOrder + 0.00001f;
+                    elem.ZOrder = ZOrderManager.ZPositions[this.InstanceGuid] + 0.00001f;
                 }
             }
         }
@@ -389,7 +387,7 @@ namespace VisualScripting
             {
                 float temp = zDepth;
 
-                foreach (Element elem in childComponents)
+                foreach (Element elem in childElements)
                 {
                     temp += elem.ZDepth;
                 }
@@ -407,7 +405,7 @@ namespace VisualScripting
         {
             Position += translate;
 
-            foreach (Element elem in childComponents)
+            foreach (Element elem in this.Children)
             {
                 elem.Translate(translate);
             }
@@ -420,10 +418,10 @@ namespace VisualScripting
             this._instanceGuid = Guid.NewGuid();
             boundingBox = new BoundingBox(position, size);
 
-            Children = new ComponentCollection(this);
+            Children = new ElementCollection(this);
 
-            zOrder = 0.00001f;
-        }        
+            ZOrderManager.ZPositions.Add(this.InstanceGuid, _zOrder);
+        }
 
         public VisualScripting.BoundingBox Bounds //!!!!!!!!!!!!!!!!!!!!!!!
         {
@@ -434,18 +432,22 @@ namespace VisualScripting
             }
         }
         public Guid InstanceGuid { get => _instanceGuid; }
-        public ComponentCollection Children { get; }
+        public ElementCollection Children { get; }
         public string Name { get; set; }
         public string ElementType { get; set; }
         public abstract Guid ElementGuid { get; }
 
         public static bool operator == (Element A, Element B)
         {
-            return (A.InstanceGuid == B.InstanceGuid);
+            if (A is null) { if (B is null) return true; }
+            else if (B is null) { if (A is null) return true; }
+            return A.Equals(B);
         }
         public static bool operator != (Element A, Element B)
         {
-            return (A.InstanceGuid != B.InstanceGuid);
+            if (A is null) { if (B is null) return false; }
+            else if (B is null) { if (A is null) return false; }
+            return !A.Equals(B);
         }
         public override bool Equals(object obj)
         {
@@ -455,7 +457,9 @@ namespace VisualScripting
         }
         public bool Equals(Element other)
         {
-            return (this.InstanceGuid == other.InstanceGuid);
+            if (!(other is null)) return (this.InstanceGuid == other.InstanceGuid);
+            else if (this is null) return true;
+            else return false;
         }
         public override int GetHashCode()
         {
@@ -476,18 +480,18 @@ namespace VisualScripting
     }
 
     //TODO: Fix enumerator implementation
-    public class ComponentCollection : IList<Element>, ICollection<Element>, IEnumerable<Element>
+    public class ElementCollection : IList<Element>, ICollection<Element>, IEnumerable<Element>
     {
-        private Element[] _components = new Element[1];
+        private Element[] _elements = new Element[0];
         private Element _parent;
         private bool _readOnly;
 
-        public ComponentCollection() : base()
+        public ElementCollection() : base()
         {
             this._parent = null;
             this._readOnly = false;
         }
-        public ComponentCollection(Element owner) : base()
+        public ElementCollection(Element owner) : base()
         {
             this._parent = owner;
             this._readOnly = false;
@@ -497,36 +501,49 @@ namespace VisualScripting
         {
             get
             {
-                return this._components[index];
+                return this._elements[index];
             }
             set
             {
                 if (index < 0) throw new IndexOutOfRangeException("Index cannot be <0.");
-                if (this._components.Length > index)
+                if (this._elements.Length > index)
                 {
-                    this._components[index] = value;
+                    this._elements[index] = value;
                 }
-                else throw new IndexOutOfRangeException($"Index {index} is out of range [0 - {(this._components.Length - 1)}].");
+                else throw new IndexOutOfRangeException($"Index {index} is out of range [0 - {(this._elements.Length - 1)}].");
             }
         }
 
         public Element Owner => this._parent;
-        public int Count => _components.Length;
+        public int Count => _elements.Length;
 
         public bool IsReadOnly => _readOnly;
         public void Add(Element item)
         {
-            this._components.Append<Element>(item);
+            Element[] temp = this._elements;
+            this._elements = new Element[temp.Length + 1];
+            if (temp.Length > 0)
+            {
+                for (int i = 0; i < (temp.Length + 1); i++)
+                {
+                    if (i < temp.Length) this._elements[i] = temp[i];
+                    else this._elements[i] = item;
+                }
+            }
+            else
+            {
+                this._elements[0] = item;
+            }
         }
         public void Clear()
         {
-            _components = new Element[] { };
+            _elements = new Element[] { };
         }
         public bool Contains(Element item)
         {
-            for (int i = 0; i < this._components.Length; i++)
+            for (int i = 0; i < this._elements.Length; i++)
             {
-                if (item == this._components[i])
+                if (item == this._elements[i])
                 {
                     return true;
                 }
@@ -535,20 +552,20 @@ namespace VisualScripting
         }
         public void CopyTo(Element[] array, int arrayIndex)
         {
-            this._components.CopyTo(array, arrayIndex);
+            this._elements.CopyTo(array, arrayIndex);
         }
         public IEnumerator<Element> GetEnumerator()
         {
-            foreach (Element element in _components)
+            foreach (Element element in _elements)
             {
                 yield return element;
             }
         }
         public int IndexOf(Element item)
         {
-            for (int i = 0; i < this._components.Length; i++)
+            for (int i = 0; i < this._elements.Length; i++)
             {
-                if (item == this._components[i])
+                if (item == this._elements[i])
                 {
                     return i;
                 }
@@ -557,18 +574,18 @@ namespace VisualScripting
         }
         public void Insert(int index, Element item)
         {
-            int n = this._components.Length + 1;
+            int n = this._elements.Length + 1;
             Element[] newarr = new Element[n];
             for (int i = 0; i < n + 1; i++)
             {
                 if (i < index - 1)
-                    newarr[i] = this._components[i];
+                    newarr[i] = this._elements[i];
                 else if (i == index - 1)
                     newarr[i] = item;
                 else
-                    newarr[i] = this._components[i - 1];
+                    newarr[i] = this._elements[i - 1];
             }
-            this._components = newarr;
+            this._elements = newarr;
         }
         public bool Remove(Element item)
         {
@@ -582,28 +599,28 @@ namespace VisualScripting
         }
         public void RemoveAt(int index)
         {
-            int n = this._components.Length + 1;
+            int n = this._elements.Length + 1;
             Element[] newarr = new Element[n];
             for (int i = 0; i < n - 1; i++)
             {
                 if (i < index - 1)
-                    newarr[i] = this._components[i];
+                    newarr[i] = this._elements[i];
                 else if (i == index - 1)
                     continue;
                 else
-                    newarr[i] = this._components[i + 1];
+                    newarr[i] = this._elements[i + 1];
             }
-            this._components = newarr;
+            this._elements = newarr;
         }
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return _components.GetEnumerator();
+            return _elements.GetEnumerator();
         }
         public VisualScripting.BoundingBox GetUnionBounds()
         {
             VisualScripting.BoundingBox[] bbArray;
-            bbArray = new VisualScripting.BoundingBox[this._components.Length];
-            for (int i = 0; i < this._components.Length; i++) bbArray[i] = this._components[i].Bounds;
+            bbArray = new VisualScripting.BoundingBox[this._elements.Length];
+            for (int i = 0; i < this._elements.Length; i++) bbArray[i] = this._elements[i].Bounds;
             return VisualScripting.BoundingBox.MassUnion(bbArray);
         }
     }

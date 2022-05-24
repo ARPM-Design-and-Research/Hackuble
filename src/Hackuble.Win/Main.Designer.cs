@@ -55,13 +55,13 @@ namespace Hackuble.Win
             this.helpMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.openVisualScriptingEnvironmentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
-            this.openVisualScriptingEnvironmentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.toolStrip2.SuspendLayout();
@@ -252,6 +252,13 @@ namespace Hackuble.Win
             this.toolStripMenuItem1.Text = "Open Three.js Viewport";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
+            // openVisualScriptingEnvironmentToolStripMenuItem
+            // 
+            this.openVisualScriptingEnvironmentToolStripMenuItem.Name = "openVisualScriptingEnvironmentToolStripMenuItem";
+            this.openVisualScriptingEnvironmentToolStripMenuItem.Size = new System.Drawing.Size(203, 20);
+            this.openVisualScriptingEnvironmentToolStripMenuItem.Text = "Open Visual Scripting Environment";
+            this.openVisualScriptingEnvironmentToolStripMenuItem.Click += new System.EventHandler(this.openVisualScriptingEnvironmentToolStripMenuItem_Click);
+            // 
             // statusStrip
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -293,13 +300,6 @@ namespace Hackuble.Win
             this.toolStripTextBox1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStripTextBox1.Name = "toolStripTextBox1";
             this.toolStripTextBox1.Size = new System.Drawing.Size(500, 25);
-            // 
-            // openVisualScriptingEnvironmentToolStripMenuItem
-            // 
-            this.openVisualScriptingEnvironmentToolStripMenuItem.Name = "openVisualScriptingEnvironmentToolStripMenuItem";
-            this.openVisualScriptingEnvironmentToolStripMenuItem.Size = new System.Drawing.Size(203, 20);
-            this.openVisualScriptingEnvironmentToolStripMenuItem.Text = "Open Visual Scripting Environment";
-            this.openVisualScriptingEnvironmentToolStripMenuItem.Click += new System.EventHandler(this.openVisualScriptingEnvironmentToolStripMenuItem_Click);
             // 
             // Main
             // 

@@ -23,7 +23,6 @@ namespace Hackuble.Win.Controls
         DateTime _lastTime;
         private int _fps;
         int _framesRendered;
-        public ToolStripProgressBar ProgressBar { get; set; }
 
         public int FrameRate
         {
@@ -43,10 +42,25 @@ namespace Hackuble.Win.Controls
         System.Drawing.Rectangle area;
         Bitmap drawingBitmap;
 
-        public List<VisualScripting.Component> sceneComponents;
-        bool selected = false;
-        VisualScripting.Component selectedComponent = null;
+        //public List<VisualScripting.Component> ActiveComponents { get; private set; }
+        public List<VisualScripting.Element> ActiveElements { get; private set; }
+
+        public VisualScripting.Element ElementInFocus { get; private set; }
+        //bool selected = false;
+        //VisualScripting.Component selectedComponent = null;
         Vector2 oldMouseWorld;
+
+        public event EventHandler<CanvasMouseDownEventArgs> ElementMouseDown;
+
+        public void AddComponent(VisualScripting.Component component)
+        {
+            this.ActiveElements.Add(component);
+            foreach (VisualScripting.Element e in component.Children)
+            {
+                if (e != null) this.ActiveElements.Add(e);
+            }
+
+        }
 
         public static bool InVisualStudio()
         {
@@ -58,7 +72,12 @@ namespace Hackuble.Win.Controls
         {
             InitializeComponent();
 
-            sceneComponents = new List<VisualScripting.Component>();
+            ZOrderManager.Initialize();
+
+            ElementMouseDown += OpenGLControl_ElementMouseDown;
+
+            //ActiveComponents = new List<VisualScripting.Component>();
+            ActiveElements = new List<VisualScripting.Element>();
 
             oldMouseWorld = new Vector2(0);
 
@@ -83,6 +102,44 @@ namespace Hackuble.Win.Controls
             }
 
             context.displayTextBoundingBox(false);
+        }
+
+        private void OpenGLControl_ElementMouseDown(object sender, CanvasMouseDownEventArgs e)
+        {
+            if (e.Elements.Count > 0)
+            {
+                ElementInFocus = e.Elements[0];
+
+                foreach (VisualScripting.Element possibleHit in e.Elements)
+                {
+                    if (possibleHit.ZOrder > ElementInFocus.ZOrder)
+                        ElementInFocus = possibleHit;
+                }
+
+                //ElementInFocus has been defined.
+
+                ZOrderManager.FocusOnElement(ElementInFocus);
+
+                float topZOrder = 0.0f;
+
+                foreach (VisualScripting.Element topElement in ActiveElements)
+                {
+                    if (topElement.ZOrder > topZOrder)
+                        topZOrder = topElement.ZOrder;
+                }
+
+                for (int i = 0; i < ActiveElements.Count; i++)
+                {
+                    VisualScripting.Element otherElem = ActiveElements[i];
+
+                    if (ElementInFocus != otherElem && otherElem.ZOrder > ElementInFocus.ZOrder)
+                    {
+                        otherElem.ZOrder -= ElementInFocus.ZDepth;
+                    }
+                }
+
+                ElementInFocus.ZOrder = topZOrder;
+            }
         }
 
         public void closeOpenGL()
@@ -144,9 +201,9 @@ namespace Hackuble.Win.Controls
 
                 oldMouseWorld = worldMouse;
 
-                if(selected)
+                if(e.Button == MouseButtons.Left && ElementInFocus != null)
                 {
-                    selectedComponent.Translate(new CanvasPoint(mouseTranslate.X, mouseTranslate.Y));
+                    ElementInFocus.Translate(new CanvasPoint(mouseTranslate.X, mouseTranslate.Y));
                 }
 
                 this.Refresh();
@@ -171,49 +228,22 @@ namespace Hackuble.Win.Controls
                 {
                     Vector2 worldMouse = context.screenToWorldSpace(new Vector2(e.X, e.Y));
 
-                    List<VisualScripting.Component> boundComp = new List<VisualScripting.Component>();
+                    List<VisualScripting.Element> hitTestElements = new List<Element>();
 
-                    foreach (VisualScripting.Component comp in sceneComponents)
-                    { 
-                        if (comp.Bounds.Contains(new CanvasPoint(worldMouse.X, worldMouse.Y)))
-                        {
-                            boundComp.Add(comp);
-                        }
-                    }
-
-                    if (boundComp.Count > 0)
+                    foreach (VisualScripting.Element elem in ActiveElements)
                     {
-                        selectedComponent = boundComp[0];
-
-                        foreach (VisualScripting.Component possibleSelect in boundComp)
+                        if (elem.Bounds.Contains(new CanvasPoint(worldMouse.X, worldMouse.Y)))
                         {
-                            if (possibleSelect.ZOrder > selectedComponent.ZOrder)
-                                selectedComponent = possibleSelect;
+                            hitTestElements.Add(elem);
                         }
-
-                        selected = true;
-
-                        float topZOrder = 0.0f;
-
-                        foreach (VisualScripting.Component topComp in sceneComponents)
-                        {
-                            if (topComp.ZOrder > topZOrder)
-                                topZOrder = topComp.ZOrder;
-                        }
-
-                        for (int i = 0; i < sceneComponents.Count; i++)
-                        {
-                            VisualScripting.Component otherComp = sceneComponents[i];
-
-                            if (selectedComponent != otherComp && otherComp.ZOrder > selectedComponent.ZOrder)
-                            {
-                                otherComp.ZOrder -= selectedComponent.ZDepth;
-                            }
-                        }
-
-                        selectedComponent.ZOrder = topZOrder;
-
                     }
+
+                    ElementMouseDown.Invoke(this, new CanvasMouseDownEventArgs(e, worldMouse, hitTestElements));
+
+                }
+                else if (e.Button == MouseButtons.Right)
+                {
+                    this.Cursor = new Cursor(Properties.Resources.hand.Handle);
                 }
 
                 this.Refresh();
@@ -230,8 +260,11 @@ namespace Hackuble.Win.Controls
 
                 if(e.Button == MouseButtons.Left)
                 {
-                    selected = false;
-                    selectedComponent = null;
+                    ElementInFocus = null;
+                }
+                else if (e.Button == MouseButtons.Right)
+                {
+                    this.Cursor = DefaultCursor;
                 }
 
                 this.Refresh();
@@ -254,26 +287,26 @@ namespace Hackuble.Win.Controls
         {
             base.OnPaint(e);
 
-            if (!InVisualStudio())
-            {
-                context.onPaint();
+            if (InVisualStudio()) return;
 
-                //if (pivotX != this.ClientRectangle.X || pivotY != this.ClientRectangle.Y)
-                //{
-                //    pivotX = this.ClientRectangle.X;
-                //    pivotY = this.ClientRectangle.Y;
-                //}
-                //if (windowHeight != this.ClientSize.Height || windowWidth != this.ClientSize.Width)
-                //{
-                //    windowWidth = this.ClientSize.Width;
-                //    windowHeight = this.ClientSize.Height;
-                //}
-                area = new System.Drawing.Rectangle(new Point(pivotX, pivotY), new Size(windowWidth, windowHeight));
+            context.onPaint();
 
-                context.getPixelData(ref pixelData);
-                UpdateBitmap(pixelData, drawingBitmap);
-                e.Graphics.DrawImage(drawingBitmap, area);
-            }
+            //if (pivotX != this.ClientRectangle.X || pivotY != this.ClientRectangle.Y)
+            //{
+            //    pivotX = this.ClientRectangle.X;
+            //    pivotY = this.ClientRectangle.Y;
+            //}
+            //if (windowHeight != this.ClientSize.Height || windowWidth != this.ClientSize.Width)
+            //{
+            //    windowWidth = this.ClientSize.Width;
+            //    windowHeight = this.ClientSize.Height;
+            //}
+            area = new System.Drawing.Rectangle(new Point(pivotX, pivotY), new Size(windowWidth, windowHeight));
+
+            context.getPixelData(ref pixelData);
+            UpdateBitmap(pixelData, drawingBitmap);
+            e.Graphics.DrawImage(drawingBitmap, area);
+
 
             //
             //      FPS CALCULATION
@@ -306,5 +339,18 @@ namespace Hackuble.Win.Controls
         }
 
 
+    }
+
+    public class CanvasMouseDownEventArgs : MouseEventArgs
+    {
+        public List<VisualScripting.Element> Elements { get; set; }
+        public Vector2 CanvasSpaceMousePosition { get; set; }
+
+        public CanvasMouseDownEventArgs(MouseEventArgs e, Vector2 canvasSpaceMousePosition, List<VisualScripting.Element> elements) : base(e.Button, e.Clicks, e.X, e.Y, e.Delta)
+        {
+            if (elements != null && elements.Count > 0) this.Elements = elements;
+            else this.Elements = new List<Element>();
+            this.CanvasSpaceMousePosition = canvasSpaceMousePosition;
+        }
     }
 }

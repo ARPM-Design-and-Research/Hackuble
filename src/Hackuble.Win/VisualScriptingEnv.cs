@@ -15,9 +15,11 @@ namespace Hackuble.Win
         private int count = 0;
         private float topZOrder = 0.00f;
         private Controls.OpenGLControl openGLControl1;
+        private StringBuilder statusBuilder;
         public VisualScriptingEnv()
         {
             InitializeComponent();
+            statusBuilder = new StringBuilder();
         }
 
         private void VisualScriptingEnv_Load(object sender, EventArgs e)
@@ -33,7 +35,6 @@ namespace Hackuble.Win
             this.openGLControl1.Location = new System.Drawing.Point(0, this.toolStrip1.Height);
             this.openGLControl1.Name = "openGLControl1";
             this.openGLControl1.TabIndex = 3;
-            this.openGLControl1.ProgressBar = this.toolStripProgressBar1;
             this.openGLControl1.Paint += OpenGLControl1_Paint;
             this.Controls.Add(this.openGLControl1);
             this.openGLControl1.BringToFront();
@@ -46,12 +47,19 @@ namespace Hackuble.Win
 
         private void OpenGLControl1_Paint(object sender, PaintEventArgs e)
         {
-            toolStripStatusLabel1.Text = this.openGLControl1.FrameRate.ToString();
+            AddInfoToStatus("FPS: " + this.openGLControl1.FrameRate.ToString());
+            if (openGLControl1.ElementInFocus != null)
+            {
+                AddInfoToStatus("Selected Element Type: " + openGLControl1.ElementInFocus.ElementType);
+                AddInfoToStatus("Element ZDepth: " + openGLControl1.ElementInFocus.ZDepth.ToString());
+                AddInfoToStatus("Element ZOrder: " + openGLControl1.ElementInFocus.ZOrder.ToString());
+            }
+            PushStatus();
         }
 
         private void VisualScriptingEnv_Paint(object sender, PaintEventArgs e)
         {
-            toolStripProgressBar1.Value = 50;
+
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -87,7 +95,7 @@ namespace Hackuble.Win
             comp.ZOrder = topZOrder + 0.00001f;
             topZOrder += comp.ZDepth + 0.00001f;
 
-            openGLControl1.sceneComponents.Add(comp);
+            openGLControl1.AddComponent(comp);
         }
 
         private void toolStripButton2_Click(object sender, EventArgs e)
@@ -99,7 +107,27 @@ namespace Hackuble.Win
             comp.ZOrder = topZOrder + 0.00001f;
             topZOrder += comp.ZDepth + 0.00001f;
 
-            openGLControl1.sceneComponents.Add(comp);
+            openGLControl1.AddComponent(comp);
+        }
+
+        private void PushStatus()
+        {
+            toolStripStatusLabel1.Text = statusBuilder.ToString();
+            ClearStatus();
+        }
+
+        private void AddInfoToStatus(string info)
+        {
+            if (statusBuilder.Length > 0)
+            {
+                statusBuilder.Append(" | ");
+            }
+            statusBuilder.Append(info);
+        }
+
+        private void ClearStatus()
+        {
+            statusBuilder = new StringBuilder();
         }
     }
 }

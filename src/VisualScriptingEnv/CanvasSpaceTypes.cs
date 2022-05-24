@@ -293,7 +293,6 @@ namespace VisualScripting
             return ((A.Size != B.Size) || (A.Location != B.Location));
         }
     }
-
     public class CanvasPoint : IEquatable<CanvasSize>, IEquatable<CanvasPoint>
     {
         public CanvasPoint(double x, double y)
@@ -420,6 +419,47 @@ namespace VisualScripting
         {
             CanvasSize s = new CanvasSize(v.X, v.Y);
             return s;
+        }
+    }
+
+
+    public static class ZOrderManager
+    {
+        public static void Initialize()
+        {
+            ZOrderManager.ZPositions = new Dictionary<Guid, float>();
+        }
+
+        public static Dictionary<Guid, float> ZPositions { get; private set; }
+
+        public static float TopZ
+        {
+            get
+            {
+                if (!(ZOrderManager.ZPositions.Values.Count > 0)) return 0.0f;
+                float tempz = float.NaN;
+                foreach (float z in ZOrderManager.ZPositions.Values)
+                {
+                    if (tempz == float.NaN) tempz = z;
+                    if (z > tempz) tempz = z;
+                }
+                return tempz;
+            }
+        }
+
+        public static float FocusOnElement(Element e)
+        {            
+            for (int i = 0; i < ZOrderManager.ZPositions.Count; i++)
+            {
+                Guid otherElem = ZOrderManager.ZPositions.Keys.ElementAt(i);
+
+                if (e.InstanceGuid != otherElem && ZOrderManager.ZPositions.Values.ElementAt(i) > e.ZOrder)
+                {
+                    ZOrderManager.ZPositions[ZOrderManager.ZPositions.Keys.ElementAt(i)] -= e.ZDepth;
+                }
+            }
+            e.ZOrder = TopZ;
+            return TopZ;
         }
     }
 }
